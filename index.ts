@@ -53,7 +53,7 @@ io.on("connection", (socket) => {
 
 
 const store = new MongoDBStore({
-    uri: 'mongodb://127.0.0.1:27017/BOT',
+    uri: process.env.DB_URL || `mongodb://127.0.0.1:27017/BOT`,
     collection: 'sessions'
 })
 
