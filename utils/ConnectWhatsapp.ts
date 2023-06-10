@@ -61,5 +61,5 @@ export const ConectWhatsapp = async (req: Request, client_id: string, socket: So
     client.on('message', async (msg: WAWebJS.Message) => {
         ControlMessage(msg)
     });
-    client.initialize();
+    await client.initialize();
 }
