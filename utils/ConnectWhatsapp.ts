@@ -9,7 +9,7 @@ export var client: Client | undefined = undefined;
 
 export const ConectWhatsapp = async (req: Request, client_id: string, socket: Socket) => {
     if (client) {
-        client.destroy()
+        await client.destroy()
     }
     console.log("getting session")
     client = new Client({

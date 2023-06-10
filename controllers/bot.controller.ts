@@ -3,13 +3,13 @@ import { ConectWhatsapp } from "../utils/ConnectWhatsapp";
 import { AppSocket } from "..";
 
 export const SetUpWhatsappProfile = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.user?.client_id
-    if (!id) {
+    const client_id = req.user?.client_id
+    if (!client_id) {
         return res.status(404).json({ message: "whatsapp session id not found" })
     }
-    if (AppSocket && id) {
+    if (AppSocket && client_id) {
         try {
-            await ConectWhatsapp(req, id, AppSocket)
+            await ConectWhatsapp(req, client_id, AppSocket)
         }
         catch (err: any) {
             console.log(err)
