@@ -20,19 +20,21 @@ function RefreshWhatsappModal() {
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        socket.on("qr", (qr) => {
-            setLoading(false)
-            setQrCode(qr)
-        })
-        socket.on("ready", () => {
-            setLoading(false)
-            setQrCode(undefined)
-            setWhatsappSession(true)
-        })
-        socket.on("loading", () => {
-            setLoading(true)
-            setQrCode(undefined)
-        })
+      if(socket){
+          socket.on("qr", (qr) => {
+              setLoading(false)
+              setQrCode(qr)
+          })
+          socket.on("ready", () => {
+              setLoading(false)
+              setQrCode(undefined)
+              setWhatsappSession(true)
+          })
+          socket.on("loading", () => {
+              setLoading(true)
+              setQrCode(undefined)
+          })
+      }
     }, [setWhatsappSession])
     return (
         <Modal
