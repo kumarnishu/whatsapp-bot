@@ -26,10 +26,10 @@ const ENV = process.env.NODE_ENV
 connectDatabase()
 
 let origin = ""
-if (ENV === "devlopment")
+if (ENV === "development")
     origin = "http://localhost:3000"
 
-if (ENV === "devlopment")
+if (ENV === "development")
     app.use(cors({
         origin: [origin],
         credentials: true
