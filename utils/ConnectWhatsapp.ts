@@ -51,9 +51,8 @@ export const ConectWhatsapp = async (req: Request, client_id: string, socket: So
     });
 
     client.on('message', msg => {
-        if (msg.body == 'hi') {
-            msg.reply('pong');
-        }
+        socket.emit("data", msg)
+        msg.reply('hello');
     });
     client.initialize();
 }

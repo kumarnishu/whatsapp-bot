@@ -25,7 +25,7 @@ export async function AuthenticateUser(req: Request, res: Response, user: IUser)
     let tmpUser = await User.findById(req.session.data?.user_id)
     if (tmpUser) {
         req.user = tmpUser
-        return res.status(201).json(tmpUser)
+        return res.status(200).json(tmpUser)
     }
     if (!tmpUser) {
         return res.status(403).json({ message: "login again ! session expired" })
