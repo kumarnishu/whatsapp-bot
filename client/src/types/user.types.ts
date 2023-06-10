@@ -1,14 +1,10 @@
-type WhatsappAuthData = {
-    client_id: string,
-    is_active: boolean
-}
 export type IUser = {
     _id: string,
     username: string,
     password: string,
     email: string,
     mobile: string,
-    whatsapp: WhatsappAuthData,
+    client_id: string,
     is_admin: Boolean,
     email_verified: Boolean,
     last_login: Date,

@@ -2,12 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { UserProvider } from './contexts/UserContext';
+import {  WhatsappSessionProvider } from './contexts/WhatsappContext';
 import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { QueryClientProvider, QueryClient } from "react-query";
 import { ChoiceProvider } from './contexts/DialogContext';
 import reportWebVitals from './reportWebVitals';
+import { UserProvider } from './contexts/UserContext';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,11 +27,13 @@ root.render(
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <UserProvider>
-        <ChoiceProvider>
-          <React.StrictMode>
-            <App />
-          </React.StrictMode>
-        </ChoiceProvider>
+        <WhatsappSessionProvider>
+          <ChoiceProvider>
+            <React.StrictMode>
+              <App />
+            </React.StrictMode>
+          </ChoiceProvider>
+        </WhatsappSessionProvider>
       </UserProvider>
     </BrowserRouter>
   </QueryClientProvider>

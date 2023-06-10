@@ -7,6 +7,11 @@ export default function FlowsPage() {
     if (socket) {
       socket.on("data", (data) => setData(data))
     }
+    return () => {
+      if (socket) {
+        socket.off("data", (data) => setData(data))
+      }
+    }
   }, [])
   console.log(data)
   return (

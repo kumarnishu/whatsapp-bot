@@ -5,60 +5,35 @@ import { AxiosResponse } from 'axios'
 import { useMutation } from 'react-query'
 import { BackendError } from '../../../types'
 import { SetUpWhatsapp } from '../../../services/BotServices'
-import { UserContext } from '../../../contexts/UserContext'
 import { socket } from '../../../socket'
 import QRCode from 'react-qr-code'
+import { WhatsappSessionContext } from '../../../contexts/WhatsappContext'
 
 
 function RefreshWhatsappModal() {
     const { choice, setChoice } = useContext(ChoiceContext)
+    const { whatsapp_session, setWhatsappSession } = useContext(WhatsappSessionContext)
     const { mutate, isLoading } = useMutation
         <AxiosResponse<any>,
-            BackendError,
-            string
-        >(SetUpWhatsapp)
-
-    const { user, setUser } = useContext(UserContext)
+            BackendError>(SetUpWhatsapp)
     const [qrCode, setQrCode] = useState<string | undefined>()
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        if (user) {
-            socket.on("qr", (qr) => {
-                setLoading(false)
-                setQrCode(qr)
-                setUser({
-                    ...user,
-                    whatsapp: {
-                        client_id: user.whatsapp.client_id,
-                        is_active: false
-                    }
-                })
-            })
-            socket.on("ready", () => {
-                setLoading(false)
-                setUser({
-                    ...user,
-                    whatsapp: {
-                        client_id: user.whatsapp.client_id,
-                        is_active: true
-                    }
-                })
-                setQrCode(undefined)
-            })
-            socket.on("loading", () => {
-                setLoading(true)
-                setUser({
-                    ...user,
-                    whatsapp: {
-                        client_id: user.whatsapp.client_id,
-                        is_active: true
-                    }
-                })
-                setQrCode(undefined)
-            })
-        }
-    }, [user, setUser])
+        socket.on("qr", (qr) => {
+            setLoading(false)
+            setQrCode(qr)
+        })
+        socket.on("ready", () => {
+            setLoading(false)
+            setQrCode(undefined)
+            setWhatsappSession(true)
+        })
+        socket.on("loading", () => {
+            setLoading(true)
+            setQrCode(undefined)
+        })
+    }, [setWhatsappSession])
     return (
         <Modal
             show={choice === AppChoiceActions.refresh_whatsapp ? true : false}
@@ -67,31 +42,27 @@ function RefreshWhatsappModal() {
         >
             <Container className='p-4'>
                 {!loading ?
-                    <> 
-                    <Button size="lg" className='w-100'
-                        disabled={Boolean(isLoading)}
-                        onClick={() => {
-                            user && mutate(user.whatsapp.client_id)
-                            setLoading(true)
-                        }}>Refresh
-                    </Button>
+                    <>
+                        <Button size="lg" className='w-100'
+                            disabled={Boolean(isLoading)}
+                            onClick={() => {
+                                mutate()
+                                setLoading(true)
+                            }}>Check Whatsapp Status
+                        </Button>
+
                         <Container className='p-4'>
-                            {
-                                user && user.whatsapp.is_active ?
+                            <>
+                                {whatsapp_session ? <p className='p-2'>Congrats ! Connected,Click Above Button to confirm</p> : null}
+                                {isLoading && !qrCode ? <h1>Loading qr code...</h1> : null}
+                                {qrCode ?
                                     <>
-                                        <h1>whatsapp connected</h1>
-                                    </>
-                                    :
-                                    <>
-                                        {isLoading && !qrCode ? <h1>Loading qr code...</h1> : null}
-                                        {qrCode ?
-                                            <>
-                                                <QRCode value={qrCode} />
-                                            </> :
-                                            null
-                                        }
-                                    </>
-                            }
+                                        <p className='p-2'>logged out ? Scan to login !</p>
+                                        <QRCode value={qrCode} />
+                                    </> :
+                                    null
+                                }
+                            </>
                         </Container>
                     </>
                     :

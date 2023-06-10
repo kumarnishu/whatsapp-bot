@@ -6,7 +6,7 @@ import { paths } from '../../Routes';
 import { Dropdown } from 'react-bootstrap';
 import { AppChoiceActions, ChoiceContext } from '../../contexts/DialogContext';
 import UpdatePasswordModal from '../modals/users/UpdatePasswordModal';
-import LogoutWhatsappButton from '../buttons/RefreshWhatsappButton';
+import RefreshWhatsappButton from '../buttons/RefreshWhatsappButton';
 
 function NavBar() {
     const { user } = useContext(UserContext)
@@ -26,7 +26,7 @@ function NavBar() {
                             height="40"
                         />
                     </Link>
-                    {user ? <LogoutWhatsappButton /> : null}
+                    {user ? <RefreshWhatsappButton /> : null}
                 </div>
                 {
                     user ?

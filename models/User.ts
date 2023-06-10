@@ -70,15 +70,10 @@ const UserSchema = new mongoose.Schema<IUser, mongoose.Model<IUser, {}, IUserMet
         required: true,
 
     },
-    whatsapp: {
-        client_id: {
-            type: String,
-            trim: true,
-            required: true
-        },
-        is_active: {
-            type: Boolean,
-            required: true }
+    client_id: {
+        type: String,
+        trim: true,
+        required: true
     },
     updated_by: {
         type: mongoose.Schema.Types.ObjectId,

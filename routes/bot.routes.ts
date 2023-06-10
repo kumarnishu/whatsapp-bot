@@ -1,10 +1,10 @@
 import express from "express";
-import {isAuthenticatedUser } from "../middlewares/auth.middleware";
+import {isAdmin, isAuthenticatedUser } from "../middlewares/auth.middleware";
 import {  SetUpWhatsappProfile } from "../controllers/bot.controller";
 
 const router = express.Router()
 
-router.route("/setup/whatsapp/:client_id").post(isAuthenticatedUser, SetUpWhatsappProfile)
+router.route("/setup/whatsapp").post(isAuthenticatedUser,isAdmin, SetUpWhatsappProfile)
 
 
 export default router

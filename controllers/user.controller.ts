@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import isEmail from "validator/lib/isEmail";
-import isMongoId from "validator/lib/isMongoId";
 import { User } from '../models/User';
 import { sendEmail } from '../utils/SendEmail';
 import { TUserBody } from '../types/user.types';
@@ -10,9 +9,9 @@ import { AuthenticateUser } from '../middlewares/auth.middleware';
 // Create Owner account
 export const SignUp =
     async (req: Request, res: Response, next: NextFunction) => {
-        let { username, email, password, mobile, whatsapp } = req.body as TUserBody
+        let { username, email, password, mobile, client_id } = req.body as TUserBody
         // validations
-        if (!username || !email || !password || !mobile || !whatsapp)
+        if (!username || !email || !password || !mobile || !client_id)
             return res.status(400).json({ message: "fill all the required fields" });
         if (!isEmail(email))
             return res.status(400).json({ message: "please provide valid email" });
@@ -33,10 +32,7 @@ export const SignUp =
             email,
             mobile,
             is_admin: true,
-            whatsapp: {
-                client_id: whatsapp.client_id.replace(/\s/g, ''),
-                is_active: false
-            }
+            client_id: client_id
         })
 
         owner.created_by = owner
@@ -44,39 +40,6 @@ export const SignUp =
         await owner.save()
         AuthenticateUser(req, res, owner)
     }
-
-// create normal user 
-export const NewUser = async (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user)
-        return res.status(403).json({ message: "please login to access this resource" })
-    let { username, email, mobile, password } = req.body as TUserBody;
-    // validations
-    if (!username || !email || !password || !mobile)
-        return res.status(400).json({ message: "fill all the required fields" });
-    if (!isEmail(email))
-        return res.status(400).json({ message: "please provide valid email" });
-
-
-    if (await User.findOne({ username: username.toLowerCase().trim() }))
-        return res.status(403).json({ message: `${username} already exists` });
-
-    if (await User.findOne({ email: email.toLowerCase().trim() }))
-        return res.status(403).json({ message: `${email} already exists` });
-    if (await User.findOne({ mobile: String(mobile).toLowerCase().trim() }))
-        return res.status(403).json({ message: `${mobile} already exists` });
-
-    const user = new User({
-        username,
-        email,
-        password,
-        mobile,
-        created_by: req.user,
-        updated_by: req.user,
-    })
-    await user.save()
-    return res.status(201).json(user)
-
-}
 
 // login
 export const Login = async (req: Request, res: Response, next: NextFunction) => {
@@ -108,64 +71,6 @@ export const Login = async (req: Request, res: Response, next: NextFunction) => 
     await user.save()
     AuthenticateUser(req, res, user)
 }
-
-
-// update user only admin can do
-export const UpdateUser = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    if (!isMongoId(id)) return res.status(400).json({ message: "user id not valid" })
-    let user = await User.findById(id);
-    if (!user) {
-        return res.status(404).json({ message: "user not found" })
-    }
-    let { email, username, mobile } = req.body as TUserBody;
-    if (!username || !email || !mobile)
-        return res.status(400).json({ message: "fill all the required fields" });
-    //check username
-    if (username !== user.username) {
-        if (await User.findOne({ username: String(username).toLowerCase().trim() }))
-            return res.status(403).json({ message: `${username} already exists` });
-    }
-    // check mobile
-    if (mobile != user.mobile) {
-        if (await User.findOne({ mobile: String(mobile).toLowerCase().trim() }))
-            return res.status(403).json({ message: `${mobile} already exists` });
-    }
-    //check email
-    if (email !== user.email) {
-        if (await User.findOne({ email: String(email).toLowerCase().trim() }))
-            return res.status(403).json({ message: `${email} already exists` });
-    }
-    // check first owner to update himself
-    if ((String(user.created_by) === String(user._id)))
-        if ((String(user.created_by) !== String(req.user?._id)))
-            return res.status(403).json({ message: "not allowed contact  administrator" })
-
-    //handle dp
-
-    if (email !== user.email) {
-        await User.findByIdAndUpdate(user.id, {
-            email, username,
-            email_verified: false
-        })
-            .then(() => { return res.status(200).json({ message: "user updated" }) })
-    }
-    await User.findByIdAndUpdate(user.id, {
-        email,
-        username,
-        mobile,
-        updated_by: req.user?._id,
-        updated_at: new Date(),
-    }).then(() => res.status(200).json({ message: "user updated" }))
-}
-
-
-// get all users only admin can do
-export const GetUsers =
-    async (req: Request, res: Response, next: NextFunction) => {
-        const users = await User.find().populate("created_by").populate("updated_by")
-        res.status(200).json(users)
-    }
 
 // logout
 export const Logout = async (req: Request, res: Response, next: NextFunction) => {
@@ -246,87 +151,6 @@ export const updatePassword = async (req: Request, res: Response, next: NextFunc
     user.updated_by = user
     await user.save();
     res.status(200).json({ message: "password updated" });
-}
-
-// make admin
-export const MakeAdmin = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    if (!isMongoId(id)) return res.status(400).json({ message: "user id not valid" })
-    let user = await User.findById(id)
-    if (!user) {
-        return res.status(404).json({ message: "user not found" })
-    }
-    if (user.is_admin)
-        return res.status(404).json({ message: "already a admin" })
-    user.is_admin = true
-    if (req.user)
-        user.updated_by = req.user
-    await user.save();
-    res.status(200).json({ message: "admin role provided successfully" });
-}
-
-
-// block user
-export const BlockUser = async (req: Request, res: Response, next: NextFunction) => {
-    //update role of user
-    const id = req.params.id;
-    if (!isMongoId(id)) return res.status(400).json({ message: "user id not valid" })
-    let user = await User.findById(id)
-    if (!user) {
-        return res.status(404).json({ message: "user not found" })
-    }
-    if (!user.is_active)
-        return res.status(404).json({ message: "user already blocked" })
-
-    if (String(user.created_by._id) === String(user._id))
-        return res.status(403).json({ message: "not allowed contact crm administrator" })
-    if (String(user._id) === String(req.user?._id))
-        return res.status(403).json({ message: "not allowed this operation here, because you may block yourself" })
-    user.is_active = false
-    if (req.user)
-        user.updated_by = req.user
-    await user.save();
-    res.status(200).json({ message: "user blocked successfully" });
-}
-// unblock user
-export const UnBlockUser = async (req: Request, res: Response, next: NextFunction) => {
-    //update role of user
-    const id = req.params.id;
-    if (!isMongoId(id)) return res.status(400).json({ message: "user id not valid" })
-    let user = await User.findById(id)
-    if (!user) {
-        return res.status(404).json({ message: "user not found" })
-    }
-    if (user.is_active)
-        return res.status(404).json({ message: "user is already active" })
-    user.is_active = true
-    if (req.user)
-        user.updated_by = req.user
-    await user.save();
-    res.status(200).json({ message: "user unblocked successfully" });
-}
-
-// remove admin
-export const RemoveAdmin = async (req: Request, res: Response, next: NextFunction) => {
-    //update role of user
-    const id = req.params.id;
-    if (!isMongoId(id)) return res.status(400).json({ message: "user id not valid" })
-    let user = await User.findById(id)
-    if (!user) {
-        return res.status(404).json({ message: "user not found" })
-    }
-    if (String(user.created_by._id) === String(user._id))
-        return res.status(403).json({ message: "not allowed contact administrator" })
-    if (String(user._id) === String(req.user?._id))
-        return res.status(403).json({ message: "not allowed this operation here, because you may harm yourself" })
-    user = await User.findById(id)
-    if (!user?.is_admin)
-        res.status(400).json({ message: "you are not an admin" });
-    await User.findByIdAndUpdate(id, {
-        is_admin: false,
-        updated_by: req.user
-    })
-    res.status(200).json({ message: "admin role removed successfully" });
 }
 
 // sending password reset mail controller

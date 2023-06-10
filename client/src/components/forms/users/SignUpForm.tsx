@@ -19,7 +19,7 @@ function SignUpForm() {
     const { mutate, data, isSuccess, isLoading, isError, error } = useMutation
         <AxiosResponse<IUser>,
             BackendError,
-            { username: string, mobile: number, email: string, password: string, whatsapp: { client_id: string, is_active: false } }
+            { username: string, mobile: number, email: string, password: string, client_id: string }
         >(Signup)
     const [display, setDisplay] = useState<string | undefined>()
     const { setUser } = useContext(UserContext)
@@ -60,7 +60,7 @@ function SignUpForm() {
             email: string,
             client_id: string
         }) => {
-            mutate({ username: values.username, mobile: values.mobile, email: values.email, password: values.password, whatsapp: { client_id: values.client_id, is_active: false } })
+            mutate(values)
         },
     });
 

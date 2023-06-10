@@ -11,6 +11,7 @@ export const isAuthenticatedUser = async (req: Request, res: Response, next: Nex
     req.user = await User.findById(req.session.data.user_id)
     next();
 };
+
 export const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
     if (req.user?.is_admin)
         return next();
