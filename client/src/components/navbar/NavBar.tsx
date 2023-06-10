@@ -6,6 +6,7 @@ import { paths } from '../../Routes';
 import { Dropdown } from 'react-bootstrap';
 import { AppChoiceActions, ChoiceContext } from '../../contexts/DialogContext';
 import UpdatePasswordModal from '../modals/users/UpdatePasswordModal';
+import LogoutWhatsappButton from '../buttons/RefreshWhatsappButton';
 
 function NavBar() {
     const { user } = useContext(UserContext)
@@ -15,15 +16,18 @@ function NavBar() {
         <>
             <UpdatePasswordModal />
             <div className="bg-dark justify-content-between align-items-between d-flex gap-1">
-                <Link to={paths.home}>
-                    <img
-                        className="m-2 d-inline-block rounded-circle"
-                        alt="icon"
-                        src="https://fplogoimages.withfloats.com/tile/605af6c3f7fc820001c55b20.jpg"
-                        width="40"
-                        height="40"
-                    />
-                </Link>
+                <div>
+                    <Link to={paths.flows}>
+                        <img
+                            className="m-2 d-inline-block rounded-circle"
+                            alt="icon"
+                            src="https://fplogoimages.withfloats.com/tile/605af6c3f7fc820001c55b20.jpg"
+                            width="40"
+                            height="40"
+                        />
+                    </Link>
+                    {user ? <LogoutWhatsappButton /> : null}
+                </div>
                 {
                     user ?
                         <>
@@ -31,7 +35,7 @@ function NavBar() {
                             <div className="d-none d-md-flex  gap-1 justify-content-center align-items-center ">
                                 <div className="d-flex align-items-center">
                                     {user ? <>
-                                        <img width="24" alt="icons"height="24" src="https://img.icons8.com/color/48/serial-tasks.png" />
+                                        <img width="24" alt="icons" height="24" src="https://img.icons8.com/color/48/serial-tasks.png" />
                                         <Link className="text-white text-decoration-none rounded shadow p-2 text-uppercase fw-bold fs-6" to={paths.flows}>Flows</Link>
                                         <Dropdown>
                                             <Dropdown.Toggle variant="dark" id="dropdown-basic">

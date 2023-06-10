@@ -12,6 +12,9 @@ export const ConectWhatsapp = async (req: Request, client_id: string, socket: So
         authStrategy: new LocalAuth({
             clientId: client_id
         }),
+        puppeteer: {
+            headless: true
+        }
 
     });
     client.on("ready", async () => {
@@ -22,6 +25,18 @@ export const ConectWhatsapp = async (req: Request, client_id: string, socket: So
         console.log("session revived", req.user?._id)
 
     })
+    client.on("authenticated", async () => {
+        console.log("authenticated")
+        await User.findByIdAndUpdate(req.user?._id, {
+            whatsapp: { client_id: client_id, is_active: true }
+        })
+    })
+    client.on("auth_failure", async () => {
+        console.log("failed to authenticate")
+        await User.findByIdAndUpdate(req.user?._id, {
+            whatsapp: { client_id: client_id, is_active: false }
+        })
+    })
     client.on('qr', async (qr) => {
         console.log("logged out", qr)
         socket.emit("qr", qr);
@@ -30,11 +45,15 @@ export const ConectWhatsapp = async (req: Request, client_id: string, socket: So
         })
 
     });
+    client.on('loading_screen', async (qr) => {
+        console.log("loading..")
+        socket.emit("loading");
+    });
 
     client.on('message', msg => {
         if (msg.body == 'hi') {
             msg.reply('pong');
         }
     });
-    await client.initialize();
+    client.initialize();
 }

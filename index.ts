@@ -61,18 +61,6 @@ store.on('error', function (error: any) {
     console.log(error);
 });
 
-//serve client
-if (ENV === "production") {
-    app.use(express.static(path.join(__dirname, "build")))
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, "build/", "index.html"));
-    })
-}
-else {
-    app.use("*", (_req: Request, res: Response, _next: NextFunction) => {
-        res.status(404).json({ message: "resource not found" })
-    })
-}
 
 app.use(express.json())
 app.use(compression())
@@ -89,6 +77,19 @@ app.use(session({
 
 app.use("/api/v1", UserRoutes)
 app.use("/api/v1", BotRoutes)
+
+//serve client
+if (ENV === "production") {
+    app.use(express.static(path.join(__dirname, "build")))
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, "build/", "index.html"));
+    })
+}
+else {
+    app.use("*", (_req: Request, res: Response, _next: NextFunction) => {
+        res.status(404).json({ message: "resource not found" })
+    })
+}
 
 
 //error handler

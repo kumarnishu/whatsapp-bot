@@ -68,7 +68,7 @@ function SignUpForm() {
         if (isSuccess) {
             setTimeout(() => {
                 setUser(data.data)
-                goto(paths.home)
+                goto(paths.flows)
             }, 500)
         }
     }, [setUser, goto, isSuccess, data])

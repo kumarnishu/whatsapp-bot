@@ -5,12 +5,10 @@ import { useContext } from "react"
 import { UserContext } from "./contexts/UserContext"
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage"
 import UpdatePasswordPage from "./pages/auth/UpdatePassword"
-import HomePage from "./pages/HomePage"
 import FlowsPage from "./pages/FlowsPage"
 import FlowPage from "./pages/FlowPage"
 
 export enum paths {
-    home = "/home",
     login = "/login",
     signup = "/signup",
     flows = "/flows",
@@ -25,7 +23,6 @@ function AppRoutes() {
             <Route path={paths.login} element={<LoginPage />} />
             <Route path={paths.signup} element={<SignUpPage />} />
             <Route path={paths.reset_password} element={<ResetPasswordPage />} />
-            <Route path={paths.home} element={user ? <HomePage /> : <LoginPage />} />
             <Route path={paths.flows} element={user ? <FlowsPage /> : <LoginPage />} />
             <Route path={paths.flow} element={user ? <FlowPage /> : <LoginPage />} />
             <Route path={paths.update_password} element={user ? <UpdatePasswordPage /> : <LoginPage />} />

@@ -62,7 +62,7 @@ function UpdateUserForm({ user }: { user: IUser }) {
         if (isSuccess) {
             setTimeout(() => {
                 setUser(data.data)
-                goto(paths.home)
+                goto(paths.flows)
             }, 2000)
         }
     }, [setUser, goto, isSuccess, data])
