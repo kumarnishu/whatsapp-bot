@@ -8,33 +8,40 @@ import { SetUpWhatsapp } from '../../../services/BotServices'
 import { socket } from '../../../socket'
 import QRCode from 'react-qr-code'
 import { WhatsappSessionContext } from '../../../contexts/WhatsappContext'
+import AlertBar from '../../alert/AlertBar'
 
 
 function RefreshWhatsappModal() {
     const { choice, setChoice } = useContext(ChoiceContext)
     const { whatsapp_session, setWhatsappSession } = useContext(WhatsappSessionContext)
-    const { mutate, isLoading } = useMutation
+    const { mutate, isSuccess, isLoading, isError, error } = useMutation
         <AxiosResponse<any>,
             BackendError>(SetUpWhatsapp)
     const [qrCode, setQrCode] = useState<string | undefined>()
     const [loading, setLoading] = useState(false)
 
+
+
     useEffect(() => {
-      if(socket){
-          socket.on("qr", (qr) => {
-              setLoading(false)
-              setQrCode(qr)
-          })
-          socket.on("ready", () => {
-              setLoading(false)
-              setQrCode(undefined)
-              setWhatsappSession(true)
-          })
-          socket.on("loading", () => {
-              setLoading(true)
-              setQrCode(undefined)
-          })
-      }
+        if (isError) setLoading(false)
+    }, [isError])
+    
+    useEffect(() => {
+        if (socket) {
+            socket.on("qr", (qr) => {
+                setLoading(false)
+                setQrCode(qr)
+            })
+            socket.on("ready", () => {
+                setLoading(false)
+                setQrCode(undefined)
+                setWhatsappSession(true)
+            })
+            socket.on("loading", () => {
+                setLoading(true)
+                setQrCode(undefined)
+            })
+        }
     }, [setWhatsappSession])
     return (
         <Modal
@@ -42,6 +49,21 @@ function RefreshWhatsappModal() {
             onHide={() => setChoice({ type: AppChoiceActions.close_app })}
             centered
         >
+            {
+                isError ? (
+                    <AlertBar variant="danger" message={error?.response.data.message} />
+
+
+                ) : null
+            }
+            {
+                isSuccess ? (
+                    <AlertBar variant="success" message={
+                        "logged in Whatsapp"
+                    } />
+
+                ) : null
+            }
             <Container className='p-4'>
                 {!loading ?
                     <>

@@ -13,7 +13,7 @@ export const SetUpWhatsappProfile = async (req: Request, res: Response, next: Ne
         }
         catch (err: any) {
             console.log(err)
-            return res.status(500).json({ message: "error while logged out" })
+            return res.status(500).json({ message: "error while Refresh Whatsapp,check internet" })
         }
 
     }
