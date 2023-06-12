@@ -21,5 +21,35 @@ export const SetUpWhatsappProfile = async (req: Request, res: Response, next: Ne
 
 }
 
+export const CreateMenu = async (req: Request, res: Response, next: NextFunction)=>{
+}
+export const UpdateMenu = async (req: Request, res: Response, next: NextFunction)=>{
+}
+export const DeleteMenu = async (req: Request, res: Response, next: NextFunction)=>{
+}
+
+export const CreateMenuItem = async (req: Request, res: Response, next: NextFunction)=>{
+}
+export const DeleteMenuItem = async (req: Request, res: Response, next: NextFunction)=>{
+}
+export const UpdateMenuItem = async (req: Request, res: Response, next: NextFunction)=>{
+}
+
+export const CreateReply = async (req: Request, res: Response, next: NextFunction)=>{
+}
+export const DeleteReply = async (req: Request, res: Response, next: NextFunction)=>{
+}
+export const UpdateReply = async (req: Request, res: Response, next: NextFunction)=>{
+}
 
 
+export const CreateFlow = async (req: Request, res: Response, next: NextFunction)=>{
+}
+
+export const UpdateFlow = async (req: Request, res: Response, next: NextFunction) => {
+
+}
+
+export const DestroyFlow = async (req: Request, res: Response, next: NextFunction) => {
+
+}

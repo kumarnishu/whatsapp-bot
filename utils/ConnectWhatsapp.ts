@@ -23,7 +23,6 @@ export const ConectWhatsapp = async (req: Request, client_id: string, socket: So
                 '--disable-setuid-sandbox'
             ]
         }
-
     });
 
     client.on("ready", async () => {

@@ -23,9 +23,6 @@ export const SignUp =
         if (await User.findOne({ mobile: String(mobile).toLowerCase().trim() }))
             return res.status(403).json({ message: `${mobile} already exists` });
         let users = await User.find()
-        if (users.length > 0) {
-            return res.status(403).json({ message: "Not Allowed Here" });
-        }
         let owner = new User({
             username,
             password,

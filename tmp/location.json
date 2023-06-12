@@ -1,0 +1,94 @@
+sent message Message {
+  _data: {
+    id: {
+      fromMe: true,
+      remote: [Object
+            ],
+      id: '3EB04C1F9F59F92D65C157',
+      _serialized: 'true_917056943283@c.us_3EB04C1F9F59F92D65C157'
+        },
+    body: '',
+    type: 'location',
+    t: 1686562403,
+    from: {
+      server: 'c.us',
+      user: '917404293907',
+      _serialized: '917404293907@c.us'
+        },
+    to: {
+      server: 'c.us',
+      user: '917056943283',
+      _serialized: '917056943283@c.us'
+        },
+    self: 'out',
+    ack: 0,
+    isNewMsg: true,
+    star: false,
+    kicNotified: false,
+    loc: 'Khasra no--26/2, opp. mie 764, near METRO PILLAR NO – 768, Part-A, MIE Part-A, Bahadurgarh, Haryana 124507',
+    lat: 28.69955,
+    lng: 76.91907,
+    isFromTemplate: false,
+    pollInvalidated: false,
+    isSentCagPollCreation: false,
+    latestEditMsgKey: null,
+    latestEditSenderTimestampMs: null,
+    mentionedJidList: [],
+    groupMentions: [],
+    isVcardOverMmsDocument: false,
+    isForwarded: false,
+    labels: [],
+    hasReaction: false,
+    ephemeralSettingTimestamp: 1686557582,
+    disappearingModeInitiator: 'chat',
+    productHeaderImageRejected: false,
+    lastPlaybackProgress: 0,
+    isDynamicReplyButtonsMsg: false,
+    isMdHistoryMsg: false,
+    stickerSentTs: 0,
+    isAvatar: false,
+    requiresDirectConnection: null
+    },
+  mediaKey: undefined,
+  id: {
+    fromMe: true,
+    remote: {
+      server: 'c.us',
+      user: '917056943283',
+      _serialized: '917056943283@c.us'
+        },
+    id: '3EB04C1F9F59F92D65C157',
+    _serialized: 'true_917056943283@c.us_3EB04C1F9F59F92D65C157'
+    },
+  ack: 0,
+  hasMedia: false,
+  body: '',
+  type: 'location',
+  timestamp: 1686562403,
+  from: '917404293907@c.us',
+  to: '917056943283@c.us',
+  author: undefined,
+  deviceType: 'android',
+  isForwarded: false,
+  forwardingScore: 0,
+  isStatus: false,
+  isStarred: false,
+  broadcast: undefined,
+  fromMe: true,
+  hasQuotedMsg: false,
+  hasReaction: false,
+  duration: undefined,
+  location: Location {
+    latitude: 28.69955,
+    longitude: 76.91907,
+    description: 'Khasra no--26/2, opp. mie 764, near METRO PILLAR NO – 768, Part-A, MIE Part-A, Bahadurgarh, Haryana 124507'
+    },
+  vCards: [],
+  inviteV4: undefined,
+  mentionedIds: [],
+  orderId: undefined,
+  token: undefined,
+  isGif: false,
+  isEphemeral: undefined,
+  links: undefined
+}

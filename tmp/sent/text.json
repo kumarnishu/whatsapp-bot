@@ -1,0 +1,87 @@
+sent message Message {
+  _data: {
+    id: {
+      fromMe: true,
+      remote: [Object
+      ],
+      id: '3EB00A71E56AD820995A64',
+      _serialized: 'true_917404293907@c.us_3EB00A71E56AD820995A64'
+    },
+    body: 'we got your message, thanks for contacting me..',
+    type: 'chat',
+    t: 1686547347,
+    from: {
+      server: 'c.us',
+      user: '917056943283',
+      _serialized: '917056943283@c.us'
+    },
+    to: {
+      server: 'c.us',
+      user: '917404293907',
+      _serialized: '917404293907@c.us'
+    },
+    self: 'out',
+    ack: 0,
+    isNewMsg: true,
+    star: false,
+    kicNotified: false,
+    isFromTemplate: false,
+    pollInvalidated: false,
+    isSentCagPollCreation: false,
+    latestEditMsgKey: null,
+    latestEditSenderTimestampMs: null,
+    mentionedJidList: [],
+    groupMentions: [],
+    isVcardOverMmsDocument: false,
+    isForwarded: false,
+    labels: [],
+    hasReaction: false,
+    ephemeralSettingTimestamp: 1686546231,
+    disappearingModeInitiator: 'chat',
+    productHeaderImageRejected: false,
+    lastPlaybackProgress: 0,
+    isDynamicReplyButtonsMsg: false,
+    isMdHistoryMsg: false,
+    stickerSentTs: 0,
+    isAvatar: false,
+    requiresDirectConnection: null
+  },
+  mediaKey: undefined,
+  id: {
+    fromMe: true,
+    remote: {
+      server: 'c.us',
+      user: '917404293907',
+      _serialized: '917404293907@c.us'
+    },
+    id: '3EB00A71E56AD820995A64',
+    _serialized: 'true_917404293907@c.us_3EB00A71E56AD820995A64'
+  },
+  ack: 0,
+  hasMedia: false,
+  body: 'we got your message, thanks for contacting me..',
+  type: 'chat',
+  timestamp: 1686547347,
+  from: '917056943283@c.us',
+  to: '917404293907@c.us',
+  author: undefined,
+  deviceType: 'android',
+  isForwarded: false,
+  forwardingScore: 0,
+  isStatus: false,
+  isStarred: false,
+  broadcast: undefined,
+  fromMe: true,
+  hasQuotedMsg: false,
+  hasReaction: false,
+  duration: undefined,
+  location: undefined,
+  vCards: [],
+  inviteV4: undefined,
+  mentionedIds: [],
+  orderId: undefined,
+  token: undefined,
+  isGif: false,
+  isEphemeral: undefined,
+  links: undefined
+}
