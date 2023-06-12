@@ -1,0 +1,330 @@
+ recieved message: Message {
+    [
+        1
+    ]   _data: {
+        [
+            1
+        ]     id: {
+            [
+                1
+            ]       fromMe: false,
+            [
+                1
+            ]       remote: '917056943283@c.us',
+            [
+                1
+            ]       id: 'E156EBE991282849C2F1D12D71FF565E',
+            [
+                1
+            ]       _serialized: 'false_917056943283@c.us_E156EBE991282849C2F1D12D71FF565E'
+[
+                1
+            ]
+        },
+        [
+            1
+        ]     body: 'BEGIN:VCARD\n' +
+[
+            1
+        ]       'VERSION: 3.0\n' +
+[
+            1
+        ]       'N:Safety;Agarson;;;\n' +
+[
+            1
+        ]       'FN:Agarson Safety\n' +
+[
+            1
+        ]       'TEL;type=Mobile:+91 6363 433 634\n' +
+[
+            1
+        ]       'TEL;type=Mobile;waid=919817702310:+91 98177 02310\n' +
+[
+            1
+        ]       'item1.ADR;type=Work:;;;;Haryana;;India\n' +
+[
+            1
+        ]       'item1.X-ABADR:in\n' +
+[
+            1
+        ]       'item2.ADR;type=Work:;;;;Haryana;;India\n' +
+[
+            1
+        ]       'item2.X-ABADR:in\n' +
+[
+            1
+        ]       'END:VCARD',
+        [
+            1
+        ]     type: 'vcard',
+        [
+            1
+        ]     t: 1686564649,
+        [
+            1
+        ]     notifyName: 'Nishu Kumar',
+        [
+            1
+        ]     from: '917056943283@c.us',
+        [
+            1
+        ]     to: '917404293907@c.us',
+        [
+            1
+        ]     self: 'in',
+        [
+            1
+        ]     ack: 1,
+        [
+            1
+        ]     isNewMsg: true,
+        [
+            1
+        ]     star: false,
+        [
+            1
+        ]     kicNotified: false,
+        [
+            1
+        ]     recvFresh: true,
+        [
+            1
+        ]     isFromTemplate: false,
+        [
+            1
+        ]     pollInvalidated: false,
+        [
+            1
+        ]     isSentCagPollCreation: false,
+        [
+            1
+        ]     latestEditMsgKey: null,
+        [
+            1
+        ]     latestEditSenderTimestampMs: null,
+        [
+            1
+        ]     broadcast: false,
+        [
+            1
+        ]     mentionedJidList: [],
+        [
+            1
+        ]     groupMentions: [],
+        [
+            1
+        ]     isVcardOverMmsDocument: false,
+        [
+            1
+        ]     vcardFormattedName: 'Agarson Safety',
+        [
+            1
+        ]     isForwarded: false,
+        [
+            1
+        ]     labels: [],
+        [
+            1
+        ]     hasReaction: false,
+        [
+            1
+        ]     productHeaderImageRejected: false,
+        [
+            1
+        ]     lastPlaybackProgress: 0,
+        [
+            1
+        ]     isDynamicReplyButtonsMsg: false,
+        [
+            1
+        ]     isMdHistoryMsg: false,
+        [
+            1
+        ]     stickerSentTs: 0,
+        [
+            1
+        ]     isAvatar: false,
+        [
+            1
+        ]     requiresDirectConnection: false,
+        [
+            1
+        ]     links: []
+[
+            1
+        ]
+    },
+    [
+        1
+    ]   mediaKey: undefined,
+    [
+        1
+    ]   id: {
+        [
+            1
+        ]     fromMe: false,
+        [
+            1
+        ]     remote: '917056943283@c.us',
+        [
+            1
+        ]     id: 'E156EBE991282849C2F1D12D71FF565E',
+        [
+            1
+        ]     _serialized: 'false_917056943283@c.us_E156EBE991282849C2F1D12D71FF565E'       
+[
+            1
+        ]
+    },
+    [
+        1
+    ]   ack: 1,
+    [
+        1
+    ]   hasMedia: false,
+    [
+        1
+    ]   body: 'BEGIN:VCARD\n' +
+[
+        1
+    ]     'VERSION: 3.0\n' +
+[
+        1
+    ]     'N:Safety;Agarson;;;\n' +
+[
+        1
+    ]     'FN:Agarson Safety\n' +
+[
+        1
+    ]     'TEL;type=Mobile:+91 6363 433 634\n' +
+[
+        1
+    ]     'TEL;type=Mobile;waid=919817702310:+91 98177 02310\n' +
+[
+        1
+    ]     'item1.ADR;type=Work:;;;;Haryana;;India\n' +
+[
+        1
+    ]     'item1.X-ABADR:in\n' +
+[
+        1
+    ]     'item2.ADR;type=Work:;;;;Haryana;;India\n' +
+[
+        1
+    ]     'item2.X-ABADR:in\n' +
+[
+        1
+    ]     'END:VCARD',
+    [
+        1
+    ]   type: 'vcard',
+    [
+        1
+    ]   timestamp: 1686564649,
+    [
+        1
+    ]   from: '917056943283@c.us',
+    [
+        1
+    ]   to: '917404293907@c.us',
+    [
+        1
+    ]   author: undefined,
+    [
+        1
+    ]   deviceType: 'android',
+    [
+        1
+    ]   isForwarded: false,
+    [
+        1
+    ]   forwardingScore: 0,
+    [
+        1
+    ]   isStatus: false,
+    [
+        1
+    ]   isStarred: false,
+    [
+        1
+    ]   broadcast: false,
+    [
+        1
+    ]   fromMe: false,
+    [
+        1
+    ]   hasQuotedMsg: false,
+    [
+        1
+    ]   hasReaction: false,
+    [
+        1
+    ]   duration: undefined,
+    [
+        1
+    ]   location: undefined,
+    [
+        1
+    ]   vCards: [
+        [
+            1
+        ]     'BEGIN:VCARD\n' +
+[
+            1
+        ]       'VERSION: 3.0\n' +
+[
+            1
+        ]       'N:Safety;Agarson;;;\n' +
+[
+            1
+        ]       'FN:Agarson Safety\n' +
+[
+            1
+        ]       'TEL;type=Mobile:+91 6363 433 634\n' +
+[
+            1
+        ]       'TEL;type=Mobile;waid=919817702310:+91 98177 02310\n' +
+[
+            1
+        ]       'item1.ADR;type=Work:;;;;Haryana;;India\n' +
+[
+            1
+        ]       'item1.X-ABADR:in\n' +
+[
+            1
+        ]       'item2.ADR;type=Work:;;;;Haryana;;India\n' +
+[
+            1
+        ]       'item2.X-ABADR:in\n' +
+[
+            1
+        ]       'END:VCARD'
+[
+            1
+        ]
+    ],
+    [
+        1
+    ]   inviteV4: undefined,
+    [
+        1
+    ]   mentionedIds: [],
+    [
+        1
+    ]   orderId: undefined,
+    [
+        1
+    ]   token: undefined,
+    [
+        1
+    ]   isGif: false,
+    [
+        1
+    ]   isEphemeral: undefined,
+    [
+        1
+    ]   links: []
+[
+        1
+    ]
+}

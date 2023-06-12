@@ -1,0 +1,108 @@
+sent message Message {
+  _data: {
+    id: {
+      fromMe: true,
+      remote: [Object
+      ],
+      id: '3EB040EB6FD8D0F5725F7E',
+      _serialized: 'true_917056943283@c.us_3EB040EB6FD8D0F5725F7E'
+    },
+    body: 'BEGIN:VCARD\n' +
+      'VERSION: 3.0\n' +
+      'N:;Nishu;;;\n' +
+      'FN:Nishu\n' +
+      'TEL;type=CELL;waid=917056943283:+91 70569 43283\n' +
+      'X-WA-BIZ-NAME:Nishu\n' +
+      'END:VCARD',
+    type: 'vcard',
+    t: 1686565352,
+    from: {
+      server: 'c.us',
+      user: '917404293907',
+      _serialized: '917404293907@c.us'
+    },
+    to: {
+      server: 'c.us',
+      user: '917056943283',
+      _serialized: '917056943283@c.us'
+    },
+    self: 'out',
+    ack: 0,
+    isNewMsg: true,
+    star: false,
+    kicNotified: false,
+    isFromTemplate: false,
+    pollInvalidated: false,
+    isSentCagPollCreation: false,
+    latestEditMsgKey: null,
+    latestEditSenderTimestampMs: null,
+    mentionedJidList: [],
+    groupMentions: [],
+    isVcardOverMmsDocument: false,
+    vcardFormattedName: 'Nishu',
+    isForwarded: false,
+    labels: [],
+    hasReaction: false,
+    ephemeralSettingTimestamp: 1686557582,
+    disappearingModeInitiator: 'chat',
+    productHeaderImageRejected: false,
+    lastPlaybackProgress: 0,
+    isDynamicReplyButtonsMsg: false,
+    isMdHistoryMsg: false,
+    stickerSentTs: 0,
+    isAvatar: false,
+    requiresDirectConnection: null
+  },
+  mediaKey: undefined,
+  id: {
+    fromMe: true,
+    remote: {
+      server: 'c.us',
+      user: '917056943283',
+      _serialized: '917056943283@c.us'
+    },
+    id: '3EB040EB6FD8D0F5725F7E',
+    _serialized: 'true_917056943283@c.us_3EB040EB6FD8D0F5725F7E'
+  },
+  ack: 0,
+  hasMedia: false,
+  body: 'BEGIN:VCARD\n' +
+    'VERSION: 3.0\n' +
+    'N:;Nishu;;;\n' +
+    'FN:Nishu\n' +
+    'TEL;type=CELL;waid=917056943283:+91 70569 43283\n' +
+    'X-WA-BIZ-NAME:Nishu\n' +
+    'END:VCARD',
+  type: 'vcard',
+  timestamp: 1686565352,
+  from: '917404293907@c.us',
+  to: '917056943283@c.us',
+  author: undefined,
+  deviceType: 'android',
+  isForwarded: false,
+  forwardingScore: 0,
+  isStatus: false,
+  isStarred: false,
+  broadcast: undefined,
+  fromMe: true,
+  hasQuotedMsg: false,
+  hasReaction: false,
+  duration: undefined,
+  location: undefined,
+  vCards: [
+    'BEGIN:VCARD\n' +
+      'VERSION: 3.0\n' +
+      'N:;Nishu;;;\n' +
+      'FN:Nishu\n' +
+      'TEL;type=CELL;waid=917056943283:+91 70569 43283\n' +
+      'X-WA-BIZ-NAME:Nishu\n' +
+      'END:VCARD'
+  ],
+  inviteV4: undefined,
+  mentionedIds: [],
+  orderId: undefined,
+  token: undefined,
+  isGif: false,
+  isEphemeral: undefined,
+  links: undefined
+}
