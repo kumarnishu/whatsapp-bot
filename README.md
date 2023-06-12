@@ -4,7 +4,7 @@ env variables
 NODE_ENV="development"
 HOST=https://localhost
 PORT=5000
-# DB_URL=mongodb+srv://username:password@cluster0.pz9ze.mongodb.net/bot?retryWrites=true&w=majority
+DB_URL=mongodb+srv://username:password@cluster0.pz9ze.mongodb.net/bot?retryWrites=true&w=majority
 TZ=Asia/Kolkata
 EMAIL_HOST=smptp.gmail.com
 EMAIL_PORT= 587
