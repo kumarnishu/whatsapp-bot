@@ -7,7 +7,6 @@ type ISticker = ""
 type IImage = ""
 type ILocation = ""
 
-
 export type IMenuItem = {
     _id: string,
     index: number,
@@ -37,6 +36,7 @@ export type IFlow = {
     flow_name: string,
     menus: IMenu[]
 }
+
 export type TFlowBody = Request['body'] & IFlow;
 
 
