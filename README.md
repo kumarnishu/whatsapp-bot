@@ -1,4 +1,5 @@
 # whatsap web bot for everry mobile
+# Revive sesssion not Working Yet for remote auth- its ia bug
 
 env variables
 NODE_ENV="development"
