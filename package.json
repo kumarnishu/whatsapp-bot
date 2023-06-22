@@ -30,6 +30,7 @@
     "socket.io": "^4.6.2",
     "typescript": "^5.1.3",
     "validator": "^13.9.0",
+    "venom-bot": "^5.0.6",
     "whatsapp-web.js": "^1.21.0"
   },
   "devDependencies": {
