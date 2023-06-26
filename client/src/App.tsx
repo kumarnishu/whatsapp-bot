@@ -1,11 +1,33 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useMemo,useState } from 'react';
 import { Button } from 'react-bootstrap';
-import ReactFlow, { Background, BackgroundVariant, Panel, addEdge, applyEdgeChanges, applyNodeChanges } from 'reactflow';
-
+import ReactFlow, { Background, BackgroundVariant, Handle, Panel, Position, addEdge, applyEdgeChanges, applyNodeChanges } from 'reactflow';
 import 'reactflow/dist/style.css';
 
+
+const handleStyle = { left: 10 };
+
+function TextUpdaterNode({data}:{ data:any }) {
+  const onChange = useCallback((evt:any) => {
+    console.log(evt.target.value);
+  }, []);
+
+  return (
+    <>
+      <Handle type="target" position={Position.Top} />
+      {/* react component here */}
+      <div>
+        <input id="text" name="text" placeholder='enter name' onChange={onChange} className="nodrag p-2" />
+      </div>
+      <Handle type="source" position={Position.Bottom} id="a" />
+      <Handle type="source" position={Position.Bottom} id="b" style={handleStyle} />
+    </>
+  );
+}
+
+
+
 const initialNodes = [
-  { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } },
+  { id: '1', type: 'textUpdater', position: { x: 0, y: 0 }, data: { label: '1' } },
   { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
   { id: '3', position: { x: 0, y: 200 }, data: { label: '3' } },
 ];
@@ -18,6 +40,8 @@ export default function App() {
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
   const [variant, setVariant] = useState<BackgroundVariant>(BackgroundVariant.Cross);
+
+  const nodeTypes = useMemo(() => ({ textUpdater: TextUpdaterNode }), []);
 
   const onNodesChange = useCallback(
     (changes: any) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -41,6 +65,7 @@ export default function App() {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         fitView
+        nodeTypes={nodeTypes}
       >
         <Background color="#ccc" variant={BackgroundVariant.Cross} />
         <Panel position='top-left' className='d-flex gap-1'>
