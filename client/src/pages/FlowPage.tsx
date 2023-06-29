@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { Background, BackgroundVariant, Connection, Controls, Edge, MiniMap, Node, Panel, ReactFlow, addEdge, useEdgesState, useNodesState } from "reactflow";
+import React, { useState, useCallback } from "react";
+import { Background, BackgroundVariant, Connection, Controls, MiniMap, Node, Panel, ReactFlow, addEdge, useNodesState, useEdgesState } from "reactflow";
 import "reactflow/dist/style.css";
 import { MenuNode, DefaultNode, OutputNode, StartNode } from "../components/nodes/NodeTypes"
 
@@ -10,33 +10,45 @@ const initialNodes: Node[] = [
   {
     id: 'start',
     position: { x: 0, y: 10 },
-    data: { id: 'start', label: "Put Keywords to trigger this flow" },
-    type: 'StartNode'  },
+    data: { id: 'start' },
+    type: 'StartNode'
+  },
   {
     id: '2',
     position: { x: 0, y: 50 },
-    data: { id: 2, label: "menu1" },
+    data: { id: 2 },
   },
   {
     id: '3',
     position: { x: 0, y: 100 },
-    data: { label: "type 1 for catalouge of company" },
+    data: {},
   },
   {
     id: '4',
     position: { x: 0, y: 150 },
-    data: { label: "type 2 for call book of company" },
+    data: {},
+  },
+  {
+    id: '5',
+    position: { x: 0, y: 200 },
+    data: { id: 2 },
+  },
+  {
+    id: '6',
+    position: { x: 0, y: 250 },
+    data: {},
+  },
+  {
+    id: '7',
+    position: { x: 0, y: 300 },
+    data: {},
   }
 ];
 
-
-
 export default function FlowPage() {
-  const [nodes, setNodes] = useState<Node[]>(initialNodes);
-  const [edges, setEdges] = useState<Edge[]>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [node, setNode] = useState<Node>()
-  const [srcNode, setSourceNode] = useState<Node>()
-  const [targetNode, setTargetNode] = useState<Node>()
 
   // add new child
   function addNewNode() {
@@ -53,23 +65,19 @@ export default function FlowPage() {
 
     if (srcNode && targetNode) {
       if (srcNode.type === "StartNode") {
-        let data = () =>
-          nodes.map((node) => {
-            if (node.id === targetNode?.id) {
-              node.type = "MenuNode"
-              console.log("running1")
-
-            }
-            return node;
-          })
-        setNodes(data);
-        console.log("running2")
-
-
+        setNodes((nodes) => nodes.map((node) => {
+          if (node.id === targetNode?.id) {
+            node.type = "MenuNode"
+            node.parentNode = srcNode?.id
+          }
+          return node
+        }))
       }
+
+
       if (srcNode.type === "MenuNode") {
         let length = nodes.filter((node) => { return node.parentNode === srcNode?.id }).length
-        let data = nodes.map((node) => {
+        setNodes((nodes) => nodes.map((node) => {
           if (node.id === targetNode?.id) {
             node.type = "DefaultNode"
             node.parentNode = srcNode?.id
@@ -78,25 +86,40 @@ export default function FlowPage() {
               index: length ? length + 1 : 1
             }
           }
-          return node;
-        })
-        setNodes(data);
+          return node
+        }))
       }
-      if (srcNode.type === "DefaultNode") {
-        return edges
+
+      if (srcNode.type === "DefaultNode" && targetNode.type === "DefaultNode") {
+        setNodes((nodes) => nodes.map((node) => {
+          if (node.id === targetNode?.id) {
+            node.type = "MenuNode"
+            node.parentNode = srcNode?.id
+          }
+          return node
+        }))
+      }
+
+      if (srcNode.type === "DefaultNode" && targetNode.type === "OutputNode") {
+        setNodes((nodes) => nodes.map((node) => {
+          if (node.id === targetNode?.id) {
+            node.parentNode = srcNode?.id
+          }
+          return node
+        }))
       }
     }
     return addEdge(params, eds)
-  }), []);
+  }), [nodes, setNodes, setEdges]);
 
-  useEffect(()=>{
-
-  },[])
+  console.log(nodes)
   return (
     <ReactFlow
-      defaultNodes={nodes}
-      defaultEdges={edges}
+      nodes={nodes}
+      edges={edges}
       onConnect={onConnect}
+      onNodesChange={onNodesChange}
+      onEdgesChange={onEdgesChange}
       fitView
       nodeTypes={nodeTypes}
       defaultEdgeOptions={{ type: "smoothstep" }}
