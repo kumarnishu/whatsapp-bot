@@ -12,7 +12,7 @@ export enum paths {
     login = "/login",
     signup = "/signup",
     flows = "/flows",
-    flow = "flow",
+    flow = "/flow",
     reset_password = "/password/reset/:token",
     update_password = "/password/update",
 }

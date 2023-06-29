@@ -26,6 +26,7 @@ function NavBar() {
                             height="40"
                         />
                     </Link>
+                    <Link to={paths.flow}>Flow</Link>
                     {user ? <RefreshWhatsappButton /> : null}
                 </div>
                 {

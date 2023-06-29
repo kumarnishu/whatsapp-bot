@@ -1,20 +1,7 @@
-import { useEffect, useState } from "react"
-import { socket } from "../socket"
+import FlowPage from "./FlowPage"
 
 export default function FlowsPage() {
-  const [data, setData] = useState()
-  useEffect(() => {
-    if (socket) {
-      socket.on("data", (data) => setData(data))
-    }
-    return () => {
-      if (socket) {
-        socket.off("data", (data) => setData(data))
-      }
-    }
-  }, [])
-  console.log(data)
   return (
-    <div>FlowsPage</div>
+   <h1>This is flow page</h1>
   )
 }
