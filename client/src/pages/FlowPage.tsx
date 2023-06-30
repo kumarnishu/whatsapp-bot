@@ -10,7 +10,7 @@ const initialNodes: Node[] = [
   {
     id: 'root',
     position: { x: 0, y: 10 },
-    data: {label: "Trigger Keywords" },
+    data: { label: "Trigger Keywords" },
     type: 'StartNode'
   }
 ];
@@ -114,43 +114,45 @@ export default function FlowPage() {
   };
   console.log(nodes)
   return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onConnect={onConnect}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      fitView
-      nodeTypes={nodeTypes}
-      defaultEdgeOptions={{ type: "smoothstep" }}
-      onNodeClick={handleSelectNode}
-      //@ts-ignore
+    <div style={{ height: "90vh" }}>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onConnect={onConnect}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        fitView
+        nodeTypes={nodeTypes}
+        defaultEdgeOptions={{ type: "smoothstep" }}
+        onNodeClick={handleSelectNode}
+        //@ts-ignore
 
-      onDrop={onDrop}
-      //@ts-ignore
+        onDrop={onDrop}
+        //@ts-ignore
 
-      onDragOver={onDragOver}
-    >
-      <Background variant={BackgroundVariant.Dots} />
-      <MiniMap pannable={true} nodeStrokeWidth={5}
-        zoomable={true} nodeColor="grey" />
-      <Controls />
-      <Panel position="top-right">
-        {/* @ts-ignore */}
-        <div className="react-flow__node-default" onDragStart={(event: DragEvent) => onDragStart(event, 'DefaultNode')} draggable>
-          Default Node
-        </div>
-        <hr></hr>
-        <div
-          className="react-flow__node-default"
-          //@ts-ignore
-          onDragStart={(event: DragEvent) => onDragStart(event, 'OutputNode')}
-          draggable
-        >
-          Output Node
-        </div>
-      </Panel>
-    </ReactFlow>
+        onDragOver={onDragOver}
+      >
+        <Background variant={BackgroundVariant.Dots} />
+        <MiniMap pannable={true} nodeStrokeWidth={5}
+          zoomable={true} nodeColor="grey" />
+        <Controls />
+        <Panel position="top-right">
+          {/* @ts-ignore */}
+          <div className="react-flow__node-default" onDragStart={(event: DragEvent) => onDragStart(event, 'DefaultNode')} draggable>
+            Default Node
+          </div>
+          <hr></hr>
+          <div
+            className="react-flow__node-default"
+            //@ts-ignore
+            onDragStart={(event: DragEvent) => onDragStart(event, 'OutputNode')}
+            draggable
+          >
+            Output Node
+          </div>
+        </Panel>
+      </ReactFlow>
+    </div>
   );
 };
 
