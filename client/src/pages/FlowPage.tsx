@@ -2,49 +2,16 @@ import React, { useState, useCallback } from "react";
 import { Background, BackgroundVariant, Connection, Controls, MiniMap, Node, Panel, ReactFlow, addEdge, useNodesState, useEdgesState } from "reactflow";
 import "reactflow/dist/style.css";
 import { MenuNode, DefaultNode, OutputNode, StartNode } from "../components/nodes/NodeTypes"
-
+import { v4 as uuidv4 } from 'uuid';
 
 const nodeTypes = { MenuNode, DefaultNode, StartNode, OutputNode }
 
 const initialNodes: Node[] = [
   {
-    id: 'start',
+    id: 'root',
     position: { x: 0, y: 10 },
-    data: { id: 'start',label:"Triggers" },
+    data: {label: "Trigger Keywords" },
     type: 'StartNode'
-  },
-  {
-    id: '2',
-    position: { x: 0, y: 50 },
-    data: { id: 2 },
-  },
-  {
-    id: '3',
-    position: { x: 0, y: 100 },
-    data: {},
-  },
-  {
-    id: '4',
-    position: { x: 0, y: 150 },
-    data: {},
-  },
-  {
-    id: '5',
-    position: { x: 0, y: 200 },
-    data: { index: 56 },
-    type: "DefaultNode"
-  },
-  {
-    id: '6',
-    position: { x: 0, y: 250 },
-    data: {index:6},
-    type: "DefaultNode"
-  },
-  {
-    id: '7',
-    position: { x: 0, y: 300 },
-    data: {},
-    type:"OutputNode"
   }
 ];
 
@@ -53,10 +20,6 @@ export default function FlowPage() {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [node, setNode] = useState<Node>()
 
-  // add new child
-  function addNewNode() {
-    console.log(node)
-  }
   function handleSelectNode(event: React.MouseEvent, node: Node) {
     setNode(node)
     console.log(node)
@@ -72,6 +35,10 @@ export default function FlowPage() {
           if (node.id === targetNode?.id) {
             node.type = "MenuNode"
             node.parentNode = srcNode?.id
+            node.data = {
+              ...node.data,
+              label: "Menu Node"
+            }
           }
           return node
         }))
@@ -98,6 +65,10 @@ export default function FlowPage() {
           if (node.id === targetNode?.id) {
             node.type = "MenuNode"
             node.parentNode = srcNode?.id
+            node.data = {
+              ...node.data,
+              label: "Menu Node"
+            }
           }
           return node
         }))
@@ -115,6 +86,33 @@ export default function FlowPage() {
     return addEdge(params, eds)
   }), [nodes, setNodes, setEdges]);
 
+  const onDrop = (event: DragEvent) => {
+    event.preventDefault();
+    if (event && event.dataTransfer) {
+      const type = event?.dataTransfer.getData('application/reactflow');
+      const newNode: Node = {
+        id: uuidv4(),
+        type,
+        position: { x: 0, y: 0 },
+        data: { label: `${type}` },
+      };
+      setNodes((nds) => nds.concat(newNode));
+    }
+  };
+
+  const onDragStart = (event: DragEvent, nodeType: string) => {
+    if (event && event.dataTransfer) {
+      event.dataTransfer.setData('application/reactflow', nodeType);
+      event.dataTransfer.effectAllowed = 'move';
+    }
+  };
+
+  const onDragOver = (event: DragEvent) => {
+    event.preventDefault();
+    if (event && event.dataTransfer)
+      event.dataTransfer.dropEffect = 'move';
+  };
+  console.log(nodes)
   return (
     <ReactFlow
       nodes={nodes}
@@ -126,15 +124,31 @@ export default function FlowPage() {
       nodeTypes={nodeTypes}
       defaultEdgeOptions={{ type: "smoothstep" }}
       onNodeClick={handleSelectNode}
+      //@ts-ignore
+
+      onDrop={onDrop}
+      //@ts-ignore
+
+      onDragOver={onDragOver}
     >
       <Background variant={BackgroundVariant.Dots} />
       <MiniMap pannable={true} nodeStrokeWidth={5}
         zoomable={true} nodeColor="grey" />
       <Controls />
       <Panel position="top-right">
-        {node ?
-          <button onClick={addNewNode}>New Node</button> : null
-        }
+        {/* @ts-ignore */}
+        <div className="react-flow__node-default" onDragStart={(event: DragEvent) => onDragStart(event, 'DefaultNode')} draggable>
+          Default Node
+        </div>
+        <hr></hr>
+        <div
+          className="react-flow__node-default"
+          //@ts-ignore
+          onDragStart={(event: DragEvent) => onDragStart(event, 'OutputNode')}
+          draggable
+        >
+          Output Node
+        </div>
       </Panel>
     </ReactFlow>
   );
