@@ -31,12 +31,13 @@ const initialNodes: Node[] = [
   {
     id: '5',
     position: { x: 0, y: 200 },
-    data: { id: 2 },
+    data: { index: 56 },
+    type: "DefaultNode"
   },
   {
     id: '6',
     position: { x: 0, y: 250 },
-    data: {},
+    data: {index:6},
     type: "DefaultNode"
   },
   {
@@ -114,7 +115,6 @@ export default function FlowPage() {
     return addEdge(params, eds)
   }), [nodes, setNodes, setEdges]);
 
-  console.log(nodes)
   return (
     <ReactFlow
       nodes={nodes}

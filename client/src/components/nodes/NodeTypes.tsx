@@ -4,17 +4,17 @@ import { styled } from "styled-components"
 
 
 const MenuDiv = styled.div`
-background-color:#0040ff
+background-color:#0040ff;
 `
 const StartDiv = styled.div`
 background-color:#ff8000
 
 `
 const DefaultDiv = styled.div`
-background-color:#ffe6e6
+background-color:  #ff8080
     `
 const OutPutDiv = styled.div`
-background-color: #ff00bf	
+background-color:#ff00bf	
 
 `
 export function MenuNode({ data }: { data: any }) {
@@ -34,8 +34,11 @@ export function DefaultNode({ data }: { data: any }) {
         <>
             <CustomHandle className=" bg-info border border-2 white" type="target" position={Position.Top} isConnectable={2} />
             <DefaultDiv className="d-flex gap-1 p-1 rounded ">
-                <div className="id border rounded p-1 ">{data.index}</div>
-                <div className="label border  rounded p-1">
+
+                <div style={{ width: 30, height: 30, borderRadius: '50% ' }} className="d-flex align-items-center  bg-light  text-dark p-2">{data.index}
+                </div>
+
+                <div className="rounded text-light p-1">
                     {data.label || "Default"}
                 </div>
             </DefaultDiv>
