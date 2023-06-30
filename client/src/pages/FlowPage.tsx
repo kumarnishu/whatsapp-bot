@@ -10,7 +10,7 @@ const initialNodes: Node[] = [
   {
     id: 'start',
     position: { x: 0, y: 10 },
-    data: { id: 'start' },
+    data: { id: 'start',label:"Triggers" },
     type: 'StartNode'
   },
   {
@@ -37,11 +37,13 @@ const initialNodes: Node[] = [
     id: '6',
     position: { x: 0, y: 250 },
     data: {},
+    type: "DefaultNode"
   },
   {
     id: '7',
     position: { x: 0, y: 300 },
     data: {},
+    type:"OutputNode"
   }
 ];
 

@@ -1,15 +1,30 @@
 import { Position } from "reactflow"
 import CustomHandle from "./CustomHandle"
+import { styled } from "styled-components"
 
 
+const MenuDiv = styled.div`
+background-color:#0040ff
+`
+const StartDiv = styled.div`
+background-color:#ff8000
+
+`
+const DefaultDiv = styled.div`
+background-color:#ffe6e6
+    `
+const OutPutDiv = styled.div`
+background-color: #ff00bf	
+
+`
 export function MenuNode({ data }: { data: any }) {
     return (
         <>
-            <CustomHandle  className="p-1 bg-danger border border-2 white" type="target" position={Position.Top}/>
-            <div className="react-flow-menu-node bg-danger text-light rounded p-1 ">
-                Menu:{data.label}
-            </div>
-            <CustomHandle  className="p-1 bg-dark border border-2 white" type="source" position={Position.Bottom}  />
+            <CustomHandle className=" bg-warning border border-2 white rounded" type="target" position={Position.Top} />
+            <MenuDiv className="react-flow-menu-node  text-light rounded p-1 ">
+                {data.label || "menu"}
+            </MenuDiv>
+            <CustomHandle className="bg-secondary border border-2 white" type="source" position={Position.Bottom} />
         </>
     )
 }
@@ -17,14 +32,14 @@ export function MenuNode({ data }: { data: any }) {
 export function DefaultNode({ data }: { data: any }) {
     return (
         <>
-            <CustomHandle className="p-1 bg-danger border border-2 white" type="target" position={Position.Top} isConnectable={2} />
-            <div className="d-flex gap-1 react-flow-default-node bg-success text-light rounded ">
-            <div className="id border p-2 ">{data.index}</div>
-                <div className="label border p-2">
-                   Default node
-               </div>
-            </div>
-            <CustomHandle  className="p-1 bg-dark border border-2 white" type="source" position={Position.Bottom} isConnectable={2} />
+            <CustomHandle className=" bg-info border border-2 white" type="target" position={Position.Top} isConnectable={2} />
+            <DefaultDiv className="d-flex gap-1 p-1 rounded ">
+                <div className="id border rounded p-1 ">{data.index}</div>
+                <div className="label border  rounded p-1">
+                    {data.label || "Default"}
+                </div>
+            </DefaultDiv>
+            <CustomHandle className=" bg-secondary border border-2 rounded white" type="source" position={Position.Bottom} isConnectable={2} />
         </>
     )
 }
@@ -32,10 +47,10 @@ export function DefaultNode({ data }: { data: any }) {
 export function OutputNode({ data }: { data: any }) {
     return (
         <>
-            <CustomHandle  className="p-1 bg-danger border border-2 white" type="source" position={Position.Top} isConnectable={1} />
-            <div className="react-flow-output-node bg-warning rounded p-2">
-                Output:{data.id}
-            </div>
+            <CustomHandle className="bg-info border border-2 white" type="target" position={Position.Top} isConnectable={1} />
+            <OutPutDiv className="text-light rounded p-2">
+                {data.label || "output"}
+            </OutPutDiv>
         </>
     )
 }
@@ -43,10 +58,10 @@ export function OutputNode({ data }: { data: any }) {
 export function StartNode({ data }: { data: any }) {
     return (
         <>
-            <div className="react-flow-start-node bg-warning rounded-circle p-2">
+            <StartDiv className="p-1 text-light rounded-circle p-2 white" >
                 {data.label}
-            </div>
-            <CustomHandle className="p-1 bg-secondary border border-2 white" type="source" position={Position.Bottom} isConnectable={1} />
+            </StartDiv>
+            <CustomHandle className="bg-secondary border border-2 white" type="source" position={Position.Bottom} isConnectable={1} />
         </>
     )
 }
