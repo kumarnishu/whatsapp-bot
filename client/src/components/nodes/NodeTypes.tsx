@@ -22,7 +22,7 @@ export function MenuNode({ data }: { data: any }) {
         <>
             <CustomHandle className=" bg-warning border border-2 white rounded" type="target" position={Position.Top} />
             <MenuDiv className="react-flow-menu-node  text-light rounded p-1 ">
-                {data.media_value || "menu"}
+                {data.media_value || "type something"}
             </MenuDiv>
             <CustomHandle className="bg-secondary border border-2 white" type="source" position={Position.Bottom} />
         </>
@@ -39,7 +39,7 @@ export function DefaultNode({ data }: { data: any }) {
                 </div>
 
                 <div className="rounded text-light p-1">
-                    {data.media_value || "Default"}
+                    {data.media_value || "type something"}
                 </div>
             </DefaultDiv>
             <CustomHandle className=" bg-secondary border border-2 rounded white" type="source" position={Position.Bottom} isConnectable={2} />
@@ -52,7 +52,7 @@ export function OutputNode({ data }: { data: any }) {
         <>
             <CustomHandle className="bg-info border border-2 white" type="target" position={Position.Top} isConnectable={1} />
             <OutPutDiv className="text-light rounded p-2">
-                {"Reply"}
+                {"Double click to see Reply"}
             </OutPutDiv>
         </>
     )
@@ -62,7 +62,7 @@ export function StartNode({ data }: { data: any }) {
     return (
         <>
             <StartDiv className="p-1 text-light rounded-circle p-2 white" >
-                {data.media_value}
+                {data.media_value||"type trigger keywords"}
             </StartDiv>
             <CustomHandle className="bg-secondary border border-2 white" type="source" position={Position.Bottom} isConnectable={1} />
         </>

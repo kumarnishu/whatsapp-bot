@@ -23,10 +23,9 @@ export default function FlowPage() {
   const [selectedNode, setSelectedNode] = useState<Node>()
   const { setChoice } = useContext(ChoiceContext)
 
-  function handleSelectNode(event: React.MouseEvent, node: Node) {
-    setSelectedNode(node)
+  function handleSelectNode(event: React.MouseEvent, _node: Node) {
+    setSelectedNode(_node)
     setChoice({ type: AppChoiceActions.update_node })
-    console.log(node)
   }
   //handle nodes
   const onConnect = useCallback((params: Connection) => setEdges((eds) => {
@@ -130,8 +129,6 @@ export default function FlowPage() {
     }
 
   }
-  console.log(nodes)
-  
   return (
     <div style={{ height: "90vh" }}>
       <ReactFlow
@@ -171,7 +168,7 @@ export default function FlowPage() {
           </div>
         </Panel>
       </ReactFlow>
-      {selectedNode ? <UpdateNodeModal updateNode={UpdateNode} /> : null}
+      {selectedNode ? <UpdateNodeModal updateNode={UpdateNode} selectedNode={selectedNode} /> : null}
     </div>
   );
 };

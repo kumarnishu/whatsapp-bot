@@ -3,13 +3,14 @@ import { AppChoiceActions, ChoiceContext } from '../../../contexts/DialogContext
 import { Modal, Button, Form } from 'react-bootstrap'
 import { useFormik } from 'formik';
 import * as Yup from "yup"
+import { Node } from "reactflow"
 
-function UpdateNodeModal({ updateNode }: { updateNode: (media_value: string, media_type?: string) => void }) {
+function UpdateNodeModal({ updateNode, selectedNode }: { updateNode: (media_value: string, media_type?: string) => void, selectedNode: Node }) {
     const { choice, setChoice } = useContext(ChoiceContext)
     const formik = useFormik({
         initialValues: {
-            media_type: "message",
-            media_value: ""
+            media_type: selectedNode.data.media_type || "message",
+            media_value: selectedNode.data.media_value || ""
         },
         validationSchema: Yup.object({
             media_value: Yup.string()
@@ -21,6 +22,7 @@ function UpdateNodeModal({ updateNode }: { updateNode: (media_value: string, med
         }) => {
             console.log(values)
             updateNode(values.media_value, values.media_type)
+            setChoice({ type: AppChoiceActions.close_app })
         },
     });
     return (
