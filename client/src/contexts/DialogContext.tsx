@@ -1,7 +1,7 @@
 import React, { useReducer } from "react"
 
 // choices
-type AppChoices = "new_user" | "close_app" | "new_task" | null | "delete_user" | "update_user" | "block_user" | "unblock_user" | "make_admin" | "remove_admin" | "update_password" |"refresh_whatsapp"
+type AppChoices = "new_user" | "close_app" | "new_task" | null | "delete_user" | "update_user" | "block_user" | "unblock_user" | "make_admin" | "remove_admin" | "update_password" | "refresh_whatsapp" | "update_node" | "update_node"
 
 type TaskChoices = "new_task" | "delete_task" | "close_task" | "edit_task" | "start_task" | "stop_task" | "view_task"
 
@@ -21,8 +21,9 @@ export enum AppChoiceActions {
     update_password = "update_password",
     make_admin = "make_admin",
     remove_admin = "remove_admin",
+    update_node = "update_node",
     close_app = "close_app",
-    refresh_whatsapp ="refresh_whatsapp"
+    refresh_whatsapp = "refresh_whatsapp"
 }
 export enum TaskChoiceActions {
     new_task = "new_task",
@@ -61,6 +62,7 @@ function reducer(state: ChoiceState, action: Action) {
         case AppChoiceActions.unblock_user: return type
         case AppChoiceActions.update_password: return type
         case AppChoiceActions.refresh_whatsapp: return type
+        case AppChoiceActions.update_node: return type
         case AppChoiceActions.close_app: return type
 
         // task dialog choices

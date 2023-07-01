@@ -1,16 +1,18 @@
-import React, { useState, useCallback } from "react";
+import React, { useContext, useState, useCallback } from "react";
 import { Background, BackgroundVariant, Connection, Controls, MiniMap, Node, Panel, ReactFlow, addEdge, useNodesState, useEdgesState } from "reactflow";
 import "reactflow/dist/style.css";
 import { MenuNode, DefaultNode, OutputNode, StartNode } from "../components/nodes/NodeTypes"
 import { v4 as uuidv4 } from 'uuid';
+import { AppChoiceActions, ChoiceContext } from "../contexts/DialogContext";
+import UpdateNodeModal from "../components/modals/flows/UpdateNode";
 
 const nodeTypes = { MenuNode, DefaultNode, StartNode, OutputNode }
 
 const initialNodes: Node[] = [
   {
-    id: 'root',
+    id: 'start',
     position: { x: 0, y: 10 },
-    data: { label: "Trigger Keywords" },
+    data: { media_value: "Trigger Keywords" },
     type: 'StartNode'
   }
 ];
@@ -19,9 +21,11 @@ export default function FlowPage() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [node, setNode] = useState<Node>()
+  const { setChoice } = useContext(ChoiceContext)
 
   function handleSelectNode(event: React.MouseEvent, node: Node) {
     setNode(node)
+    setChoice({ type: AppChoiceActions.update_node })
     console.log(node)
   }
   //handle nodes
@@ -94,7 +98,7 @@ export default function FlowPage() {
         id: uuidv4(),
         type,
         position: { x: 0, y: 0 },
-        data: { label: `${type}` },
+        data: { media_value: `${type}` },
       };
       setNodes((nds) => nds.concat(newNode));
     }
@@ -112,7 +116,25 @@ export default function FlowPage() {
     if (event && event.dataTransfer)
       event.dataTransfer.dropEffect = 'move';
   };
+
+  const UpdateNode = (media_value: string, media_type?: string) => {
+    if (node) {
+      setNodes((nodes) => nodes.map((node) => {
+        if (node.id === node.id) {
+          node.data = {
+            ...node.data,
+            media_value: media_value,
+            media_type: media_type,
+          }
+        }
+        return node
+      }))
+    }
+
+  }
+  console.log(node)
   console.log(nodes)
+  
   return (
     <div style={{ height: "90vh" }}>
       <ReactFlow
@@ -124,7 +146,7 @@ export default function FlowPage() {
         fitView
         nodeTypes={nodeTypes}
         defaultEdgeOptions={{ type: "smoothstep" }}
-        onNodeClick={handleSelectNode}
+        onNodeDoubleClick={handleSelectNode}
         //@ts-ignore
 
         onDrop={onDrop}
@@ -152,6 +174,7 @@ export default function FlowPage() {
           </div>
         </Panel>
       </ReactFlow>
+      {node ? <UpdateNodeModal updateNode={UpdateNode} /> : null}
     </div>
   );
 };

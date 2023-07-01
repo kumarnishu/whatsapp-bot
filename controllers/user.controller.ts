@@ -22,14 +22,13 @@ export const SignUp =
             return res.status(403).json({ message: `${email} already exists` });
         if (await User.findOne({ mobile: String(mobile).toLowerCase().trim() }))
             return res.status(403).json({ message: `${mobile} already exists` });
-        let users = await User.find()
         let owner = new User({
             username,
             password,
             email,
             mobile,
             is_admin: true,
-            client_id: client_id
+            client_id: String(client_id).replace(" ", "")
         })
 
         owner.created_by = owner

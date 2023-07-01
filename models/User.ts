@@ -47,6 +47,10 @@ const UserSchema = new mongoose.Schema<IUser, mongoose.Model<IUser, {}, IUserMet
         required: true,
 
     },
+    is_whatsapp_active:{
+        type: Boolean,
+        default: false,
+    },
     last_login: {
         type: Date,
         default: new Date(),

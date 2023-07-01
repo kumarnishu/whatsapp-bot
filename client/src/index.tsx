@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import {  WhatsappSessionProvider } from './contexts/WhatsappContext';
 import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { QueryClientProvider, QueryClient } from "react-query";
@@ -27,13 +26,11 @@ root.render(
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <UserProvider>
-        <WhatsappSessionProvider>
           <ChoiceProvider>
             <React.StrictMode>
               <App />
             </React.StrictMode>
           </ChoiceProvider>
-        </WhatsappSessionProvider>
       </UserProvider>
     </BrowserRouter>
   </QueryClientProvider>

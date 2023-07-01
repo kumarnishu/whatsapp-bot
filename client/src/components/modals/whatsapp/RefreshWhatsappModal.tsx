@@ -7,42 +7,49 @@ import { BackendError } from '../../../types'
 import { SetUpWhatsapp } from '../../../services/BotServices'
 import { socket } from '../../../socket'
 import QRCode from 'react-qr-code'
-import { WhatsappSessionContext } from '../../../contexts/WhatsappContext'
 import AlertBar from '../../alert/AlertBar'
+import { UserContext } from '../../../contexts/UserContext'
 
 
 function RefreshWhatsappModal() {
     const { choice, setChoice } = useContext(ChoiceContext)
-    const { whatsapp_session, setWhatsappSession } = useContext(WhatsappSessionContext)
-    const { mutate, isSuccess, isLoading, isError, error } = useMutation
+    const { user, setUser } = useContext(UserContext)
+    const { mutate, isLoading, isError, error } = useMutation
         <AxiosResponse<any>,
             BackendError>(SetUpWhatsapp)
     const [qrCode, setQrCode] = useState<string | undefined>()
     const [loading, setLoading] = useState(false)
 
-
-
     useEffect(() => {
         if (isError) setLoading(false)
     }, [isError])
-    
+
     useEffect(() => {
         if (socket) {
             socket.on("qr", (qr) => {
                 setLoading(false)
                 setQrCode(qr)
+                if (user)
+                    setUser({
+                        ...user,
+                        is_whatsapp_active: false
+                    })
             })
             socket.on("ready", () => {
                 setLoading(false)
                 setQrCode(undefined)
-                setWhatsappSession(true)
+                if (user)
+                    setUser({
+                        ...user,
+                        is_whatsapp_active: true
+                    })
             })
             socket.on("loading", () => {
                 setLoading(true)
                 setQrCode(undefined)
             })
         }
-    }, [setWhatsappSession])
+    }, [])
     return (
         <Modal
             show={choice === AppChoiceActions.refresh_whatsapp ? true : false}
@@ -52,16 +59,6 @@ function RefreshWhatsappModal() {
             {
                 isError ? (
                     <AlertBar variant="danger" message={error?.response.data.message} />
-
-
-                ) : null
-            }
-            {
-                isSuccess ? (
-                    <AlertBar variant="success" message={
-                        "logged in Whatsapp"
-                    } />
-
                 ) : null
             }
             <Container className='p-4'>
@@ -77,7 +74,7 @@ function RefreshWhatsappModal() {
 
                         <Container className='p-4'>
                             <>
-                                {whatsapp_session ? <p className='p-2'>Congrats ! Connected,Click Above Button to confirm</p> : null}
+                                {user && user.is_whatsapp_active ? <p className='p-2'>Congrats ! Connected,Click Above Button to confirm</p> : null}
                                 {isLoading && !qrCode ? <h1>Loading qr code...</h1> : null}
                                 {qrCode ?
                                     <>
