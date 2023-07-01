@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { AppChoiceActions, ChoiceContext } from '../../../contexts/DialogContext'
-import { Modal, Button, Container, Form } from 'react-bootstrap'
+import { Modal, Button, Form } from 'react-bootstrap'
 import { useFormik } from 'formik';
 import * as Yup from "yup"
 
@@ -8,17 +8,18 @@ function UpdateNodeModal({ updateNode }: { updateNode: (media_value: string, med
     const { choice, setChoice } = useContext(ChoiceContext)
     const formik = useFormik({
         initialValues: {
-            media_type: "",
+            media_type: "message",
             media_value: ""
         },
         validationSchema: Yup.object({
             media_value: Yup.string()
-                .required()
+                .required("this is required")
         }),
         onSubmit: (values: {
             media_type: string,
             media_value: string
         }) => {
+            console.log(values)
             updateNode(values.media_value, values.media_type)
         },
     });
@@ -37,10 +38,13 @@ function UpdateNodeModal({ updateNode }: { updateNode: (media_value: string, med
                     <Form.Text className='pl-2 text-muted '>{formik.touched.media_value && formik.errors.media_value ? formik.errors.media_value : ""}</Form.Text>
                 </Form.Group>
                 <Form.Group className="mb-3" >
-                    <Form.Control className="border border-primary" type="select" placeholder="Select Media Type"
+                    <Form.Select className="border border-primary"
                         {...formik.getFieldProps('media_type')}
-                    />
-                    <Form.Text className='pl-2 text-muted'>{formik.touched.media_type && formik.errors.media_type ? formik.errors.media_type : ""}</Form.Text>
+                    >
+                        <option value="message">Message</option>
+                        <option value="media">Media</option>
+                    </Form.Select>
+                    <Form.Text className='pl-2 text-muted'>{formik.touched.media_type && formik.errors.media_type ? formik.errors.media_type : "videos,gifts and stickers not supported"}</Form.Text>
                 </Form.Group>
                 <Button variant="primary" className='w-100' type="submit"
                 >Update</Button>

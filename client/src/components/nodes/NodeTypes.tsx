@@ -52,7 +52,7 @@ export function OutputNode({ data }: { data: any }) {
         <>
             <CustomHandle className="bg-info border border-2 white" type="target" position={Position.Top} isConnectable={1} />
             <OutPutDiv className="text-light rounded p-2">
-                {data.media_value || "output"}
+                {"Reply"}
             </OutPutDiv>
         </>
     )

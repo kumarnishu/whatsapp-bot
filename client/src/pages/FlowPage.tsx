@@ -20,11 +20,11 @@ const initialNodes: Node[] = [
 export default function FlowPage() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [node, setNode] = useState<Node>()
+  const [selectedNode, setSelectedNode] = useState<Node>()
   const { setChoice } = useContext(ChoiceContext)
 
   function handleSelectNode(event: React.MouseEvent, node: Node) {
-    setNode(node)
+    setSelectedNode(node)
     setChoice({ type: AppChoiceActions.update_node })
     console.log(node)
   }
@@ -41,7 +41,6 @@ export default function FlowPage() {
             node.parentNode = srcNode?.id
             node.data = {
               ...node.data,
-              label: "Menu Node"
             }
           }
           return node
@@ -71,7 +70,6 @@ export default function FlowPage() {
             node.parentNode = srcNode?.id
             node.data = {
               ...node.data,
-              label: "Menu Node"
             }
           }
           return node
@@ -98,7 +96,7 @@ export default function FlowPage() {
         id: uuidv4(),
         type,
         position: { x: 0, y: 0 },
-        data: { media_value: `${type}` },
+        data: {},
       };
       setNodes((nds) => nds.concat(newNode));
     }
@@ -118,13 +116,13 @@ export default function FlowPage() {
   };
 
   const UpdateNode = (media_value: string, media_type?: string) => {
-    if (node) {
+    if (selectedNode) {
       setNodes((nodes) => nodes.map((node) => {
-        if (node.id === node.id) {
+        if (node.id === selectedNode.id) {
           node.data = {
             ...node.data,
-            media_value: media_value,
-            media_type: media_type,
+            media_value,
+            media_type,
           }
         }
         return node
@@ -132,7 +130,6 @@ export default function FlowPage() {
     }
 
   }
-  console.log(node)
   console.log(nodes)
   
   return (
@@ -174,7 +171,7 @@ export default function FlowPage() {
           </div>
         </Panel>
       </ReactFlow>
-      {node ? <UpdateNodeModal updateNode={UpdateNode} /> : null}
+      {selectedNode ? <UpdateNodeModal updateNode={UpdateNode} /> : null}
     </div>
   );
 };
