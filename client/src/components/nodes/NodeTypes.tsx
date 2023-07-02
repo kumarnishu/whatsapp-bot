@@ -17,6 +17,7 @@ background-color:#ff8080;
 font-size:10px;
     `
 const OutPutDiv = styled.div`
+background-color:#32CD32;
 font-size:10px;
 max-width:200px;
 overflow:hidden;
@@ -55,7 +56,7 @@ export function OutputNode({ data }: { data: any }) {
     return (
         <>
             <CustomHandle className="bg-info border border-2 white" type="target" position={Position.Top} />
-            <OutPutDiv className="bg-success text-light rounded-pill p-1 px-2">
+            <OutPutDiv className="text-light rounded p-1 px-2">
                 {data.media_value||"type reply"}
             </OutPutDiv>
         </>

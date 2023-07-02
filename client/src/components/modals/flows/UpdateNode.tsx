@@ -3,7 +3,7 @@ import { AppChoiceActions, ChoiceContext } from '../../../contexts/DialogContext
 
 import { Node } from "reactflow"
 import { Modal, Button } from 'react-bootstrap'
-import UpdateNodeForm from '../../forms/users/UpdateNodeForm'
+import UpdateNodeForm from '../../forms/nodes/UpdateNodeForm'
 
 function UpdateNodeModal({ updateNode, selectedNode }: { updateNode: (media_value: string, media_type?: string) => void, selectedNode: Node }) {
     const { choice, setChoice } = useContext(ChoiceContext)

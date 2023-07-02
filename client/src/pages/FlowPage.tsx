@@ -129,6 +129,7 @@ export default function FlowPage() {
     }
 
   }
+  console.log(nodes)
   return (
     <div style={{ height: "90vh" }}>
       <ReactFlow
@@ -154,17 +155,21 @@ export default function FlowPage() {
         <Controls />
         <Panel position="top-right">
           {/* @ts-ignore */}
-          <div className="react-flow__node-default" onDragStart={(event: DragEvent) => onDragStart(event, 'DefaultNode')} draggable>
-            Default Node
+          <div style={{ cursor: "pointer", maxWidth: 100, backgroundColor: '#ff8080' }} className="react-flow__node-default  p-1 fs-6 mt-1 text-light" onDragStart={(event: DragEvent) => onDragStart(event, 'DefaultNode')} draggable>
+            <div className="d-flex gap-1 align-items-center justify-content-center">
+              <img width="20" height="20" src="https://img.icons8.com/arcade/64/box.png" alt="undo" />
+              <span>Default</span>
+            </div>
           </div>
-          <hr></hr>
-          <div
-            className="react-flow__node-default"
+          <div style={{ cursor: "pointer", maxWidth: 100, backgroundColor: '#32CD32' }} className="react-flow__node-default  p-1 fs-6 mt-1 text-light"
             //@ts-ignore
             onDragStart={(event: DragEvent) => onDragStart(event, 'OutputNode')}
             draggable
           >
-            Output Node
+            <div className="d-flex gap-1 align-items-center justify-content-center">
+              <img width="20" height="20" src="https://img.icons8.com/arcade/64/box.png" alt="undo" />
+              <span>Output</span>
+            </div>
           </div>
         </Panel>
       </ReactFlow>
