@@ -152,7 +152,7 @@ function CreateFlowModal() {
             show={choice === AppChoiceActions.create_flow ? true : false}
             centered
         >
-            <div style={{ height: "90vh" }}>
+            <div style={{ height: "100vh" }}>
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}

@@ -15,7 +15,8 @@ export type IFlow = {
     updated_at: Date,
     updated_by: IUser,
     nodes: FlowNode[],
-    edges: Object[]
+    edges: Object[],
+    is_active:Boolean
 }
 export type TFlowBody = Request['body'] & IFlow & FlowNode;
 

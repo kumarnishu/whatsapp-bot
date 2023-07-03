@@ -11,6 +11,11 @@ const FlowSchema = new mongoose.Schema<IFlow, mongoose.Model<IFlow, {}, {}>, {}>
         index: true,
         lowercase: true,
     },
+    is_active: {
+        type: Boolean,
+        default: false,
+
+    },
     nodes: [{ type: Object }],
     edges: [{ type: Object }],
     trigger_keywords: {

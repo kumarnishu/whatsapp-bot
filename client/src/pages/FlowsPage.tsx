@@ -36,6 +36,7 @@ export default function FlowsPage() {
           <thead>
             <tr>
               <th style={{ minWidth: '120px' }} scope="col">Index</th>
+              <th style={{ minWidth: '120px' }} scope="col">Status</th>
               <th style={{ minWidth: '120px' }} scope="col">Flow Name</th>
               <th style={{ minWidth: '120px' }} scope="col">Triggers</th>
               <th style={{ minWidth: '120px' }} scope="col">Last Updated</th>
@@ -50,6 +51,7 @@ export default function FlowsPage() {
                     return (
                       <tr key={index}>
                         <th scope="row">{index + 1}</th>
+                        <td>{flow.is_active ? "active" : "disabled"}</td>
                         <td>{flow.flow_name}</td>
                         <td>{flow.trigger_keywords}</td>
                         <td>{flow.updated_at && new Date(flow.updated_at).toLocaleString()}</td>

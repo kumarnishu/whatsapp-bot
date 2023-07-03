@@ -128,16 +128,15 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
     }
 
     useEffect(() => {
-        let startNode = nodes.find(node => node.id === "start")
-        if (startNode) {
+        if (flow) {
             setFlow({
-                flow_name: "",
-                nodes,
-                edges,
-                trigger_keywords: startNode.data.media_value
+                flow_name: flow.flow_name,
+                nodes: flow.nodes,
+                edges: flow.edges,
+                trigger_keywords: flow.trigger_keywords
             })
         }
-    }, [nodes, edges])
+    }, [flow, setFlow])
 
     useEffect(() => {
         if (selectedFlow) {
@@ -146,13 +145,12 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
             setEdges(selectedFlow.edges)
         }
     }, [selectedFlow, setNodes, setFlow, setEdges])
-    console.log(flow)
     return (
         <Modal fullscreen
             show={choice === AppChoiceActions.update_flow ? true : false}
             centered
         >
-            <div style={{ height: "90vh" }}>
+            <div style={{ height: "100vh" }}>
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}

@@ -10,7 +10,8 @@ export type IFlow = {
     updated_at?: Date,
     updated_by?: IUser,
     nodes: Node[],
-    edges: Edge[]
+    edges: Edge[],
+    is_active?:boolean
 }
 
 
