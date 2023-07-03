@@ -7,16 +7,24 @@ import { IFlow } from "../../../types/flow.types";
 import { Modal } from "react-bootstrap";
 import UpdateNodeModal from "./UpdateNodeModal";
 import { AppChoiceActions, ChoiceContext } from "../../../contexts/DialogContext";
-import SaveUpdateFlowModal from "./SaveUpdateFlowModal";
+import SaveNewFlow from "./SaveNewFlow";
 
 const nodeTypes = { MenuNode, DefaultNode, StartNode, OutputNode }
+const initialNodes: Node[] = [
+    {
+        id: 'start',
+        position: { x: 0, y: 10 },
+        data: { media_value: "" },
+        type: 'StartNode'
+    }
+];
 
-function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
+function CreateFlowModal() {
     const { choice, setChoice } = useContext(ChoiceContext)
-    const [nodes, setNodes, onNodesChange] = useNodesState(selectedFlow.nodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(selectedFlow.edges);
+    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [selectedNode, setSelectedNode] = useState<Node>()
-    const [interaction] = useState(false)
+    const [interaction, setInteraction] = useState(false)
     const [flow, setFlow] = useState<IFlow>()
     const [displaySaveModal, setDisplaySaveModal] = useState(false)
     function handleSelectNode(event: React.MouseEvent, _node: Node) {
@@ -139,14 +147,9 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
         }
     }, [nodes, edges])
 
-    useEffect(() => {
-        if (selectedFlow)
-            setFlow(selectedFlow)
-    }, [selectedFlow, nodes, edges])
-
     return (
         <Modal fullscreen
-            show={choice === AppChoiceActions.update_flow ? true : false}
+            show={choice === AppChoiceActions.create_flow ? true : false}
             centered
         >
             <div style={{ height: "90vh" }}>
@@ -207,14 +210,26 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
                                 <span >Close</span>
                             </div>
                         </div>
-                        
+                        <div style={{ cursor: "pointer", maxWidth: 100, backgroundColor: '#72A0C1' }} className="react-flow__node-default btn p-1 fs-6 mt-1 text-light"
+                        >
+                            <div className="d-flex gap-1 align-items-center justify-content-center"
+                                onClick={() => {
+                                    setFlow(undefined)
+                                    setNodes(initialNodes)
+                                    setEdges([])
+                                }}
+                            >
+                                <img width="20" height="20" src="https://img.icons8.com/ios-filled/50/update-left-rotation.png" alt="close" />
+                                <span>Reset</span>
+                            </div>
+                        </div>
                     </Panel>
                 </ReactFlow >
                 {selectedNode ? <UpdateNodeModal updateNode={UpdateNode} selectedNode={selectedNode} setSelectedNode={setSelectedNode} /> : null}
-                {displaySaveModal && flow ? <SaveUpdateFlowModal flow={flow} setDisplaySaveModal={setDisplaySaveModal} /> : null}
+                {displaySaveModal && flow ? <SaveNewFlow flow={flow} setDisplaySaveModal={setDisplaySaveModal} /> : null}
             </div>
         </Modal>
     )
 }
 
-export default UpdateFlowModel
+export default CreateFlowModal

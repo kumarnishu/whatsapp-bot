@@ -14,6 +14,6 @@ export const GetFlows = async () => {
     return await apiClient.get(`flows`);
 };
 
-export const DestroyFlow = async ({ id, body }: { id: string, body: IFlow }) => {
+export const DestroyFlow = async (id: string) => {
     return await apiClient.delete(`flows/${id}`);
 };

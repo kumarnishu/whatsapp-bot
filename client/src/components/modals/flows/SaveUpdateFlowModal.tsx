@@ -1,19 +1,19 @@
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { IFlow } from '../../../types/flow.types'
 import { useFormik } from 'formik'
 import * as Yup from "yup"
 import { Form } from 'react-bootstrap'
-import { paths } from '../../../Routes'
 import Alert from 'react-bootstrap/Alert';
 import { AxiosResponse } from 'axios'
 import { useMutation } from 'react-query'
 import { BackendError } from '../../../types'
 import { CreateFlow } from '../../../services/BotServices'
-import { useNavigate } from 'react-router-dom'
 import { queryClient } from '../../..'
+import { AppChoiceActions, ChoiceContext } from '../../../contexts/DialogContext'
 
-function SaveFlowModal({ flow, setDisplaySaveModal }: { flow: IFlow, setDisplaySaveModal: React.Dispatch<React.SetStateAction<boolean>> }) {
+function SaveUpdateFlowModal({ flow, setDisplaySaveModal }: { flow: IFlow, setDisplaySaveModal: React.Dispatch<React.SetStateAction<boolean>> }) {
+    const { setChoice } = useContext(ChoiceContext)
     const { mutate, isSuccess, isLoading, isError, error } = useMutation
         <AxiosResponse<IFlow>,
             BackendError,
@@ -49,9 +49,10 @@ function SaveFlowModal({ flow, setDisplaySaveModal }: { flow: IFlow, setDisplayS
         if (isSuccess) {
             setTimeout(() => {
                 setDisplaySaveModal(false)
+                setChoice({ type: AppChoiceActions.close_app })
             }, 400)
         }
-    }, [isSuccess])
+    }, [isSuccess, setDisplaySaveModal, setChoice])
     console.log(flow)
     return (
         <Modal
@@ -92,4 +93,4 @@ function SaveFlowModal({ flow, setDisplaySaveModal }: { flow: IFlow, setDisplayS
     )
 }
 
-export default SaveFlowModal
+export default SaveUpdateFlowModal

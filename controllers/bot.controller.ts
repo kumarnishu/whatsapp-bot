@@ -27,9 +27,8 @@ export const CreateFlow = async (req: Request, res: Response, next: NextFunction
     const { flow_name, nodes, edges, trigger_keywords } = req.body as TFlowBody
     if (!flow_name || !nodes || !edges || !trigger_keywords)
         return res.status(400).json({ message: "please fill required fields" })
-    let flows = await Flow.find({ created_by: req.user })
-    let flow = flows.find(flow => flow.flow_name === flow_name)
-    console.log(flow)
+    let flows = await Flow.find({ created_by: req.user, flow_name: flow_name })
+    let flow = flows[0]
     if (flow) {
         await Flow.findByIdAndUpdate(flow._id, {
             flow_name: flow_name,
@@ -57,7 +56,7 @@ export const CreateFlow = async (req: Request, res: Response, next: NextFunction
     return res.status(201).json("flow saved")
 }
 
-export const GetFlows = async (req: Request, res: Response, next: NextFunction)=>{
+export const GetFlows = async (req: Request, res: Response, next: NextFunction) => {
     let flows = await Flow.find({ created_by: req.user })
     return res.status(200).json(flows)
 }
