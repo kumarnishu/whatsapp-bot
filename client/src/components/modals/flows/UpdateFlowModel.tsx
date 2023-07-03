@@ -13,11 +13,11 @@ const nodeTypes = { MenuNode, DefaultNode, StartNode, OutputNode }
 
 function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
     const { choice, setChoice } = useContext(ChoiceContext)
-    const [nodes, setNodes, onNodesChange] = useNodesState(selectedFlow.nodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(selectedFlow.edges);
+    const [flow, setFlow] = useState<IFlow>()
+    const [nodes, setNodes, onNodesChange] = useNodesState([]);
+    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [selectedNode, setSelectedNode] = useState<Node>()
     const [interaction] = useState(false)
-    const [flow, setFlow] = useState<IFlow>()
     const [displaySaveModal, setDisplaySaveModal] = useState(false)
     function handleSelectNode(event: React.MouseEvent, _node: Node) {
         setSelectedNode(_node)
@@ -140,10 +140,13 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
     }, [nodes, edges])
 
     useEffect(() => {
-        if (selectedFlow)
+        if (selectedFlow) {
             setFlow(selectedFlow)
-    }, [selectedFlow, nodes, edges])
-
+            setNodes(selectedFlow.nodes)
+            setEdges(selectedFlow.edges)
+        }
+    }, [selectedFlow, setNodes, setFlow, setEdges])
+    console.log(flow)
     return (
         <Modal fullscreen
             show={choice === AppChoiceActions.update_flow ? true : false}
@@ -207,7 +210,7 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
                                 <span >Close</span>
                             </div>
                         </div>
-                        
+
                     </Panel>
                 </ReactFlow >
                 {selectedNode ? <UpdateNodeModal updateNode={UpdateNode} selectedNode={selectedNode} setSelectedNode={setSelectedNode} /> : null}

@@ -21,7 +21,7 @@ function DeleteFlowModal({ flow }: { flow: IFlow }) {
 
     return (
         <Modal
-        className='p-2 rounded-circle'
+            className='p-2 rounded-circle'
             show={choice === AppChoiceActions.delete_flow ? true : false}
             onHide={() => setChoice({ type: AppChoiceActions.close_app })}
             centered
@@ -37,13 +37,15 @@ function DeleteFlowModal({ flow }: { flow: IFlow }) {
             }
             {
                 isSuccess ? (
-                    <AlertBar variant="success" message='Flow deleted from the store'/>
+                    <AlertBar variant="success" message='Flow deleted from the store' />
                 ) : null
             }
-            <p className='p-2 bg-info fs-4'>
-                {`you are deleteing the ${flow.flow_name}`}
-            </p>
-           <div className='p-2 d-flex gap-2'>
+            <div className="modal-header">
+                <h5 className='modal-title'>
+                    {`This will permanently delete this ${flow.flow_name}`}
+                </h5>
+            </div>
+            <div className='p-2 d-flex justify-content-end gap-2'>
                 <Button onClick={() => setChoice({ type: AppChoiceActions.close_app })}>Cancel</Button>
                 <Button variant="outline-danger" onClick={() => {
                     if (flow && flow._id) mutate(flow._id)
@@ -51,7 +53,7 @@ function DeleteFlowModal({ flow }: { flow: IFlow }) {
                 }
                 }
                     disabled={isLoading}>Delete</Button>
-           </div>
+            </div>
         </Modal>
     )
 }

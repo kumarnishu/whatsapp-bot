@@ -19,7 +19,6 @@ export default function FlowsPage() {
     if (data)
       setFlows(data.data)
   }, [data])
-  console.log(flow)
   return (
     <>
 
