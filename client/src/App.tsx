@@ -16,7 +16,7 @@ export default function App() {
     if (data) {
       setUser(data.data)
     }
-  }, [data])
+  }, [data, setUser])
   return (
     <>
       {user ? <NavBar /> : null}

@@ -24,7 +24,7 @@ function CreateFlowModal() {
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [selectedNode, setSelectedNode] = useState<Node>()
-    const [interaction, setInteraction] = useState(false)
+    const [interaction] = useState(false)
     const [flow, setFlow] = useState<IFlow>()
     const [displaySaveModal, setDisplaySaveModal] = useState(false)
     function handleSelectNode(event: React.MouseEvent, _node: Node) {
