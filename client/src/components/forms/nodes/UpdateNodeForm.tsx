@@ -1,12 +1,9 @@
 import {  Button, Form } from 'react-bootstrap'
 import { useFormik } from 'formik';
 import * as Yup from "yup"
-import { useContext } from 'react';
-import { AppChoiceActions, ChoiceContext } from '../../../contexts/DialogContext';
 import { Node } from 'reactflow';
 
-function UpdateNodeForm({ updateNode, node }: { updateNode: (media_value: string, media_type?: string) => void, node: Node }) {
-    const { setChoice } = useContext(ChoiceContext)
+function UpdateNodeForm({ updateNode, node, setSelectedNode }: { updateNode: (media_value: string, media_type?: string) => void, node: Node, setSelectedNode: React.Dispatch<React.SetStateAction<Node | undefined>> }) {
     const formik = useFormik({
         initialValues: {
             media_type: node.data.media_type,
@@ -21,7 +18,7 @@ function UpdateNodeForm({ updateNode, node }: { updateNode: (media_value: string
             media_value: string
         }) => {
             updateNode(values.media_value, values.media_type)
-            setChoice({ type: AppChoiceActions.close_app })
+            setSelectedNode(undefined)
         },
     });
   return (

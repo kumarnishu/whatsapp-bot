@@ -55,7 +55,7 @@ function LoginForm() {
 
     return (
         <>
-            <Container className='d-flex  fluid justify-content-center h-100 min-vw-100'>
+            <Container className='d-flex fluid justify-content-center h-100 min-vw-100'>
                 <Form onSubmit={formik.handleSubmit} className='shadow mt-5  p-3 bg-body-tertiary border border-1 rounded bg-light align-self-center'>
                     <h1 className="d-block fs-4 text-center">Login Form</h1>
                     {

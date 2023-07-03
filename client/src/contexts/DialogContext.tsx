@@ -1,8 +1,8 @@
 import React, { useReducer } from "react"
 
 // choices
-type AppChoices = "new_user" | "close_app" | "new_task" | null | "delete_user" | "update_user" | "block_user" | "unblock_user" | "make_admin" | "remove_admin" | "update_password" | "refresh_whatsapp" | "update_node" | "update_node"
-
+type AppChoices = "new_user" | "close_app" | "new_task" | null | "delete_user" | "update_user" | "block_user" | "unblock_user" | "make_admin" | "remove_admin" | "update_password" | "refresh_whatsapp" | "update_node" | "update_node" | "save_flow" | "delete_flow" | "create_flow"
+    | "update_flow"
 type TaskChoices = "new_task" | "delete_task" | "close_task" | "edit_task" | "start_task" | "stop_task" | "view_task"
 
 type MessageChoices = "new_message" | "delete_message" | "close_message" | "edit_message" | "start_message" | "stop_message" | "view_message"
@@ -23,7 +23,11 @@ export enum AppChoiceActions {
     remove_admin = "remove_admin",
     update_node = "update_node",
     close_app = "close_app",
-    refresh_whatsapp = "refresh_whatsapp"
+    create_flow = "create_flow",
+    refresh_whatsapp = "refresh_whatsapp",
+    save_flow = "save_flow",
+    update_flow = "update_flow",
+    delete_flow = "delete_flow"
 }
 export enum TaskChoiceActions {
     new_task = "new_task",
@@ -63,6 +67,10 @@ function reducer(state: ChoiceState, action: Action) {
         case AppChoiceActions.update_password: return type
         case AppChoiceActions.refresh_whatsapp: return type
         case AppChoiceActions.update_node: return type
+        case AppChoiceActions.save_flow: return type
+        case AppChoiceActions.delete_flow: return type
+        case AppChoiceActions.update_flow: return type
+        case AppChoiceActions.create_flow: return type
         case AppChoiceActions.close_app: return type
 
         // task dialog choices

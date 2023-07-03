@@ -1,11 +1,9 @@
 import { useContext } from 'react'
 import { AppChoiceActions, ChoiceContext } from '../../../contexts/DialogContext'
-
-import { Node } from "reactflow"
 import { Modal, Button } from 'react-bootstrap'
-import UpdateNodeForm from '../../forms/nodes/UpdateNodeForm'
+import { IFlow } from '../../../types/flow.types'
 
-function UpdateNodeModal({ updateNode, selectedNode }: { updateNode: (media_value: string, media_type?: string) => void, selectedNode: Node }) {
+function DeleteFlowModal({flow }: { flow:IFlow}) {
     const { choice, setChoice } = useContext(ChoiceContext)
     return (
         <Modal
@@ -13,12 +11,11 @@ function UpdateNodeModal({ updateNode, selectedNode }: { updateNode: (media_valu
             onHide={() => setChoice({ type: AppChoiceActions.close_app })}
             centered
         >
-            {selectedNode ?
-                <UpdateNodeForm node={selectedNode} updateNode={updateNode} /> : null}
+           
 
             <Button variant="outline-danger" onClick={() => setChoice({ type: AppChoiceActions.close_app })}>Close</Button>
         </Modal>
     )
 }
 
-export default UpdateNodeModal
+export default DeleteFlowModal
