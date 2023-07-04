@@ -17,8 +17,15 @@ export type IFlow = {
     nodes: FlowNode[],
     edges: Object[],
     is_active:Boolean
+
 }
 export type TFlowBody = Request['body'] & IFlow & FlowNode;
 
 
-
+export type IFlowTracker={
+    _id:string,
+    flow_name:string
+    phone_number:number,
+    menu_id:string,
+    index:number,
+}

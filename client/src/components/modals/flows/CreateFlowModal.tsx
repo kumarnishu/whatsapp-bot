@@ -14,8 +14,9 @@ const initialNodes: Node[] = [
     {
         id: 'start',
         position: { x: 0, y: 10 },
-        data: { media_value: "" },
-        type: 'StartNode'
+        data: { media_value: "Start" },
+        type: 'StartNode',
+        deletable:false
     }
 ];
 
@@ -24,7 +25,6 @@ function CreateFlowModal() {
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [selectedNode, setSelectedNode] = useState<Node>()
-    const [interaction] = useState(false)
     const [flow, setFlow] = useState<IFlow>()
     const [displaySaveModal, setDisplaySaveModal] = useState(false)
     function handleSelectNode(event: React.MouseEvent, _node: Node) {
@@ -146,7 +146,7 @@ function CreateFlowModal() {
             })
         }
     }, [nodes, edges])
-
+console.log(flow)
     return (
         <Modal fullscreen
             show={choice === AppChoiceActions.create_flow ? true : false}
@@ -173,7 +173,7 @@ function CreateFlowModal() {
                     <Background variant={BackgroundVariant.Dots} />
                     <MiniMap pannable={true} nodeStrokeWidth={5}
                         zoomable={true} nodeColor="grey" />
-                    <Controls showInteractive={interaction} position="top-left" />
+                    <Controls  position="top-left" />
                     <Panel position="top-right" className="d-flex flex-column gap-1">
                         {/* @ts-ignore */}
                         <div style={{ cursor: "pointer", maxWidth: 100, backgroundColor: '#ff8080' }} className="react-flow__node-default btn  p-1 fs-6 mt-1 text-light" onDragStart={(event: DragEvent) => onDragStart(event, 'DefaultNode')} draggable>

@@ -8,7 +8,7 @@ background-color:#0040ff;
 font-size:10px;
 `
 const StartDiv = styled.div`
-background-color:#ff8000;
+background-color:black;
 font-size:10px;
 
 `
@@ -28,7 +28,7 @@ export function MenuNode({ data }: { data: any }) {
         <>
             <CustomHandle className=" bg-warning border border-2 white rounded-pill" type="target" position={Position.Top} />
             <MenuDiv className="react-flow-menu-node  text-light rounded-pill p-1 ">
-                {data.media_value || "type something"}
+                {data.media_value || "Menu"}
             </MenuDiv>
             <CustomHandle className="bg-secondary border border-2 white" type="source" position={Position.Bottom} />
         </>
@@ -44,7 +44,7 @@ export function DefaultNode({ data }: { data: any }) {
                 </div>
 
                 <div className="rounded-pill text-light ">
-                    {data.media_value || "type something"}
+                    {data.media_value || "Default"}
                 </div>
             </DefaultDiv>
             <CustomHandle className=" bg-secondary border border-2 rounded-pill white" type="source" position={Position.Bottom}  />
@@ -55,13 +55,13 @@ export function DefaultNode({ data }: { data: any }) {
 export function OutputNode({ data }: { data: any }) {
     return (
         <>
-            <CustomHandle className=" bg-info border border-2 white" type="target" position={Position.Top} isConnectable={1} />
+            <CustomHandle className=" bg-info border border-2 white" type="target" position={Position.Top}  />
             <OutPutDiv className="d-flex gap-1 p-1 rounded-pill ">
                 <div style={{ width: 15, height: 15, borderRadius: '50% ' }} className="d-flex align-items-center  bg-light  text-dark p-1">{data.index}
                 </div>
 
                 <div className="rounded-pill text-light ">
-                    {data.media_value || "type something"}
+                    {data.media_value || "Output"}
                 </div>
             </OutPutDiv>
         </>
