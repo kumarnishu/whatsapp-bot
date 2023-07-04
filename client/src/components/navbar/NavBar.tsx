@@ -42,8 +42,10 @@ function NavBar() {
                                                 {user.username.toUpperCase()}
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu >
-                                                <Dropdown.Item onClick={() => setChoice({ type: AppChoiceActions.update_password })}><img height="30" width="30" src="https://img.icons8.com/color/48/keys-holder.png" alt="icons" />Update Password</Dropdown.Item>
-                                                <Dropdown.Item className="border border-hometom-1"><LogoutButton /></Dropdown.Item>
+                                                <Dropdown.Item className="border-bottom-1" onClick={() => setChoice({ type: AppChoiceActions.update_password })}><img height="30" width="30" src="https://img.icons8.com/color/48/keys-holder.png" alt="icons" />Update Password</Dropdown.Item>
+                                                <Dropdown.Item >
+                                                    <LogoutButton />
+                                                </Dropdown.Item>
                                             </Dropdown.Menu>
                                         </Dropdown>
                                     </> : null}

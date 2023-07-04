@@ -16,7 +16,7 @@ function LogoutButton() {
         }
     }, [goto, isSuccess])
     return (
-        <Button variant="text" className='p-0 m-0' size="sm" onClick={() => {
+        <Button variant="text" className='p-0 w-100 m-0' size="sm" onClick={() => {
             mutate()
             setUser(undefined)
         }}>

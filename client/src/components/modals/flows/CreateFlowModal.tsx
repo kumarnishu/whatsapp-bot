@@ -16,7 +16,7 @@ const initialNodes: Node[] = [
         position: { x: 0, y: 10 },
         data: { media_value: "Start" },
         type: 'StartNode',
-        deletable:false
+        deletable: false
     }
 ];
 
@@ -134,7 +134,15 @@ function CreateFlowModal() {
         }
 
     }
-
+    const handleNewNodeONClick = (type: string) => {
+        const newNode: Node = {
+            id: uuidv4(),
+            type,
+            position: { x: 0, y: 0 },
+            data: {},
+        };
+        setNodes((nds) => nds.concat(newNode));
+    }
     useEffect(() => {
         let startNode = nodes.find(node => node.id === "start")
         if (startNode) {
@@ -146,7 +154,7 @@ function CreateFlowModal() {
             })
         }
     }, [nodes, edges])
-console.log(flow)
+    console.log(flow)
     return (
         <Modal fullscreen
             show={choice === AppChoiceActions.create_flow ? true : false}
@@ -173,11 +181,14 @@ console.log(flow)
                     <Background variant={BackgroundVariant.Dots} />
                     <MiniMap pannable={true} nodeStrokeWidth={5}
                         zoomable={true} nodeColor="grey" />
-                    <Controls  position="top-left" />
+                    <Controls position="top-left" />
                     <Panel position="top-right" className="d-flex flex-column gap-1">
                         {/* @ts-ignore */}
-                        <div style={{ cursor: "pointer", maxWidth: 100, backgroundColor: '#ff8080' }} className="react-flow__node-default btn  p-1 fs-6 mt-1 text-light" onDragStart={(event: DragEvent) => onDragStart(event, 'DefaultNode')} draggable>
-                            <div className="d-flex gap-1 align-items-center justify-content-center">
+                        <div style={{ cursor: "pointer", maxWidth: 100, backgroundColor: '#ff8080' }} className="react-flow__node-default btn  p-1 fs-6 mt-1 text-light" onDragStart={(event: DragEvent) => onDragStart(event, 'DefaultNode')} draggable
+                            onDoubleClick={()=>handleNewNodeONClick("DefaultNode")}
+                        >
+                            <div className="d-flex gap-1 align-items-center justify-content-center"
+                            >
                                 <img width="20" height="20" src="https://img.icons8.com/arcade/64/box.png" alt="undo" />
                                 <span>Default</span>
                             </div>
@@ -186,6 +197,7 @@ console.log(flow)
                             //@ts-ignore
                             onDragStart={(event: DragEvent) => onDragStart(event, 'OutputNode')}
                             draggable
+                            onDoubleClick={() => handleNewNodeONClick("OutputNode")}
                         >
                             <div className="d-flex gap-1 align-items-center justify-content-center">
                                 <img width="20" height="20" src="https://img.icons8.com/arcade/64/box.png" alt="undo" />

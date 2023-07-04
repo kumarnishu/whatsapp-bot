@@ -1,4 +1,4 @@
-import React, {  useContext, useState, useCallback } from "react";
+import React, { useContext, useState, useCallback } from "react";
 import { Background, BackgroundVariant, Connection, Controls, MiniMap, Node, Panel, ReactFlow, addEdge, useNodesState, useEdgesState } from "reactflow";
 import "reactflow/dist/style.css";
 import { v4 as uuidv4 } from 'uuid';
@@ -125,7 +125,15 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
         }
 
     }
-
+    const handleNewNodeONClick = (type: string) => {
+        const newNode: Node = {
+            id: uuidv4(),
+            type,
+            position: { x: 0, y: 0 },
+            data: {},
+        };
+        setNodes((nds) => nds.concat(newNode));
+    }
     console.log(flow)
     return (
         <Modal fullscreen
@@ -153,10 +161,12 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
                     <Background variant={BackgroundVariant.Dots} />
                     <MiniMap pannable={true} nodeStrokeWidth={5}
                         zoomable={true} nodeColor="grey" />
-                    <Controls  position="top-left" />
+                    <Controls position="top-left" />
                     <Panel position="top-right" className="d-flex flex-column gap-1">
                         {/* @ts-ignore */}
-                        <div style={{ cursor: "pointer", maxWidth: 100, backgroundColor: '#ff8080' }} className="react-flow__node-default btn  p-1 fs-6 mt-1 text-light" onDragStart={(event: DragEvent) => onDragStart(event, 'DefaultNode')} draggable>
+                        <div style={{ cursor: "pointer", maxWidth: 100, backgroundColor: '#ff8080' }} className="react-flow__node-default btn  p-1 fs-6 mt-1 text-light" onDragStart={(event: DragEvent) => onDragStart(event, 'DefaultNode')} draggable
+                            onDoubleClick={() => handleNewNodeONClick("DefaultNode")}
+                        >
                             <div className="d-flex gap-1 align-items-center justify-content-center">
                                 <img width="20" height="20" src="https://img.icons8.com/arcade/64/box.png" alt="undo" />
                                 <span>Default</span>
@@ -166,6 +176,7 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
                             //@ts-ignore
                             onDragStart={(event: DragEvent) => onDragStart(event, 'OutputNode')}
                             draggable
+                            onDoubleClick={() => handleNewNodeONClick("OutputNode")}
                         >
                             <div className="d-flex gap-1 align-items-center justify-content-center">
                                 <img width="20" height="20" src="https://img.icons8.com/arcade/64/box.png" alt="undo" />
