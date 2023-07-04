@@ -67,14 +67,9 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
             }
 
             if (srcNode.type === "DefaultNode" && targetNode.type === "OutputNode") {
-                let length = nodes.filter((node) => { return node.parentNode === srcNode?.id }).length
                 setNodes((nodes) => nodes.map((node) => {
                     if (node.id === targetNode?.id) {
                         node.parentNode = srcNode?.id
-                        node.data = {
-                            ...node.data,
-                            index: length ? length + 1 : 1
-                        }
                     }
                     return node
                 }))

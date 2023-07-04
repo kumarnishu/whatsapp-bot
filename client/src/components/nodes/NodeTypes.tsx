@@ -55,14 +55,9 @@ export function DefaultNode({ data }: { data: any }) {
 export function OutputNode({ data }: { data: any }) {
     return (
         <>
-            <CustomHandle className=" bg-info border border-2 white" type="target" position={Position.Top}  />
-            <OutPutDiv className="d-flex gap-1 p-1 rounded-pill ">
-                <div style={{ width: 15, height: 15, borderRadius: '50% ' }} className="d-flex align-items-center  bg-light  text-dark p-1">{data.index}
-                </div>
-
-                <div className="rounded-pill text-light ">
+            <CustomHandle className=" bg-info border border-2 white" type="target" position={Position.Top} isConnectable={1} />
+            <OutPutDiv className="d-flex gap-1 p-1 rounded-pill text-light ">
                     {data.media_value || "Output"}
-                </div>
             </OutPutDiv>
         </>
     )
