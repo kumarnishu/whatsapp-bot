@@ -16,16 +16,17 @@ export type IFlow = {
     updated_by: IUser,
     nodes: FlowNode[],
     edges: Object[],
-    is_active:Boolean
+    is_active: Boolean
 
 }
 export type TFlowBody = Request['body'] & IFlow & FlowNode;
 
 
-export type IFlowTracker={
-    _id:string,
-    flow_name:string
-    phone_number:number,
-    menu_id:string,
-    index:number,
+export type IMenuTracker = {
+    _id: string,
+    phone_number: string,
+    menu_id: string,
+    flow:IFlow,
+    joined_at: Date,
+    last_active: Date
 }

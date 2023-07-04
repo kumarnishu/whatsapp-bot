@@ -223,7 +223,10 @@ function CreateFlowModal() {
                         <div style={{ cursor: "pointer", maxWidth: 100, backgroundColor: '#72A0C1' }} className="react-flow__node-default btn p-1 fs-6 mt-1 text-light"
                         >
                             <div className="d-flex gap-1 align-items-center justify-content-center"
-                                onClick={() => setChoice({ type: AppChoiceActions.close_app })}
+                                onClick={() => {
+                                    setSelectedNode(undefined)
+                                    setChoice({ type: AppChoiceActions.close_app })
+                                }}
                             >
                                 <img width="20" height="20" src="https://img.icons8.com/fluency/48/delete-sign.png" alt="close" />
                                 <span >Close</span>
@@ -245,7 +248,9 @@ function CreateFlowModal() {
                     </Panel>
                 </ReactFlow >
                 {selectedNode ? <UpdateNodeModal updateNode={UpdateNode} selectedNode={selectedNode} setSelectedNode={setSelectedNode} /> : null}
-                {displaySaveModal && flow ? <SaveNewFlow flow={flow} setDisplaySaveModal={setDisplaySaveModal} /> : null}
+                {displaySaveModal && flow ? <SaveNewFlow flow={flow} setDisplaySaveModal={setDisplaySaveModal}
+                    setSelectedNode={setSelectedNode}
+                /> : null}
             </div>
         </Modal>
     )

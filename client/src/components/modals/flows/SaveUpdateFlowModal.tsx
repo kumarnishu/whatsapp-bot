@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { IFlow } from '../../../types/flow.types'
 import { useFormik } from 'formik'
@@ -11,8 +11,10 @@ import { BackendError } from '../../../types'
 import { CreateFlow } from '../../../services/BotServices'
 import { queryClient } from '../../..'
 import { AppChoiceActions, ChoiceContext } from '../../../contexts/DialogContext'
+import { Node } from 'reactflow'
 
-function SaveUpdateFlowModal({ flow, setDisplaySaveModal }: { flow: IFlow, setDisplaySaveModal: React.Dispatch<React.SetStateAction<boolean>> }) {
+
+function SaveUpdateFlowModal({ flow, setDisplaySaveModal, setSelectedNode }: { flow: IFlow, setDisplaySaveModal: React.Dispatch<React.SetStateAction<boolean>>, setSelectedNode: React.Dispatch<React.SetStateAction<Node | undefined>> }) {
     const { setChoice } = useContext(ChoiceContext)
     const { mutate, isSuccess, isLoading, isError, error } = useMutation
         <AxiosResponse<IFlow>,
@@ -41,6 +43,7 @@ function SaveUpdateFlowModal({ flow, setDisplaySaveModal }: { flow: IFlow, setDi
             mutate({
                 ...flow,
                 flow_name: values.flow_name
+
             })
         },
     });
@@ -49,10 +52,11 @@ function SaveUpdateFlowModal({ flow, setDisplaySaveModal }: { flow: IFlow, setDi
         if (isSuccess) {
             setTimeout(() => {
                 setDisplaySaveModal(false)
+                setSelectedNode(undefined)
                 setChoice({ type: AppChoiceActions.close_app })
             }, 400)
         }
-    }, [isSuccess, setDisplaySaveModal, setChoice])
+    }, [isSuccess, setDisplaySaveModal, setSelectedNode, setChoice])
     console.log(flow)
     return (
         <Modal

@@ -52,7 +52,6 @@ export const CreateFlow = async (req: Request, res: Response, next: NextFunction
             updated_by: req.user
         }).save()
     }
-
     return res.status(201).json("flow saved")
 }
 

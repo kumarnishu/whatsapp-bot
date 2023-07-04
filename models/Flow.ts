@@ -1,6 +1,5 @@
 import mongoose from "mongoose"
 import { IFlow } from "../types/flow.types"
-import { FlowNode } from "typescript"
 
 
 const FlowSchema = new mongoose.Schema<IFlow, mongoose.Model<IFlow, {}, {}>, {}>({
