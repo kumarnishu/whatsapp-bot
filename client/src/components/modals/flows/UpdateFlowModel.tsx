@@ -120,6 +120,12 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
                         media_type,
                     }
                 }
+                if (node.id ==="start") {
+                   setFlow({
+                    ...flow,
+                       trigger_keywords: node.data.media_value
+                   })
+                }
                 return node
             }))
         }

@@ -28,16 +28,11 @@ export const ConectWhatsapp = async (req: Request, client_id: string, socket: So
     client.on("ready", async () => {
         socket.emit("ready", client_id)
         await User.findByIdAndUpdate(req.user?._id, {
-            is_whatsapp_active: true
+            is_whatsapp_active: true,
+            connected_number: client?.info.wid.user
         })
-        console.log("session revived", req.user?._id)
+        console.log("session revived", client && client.info.wid.user)
 
-    })
-    client.on("authenticated", async () => {
-        console.log("authenticated")
-        await User.findByIdAndUpdate(req.user?._id, {
-            is_whatsapp_active: true 
-        })
     })
     client.on("auth_failure", async () => {
         console.log("failed to authenticate")

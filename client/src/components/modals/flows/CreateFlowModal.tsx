@@ -129,6 +129,13 @@ function CreateFlowModal() {
                         media_type,
                     }
                 }
+                if (node.id === "start") {
+                    if (flow)
+                        setFlow({
+                            ...flow,
+                            trigger_keywords: node.data.media_value
+                        })
+                }
                 return node
             }))
         }
@@ -185,7 +192,7 @@ function CreateFlowModal() {
                     <Panel position="top-right" className="d-flex flex-column gap-1">
                         {/* @ts-ignore */}
                         <div style={{ cursor: "pointer", maxWidth: 100, backgroundColor: '#ff8080' }} className="react-flow__node-default btn  p-1 fs-6 mt-1 text-light" onDragStart={(event: DragEvent) => onDragStart(event, 'DefaultNode')} draggable
-                            onDoubleClick={()=>handleNewNodeONClick("DefaultNode")}
+                            onDoubleClick={() => handleNewNodeONClick("DefaultNode")}
                         >
                             <div className="d-flex gap-1 align-items-center justify-content-center"
                             >

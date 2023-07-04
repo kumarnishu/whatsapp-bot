@@ -4,7 +4,7 @@ export type FlowNode = {
     id: string,
     data: any,
     type: "DefaultNode" | "MenuNode" | "StartNode" | "OutputNode",
-    ParentNode: string
+    parentNode: string
 }
 export type IFlow = {
     _id: string,

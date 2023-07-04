@@ -74,7 +74,7 @@ function RefreshWhatsappModal() {
 
                         <Container className='p-4'>
                             <>
-                                {user && user.is_whatsapp_active ? <p className='p-2'>Congrats ! Connected,Click Above Button to confirm</p> : null}
+                                {user && user.is_whatsapp_active ? <p className='p-2'>Congrats {user.connected_number} Connected,Click Above Button to confirm</p> : null}
                                 {isLoading && !qrCode ? <h1>Loading qr code...</h1> : null}
                                 {qrCode ?
                                     <>

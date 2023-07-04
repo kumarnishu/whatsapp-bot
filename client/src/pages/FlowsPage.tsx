@@ -9,11 +9,13 @@ import { AppChoiceActions, ChoiceContext } from "../contexts/DialogContext"
 import UpdateFlowModel from "../components/modals/flows/UpdateFlowModel"
 import CreateFlowModal from "../components/modals/flows/CreateFlowModal"
 import DeleteFlowModal from "../components/modals/flows/DeleteFlowModal"
+import { UserContext } from "../contexts/UserContext"
 
 export default function FlowsPage() {
   const [flows, setFlows] = useState<IFlow[]>()
   const [flow, setFlow] = useState<IFlow>()
   const { setChoice } = useContext(ChoiceContext)
+  const { user } = useContext(UserContext)
   const { data } = useQuery<AxiosResponse<IFlow[]>, BackendError>("flows", GetFlows)
   useEffect(() => {
     if (data)
@@ -37,6 +39,7 @@ export default function FlowsPage() {
             <tr>
               <th style={{ minWidth: '120px' }} scope="col">Index</th>
               <th style={{ minWidth: '120px' }} scope="col">Status</th>
+              <th style={{ minWidth: '120px' }} scope="col">Phone</th>
               <th style={{ minWidth: '120px' }} scope="col">Flow Name</th>
               <th style={{ minWidth: '120px' }} scope="col">Triggers</th>
               <th style={{ minWidth: '120px' }} scope="col">Last Updated</th>
@@ -52,6 +55,7 @@ export default function FlowsPage() {
                       <tr key={index}>
                         <th scope="row">{index + 1}</th>
                         <td>{flow.is_active ? "active" : "disabled"}</td>
+                        <td>{user?.connected_number}</td>
                         <td>{flow.flow_name}</td>
                         <td>{flow.trigger_keywords}</td>
                         <td>{flow.updated_at && new Date(flow.updated_at).toLocaleString()}</td>
