@@ -30,7 +30,7 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                             sendingNodes.forEach(async (node) => {
                                 await client?.sendMessage(from._serialized, node.data.media_value)
                             })
-                            await client?.sendMessage(from._serialized, "0 for main menu")
+                            await client?.sendMessage(from._serialized, "type 0 for main menu")
                             await new MenuTracker({
                                 menu_id: flow.nodes.find(node => node.parentNode === "start")?.id,
                                 phone_number: String(from._serialized),
@@ -44,10 +44,14 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
             }
             if (tracker && from) {
                 let parent = tracker.flow.nodes.find((node) => node.id === tracker?.menu_id)
-                if (msg.body === "0") {
-                    let node = tracker?.flow.nodes.find((node) => node.parentNode === "start")
-                    if (node) {
-                        tracker.menu_id = node.id
+                if (msg.body === '0') {
+                    let parentNode = tracker?.flow.nodes.find((node) => node.parentNode === "start")
+                    let sendingNodes = tracker?.flow.nodes.filter((node) => { return node.parentNode === parentNode?.id })
+                    sendingNodes.forEach(async (node) => {
+                        await client?.sendMessage(from._serialized, node.data.media_value)
+                    })
+                    if (parentNode) {
+                        tracker.menu_id = parentNode.id
                         await tracker.save()
                     }
                 }
@@ -63,12 +67,9 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
 
                     if (targetNode) {
                         let childNodes: FlowNode[] | undefined = tracker.flow.nodes.filter((node) => { return node.parentNode === targetNode?.id })
-                        console.log(childNodes)
                         let childOutputNodes = childNodes.filter((node) => { return node.type === "OutputNode" })
-                        console.log(childOutputNodes)
 
                         let childMenuNodes = childNodes.filter((node) => { return node.type === "MenuNode" })
-                        console.log(childMenuNodes)
 
                         if (childMenuNodes.length > 0) {
                             let menuNode = childMenuNodes[0]
@@ -85,7 +86,7 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                                 sendingNodes.forEach(async (node) => {
                                     await client?.sendMessage(from._serialized, node.data.media_value)
                                 })
-                                await client?.sendMessage(from._serialized, "0 for main menu")
+                                await client?.sendMessage(from._serialized, "type 0 for main menu")
                                 tracker.menu_id = menuNode.id
                                 await tracker.save()
                             }
