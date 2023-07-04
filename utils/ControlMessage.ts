@@ -1,4 +1,4 @@
-import WAWebJS from "whatsapp-web.js";
+import WAWebJS, { MessageMedia } from "whatsapp-web.js";
 import { client } from "./ConnectWhatsapp";
 import { Flow } from "../models/Flow";
 import { User } from "../models/User";
@@ -84,7 +84,12 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                                     return 0;
                                 });
                                 sendingNodes.forEach(async (node) => {
-                                    await client?.sendMessage(from._serialized, node.data.media_value)
+                                    if (node.data.media_type === "message")
+                                        await client?.sendMessage(from._serialized, node.data.media_value)
+                                    else {
+                                        let message = await MessageMedia.fromUrl(String(node.data.media_value));
+                                        await client?.sendMessage(from._serialized, message)
+                                    }
                                 })
                                 await client?.sendMessage(from._serialized, "type 0 for main menu")
                                 tracker.menu_id = menuNode.id
