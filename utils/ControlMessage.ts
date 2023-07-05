@@ -44,7 +44,7 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
             }
             if (tracker && from) {
                 let parent = tracker.flow.nodes.find((node) => node.id === tracker?.menu_id)
-                if (msg.body === '0') {
+                if (msg.body === '0' || tracker.flow.trigger_keywords.split(",").includes(msg.body)) {
                     let parentNode = tracker?.flow.nodes.find((node) => node.parentNode === "start")
                     let sendingNodes = tracker?.flow.nodes.filter((node) => { return node.parentNode === parentNode?.id })
                     sendingNodes.forEach(async (node) => {
@@ -99,7 +99,7 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                                     let message = await MessageMedia.fromUrl(String(node.data.media_value));
                                     await client?.sendMessage(from._serialized, message)
                                 }
-                                
+
                             })
                         }
                     }
