@@ -16,7 +16,7 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                 if (flows.length > 0) {
                     let flow = flows.find(flow => {
                         let keys = flow.trigger_keywords.split(",");
-                        let key = keys.find(key => key === String(msg.body))
+                        let key = keys.find(key => key === String(msg.body).toLowerCase())
                         if (key) {
                             return flow
                         }
@@ -43,7 +43,7 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
             }
             if (tracker && from) {
                 let parent = tracker.flow.nodes.find((node) => node.id === tracker?.menu_id)
-                if (String(msg.body) === '0' || tracker.flow.trigger_keywords.split(",").includes(String(msg.body))) {
+                if (String(msg.body).toLowerCase() === '0' || tracker.flow.trigger_keywords.split(",").includes(String(msg.body).toLowerCase())) {
                     let parentNode = tracker?.flow.nodes.find((node) => node.parentNode === "start")
                     let sendingNodes = tracker?.flow.nodes.filter((node) => { return node.parentNode === parentNode?.id })
                     sendingNodes.forEach(async (node) => {
@@ -58,7 +58,7 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                     let sendingNodes = tracker.flow.nodes.filter((node) => { return node.parentNode === parent?.id })
                     let targetNode = sendingNodes.filter((node) => {
                         let index = String(node.data.index)
-                        if (index === String(msg.body)) {
+                        if (index === String(msg.body).toLowerCase()) {
                             return node
                         }
                         return undefined
