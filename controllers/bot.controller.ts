@@ -35,7 +35,7 @@ export const CreateFlow = async (req: Request, res: Response, next: NextFunction
             flow_name: flow_name,
             nodes: nodes,
             edges: edges,
-            trigger_keywords: trigger_keywords,
+            trigger_keywords: trigger_keywords.toLowerCase(),
             created_at: new Date(),
             updated_at: new Date(),
             updated_by: req.user
@@ -46,7 +46,7 @@ export const CreateFlow = async (req: Request, res: Response, next: NextFunction
             flow_name: flow_name,
             nodes: nodes,
             edges: edges,
-            trigger_keywords: trigger_keywords,
+            trigger_keywords: trigger_keywords.toLowerCase(),
             created_at: new Date(),
             updated_at: new Date(),
             created_by: req.user,

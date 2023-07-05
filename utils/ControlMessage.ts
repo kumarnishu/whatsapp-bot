@@ -9,7 +9,6 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
     try {
         if (client) {
             const from = await client.getNumberId(msg.from);
-            const me = await client.getNumberId(msg.to);
             let tracker = await MenuTracker.findOne({ phone_number: from?._serialized }).populate('flow')
             if (!tracker) {
                 let user = await User.findOne({ connected_number: String(msg.to).replace("@c.us", "") })
