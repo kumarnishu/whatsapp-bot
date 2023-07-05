@@ -86,7 +86,7 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
                 id: uuidv4(),
                 type,
                 position: { x: 0, y: 0 },
-                data: {},
+                data: { media_type: "message", media_value: "default" }
             };
             setNodes((nds) => nds.concat(newNode));
         }
@@ -131,7 +131,7 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
             id: uuidv4(),
             type,
             position: { x: 0, y: 0 },
-            data: {},
+            data: { media_type: "message", media_value: "default" }
         };
         setNodes((nds) => nds.concat(newNode));
     }

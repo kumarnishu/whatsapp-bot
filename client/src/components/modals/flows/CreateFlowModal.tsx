@@ -14,7 +14,7 @@ const initialNodes: Node[] = [
     {
         id: 'start',
         position: { x: 0, y: 10 },
-        data: { media_value: "Start" },
+        data: { media_type : "message", media_value: "Start" },
         type: 'StartNode',
         deletable: false
     }
@@ -43,6 +43,8 @@ function CreateFlowModal() {
                         node.parentNode = srcNode?.id
                         node.data = {
                             ...node.data,
+                            media_type: "message",
+                            media_value:"menu"
                         }
                     }
                     return node
@@ -58,7 +60,9 @@ function CreateFlowModal() {
                         node.parentNode = srcNode?.id
                         node.data = {
                             ...node.data,
-                            index: length ? length + 1 : 1
+                            index: length ? length + 1 : 1,
+                            media_type: "message",
+                            media_value: "default"
                         }
                     }
                     return node
@@ -70,6 +74,11 @@ function CreateFlowModal() {
                     if (node.id === targetNode?.id) {
                         node.type = "MenuNode"
                         node.parentNode = srcNode?.id
+                            node.data = {
+                                ...node.data,
+                                media_type: "message",
+                                media_value: "menu"
+                            }
                     }
                     return node
                 }))
@@ -79,6 +88,11 @@ function CreateFlowModal() {
                   setNodes((nodes) => nodes.map((node) => {
                     if (node.id === targetNode?.id) {
                         node.parentNode = srcNode?.id
+                            node.data = {
+                                ...node.data,
+                                media_type: "message",
+                                media_value: "output"
+                            }
                     }
                     return node
                 }))
@@ -95,7 +109,7 @@ function CreateFlowModal() {
                 id: uuidv4(),
                 type,
                 position: { x: 0, y: 0 },
-                data: {},
+                data: { media_type: "message", media_value: "default" }
             };
             setNodes((nds) => nds.concat(newNode));
         }
@@ -141,7 +155,7 @@ function CreateFlowModal() {
             id: uuidv4(),
             type,
             position: { x: 0, y: 0 },
-            data: {},
+            data: { media_type: "message", media_value: "default" }
         };
         setNodes((nds) => nds.concat(newNode));
     }

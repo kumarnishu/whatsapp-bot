@@ -47,7 +47,7 @@ export function DefaultNode({ data }: { data: any }) {
                     {data.media_value || "Default"}
                 </div>
             </DefaultDiv>
-            <CustomHandle className=" bg-secondary border border-2 rounded-pill white" type="source" position={Position.Bottom}  />
+            <CustomHandle className=" bg-secondary border border-2 rounded-pill white" type="source" position={Position.Bottom} />
         </>
     )
 }
@@ -57,7 +57,7 @@ export function OutputNode({ data }: { data: any }) {
         <>
             <CustomHandle className=" bg-info border border-2 white" type="target" position={Position.Top} isConnectable={1} />
             <OutPutDiv className="d-flex gap-1 p-1 rounded-pill text-light ">
-                    {data.media_value || "Output"}
+                {data.media_type === "message" ? data.media_value : "media"}
             </OutPutDiv>
         </>
     )
