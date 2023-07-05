@@ -94,12 +94,12 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                         if (childOutputNodes.length > 0) {
                             childOutputNodes?.forEach(async (node) => {
                                 if (node.data.media_type === "message")
-                                        await client?.sendMessage(from._serialized, node.data.media_value)
-                                    else {
-                                        let message = await MessageMedia.fromUrl(String(node.data.media_value));
-                                        await client?.sendMessage(from._serialized, message)
-                                    }
-                
+                                    await client?.sendMessage(from._serialized, node.data.media_value)
+                                else {
+                                    let message = await MessageMedia.fromUrl(String(node.data.media_value));
+                                    await client?.sendMessage(from._serialized, message)
+                                }
+                                
                             })
                         }
                     }
