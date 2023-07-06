@@ -31,7 +31,7 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                             sendingNodes.forEach(async (node) => {
                                 await client?.sendMessage(from._serialized, node.data.media_value)
                             })
-                            await client?.sendMessage(from._serialized, "type 0 for main menu")
+                            await client?.sendMessage(from._serialized, "Press 0 for main menu")
                             await new MenuTracker({
                                 menu_id: flow.nodes.find(node => node.parentNode === "commom_message")?.id,
                                 phone_number: String(from._serialized),
@@ -93,7 +93,7 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                                 sendingNodes.forEach(async (node) => {
                                     await client?.sendMessage(from._serialized, node.data.media_value)
                                 })
-                                await client?.sendMessage(from._serialized, "type 0 for main menu")
+                                await client?.sendMessage(from._serialized, "Press 0 for main menu")
                                 tracker.menu_id = menuNode.id
                                 await tracker.save()
                             }
