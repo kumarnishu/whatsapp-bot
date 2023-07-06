@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState, useCallback } from "react";
-import { Background, BackgroundVariant, Connection, Controls, MiniMap, Node, Panel, ReactFlow, addEdge, useNodesState, useEdgesState } from "reactflow";
+import { Background, BackgroundVariant, Connection, Controls, MiniMap, Node, Panel, ReactFlow, addEdge, useNodesState, useEdgesState, Edge } from "reactflow";
 import "reactflow/dist/style.css";
 import { v4 as uuidv4 } from 'uuid';
 import { MenuNode, DefaultNode, StartNode, OutputNode } from "../../nodes/NodeTypes"
@@ -13,17 +13,33 @@ const nodeTypes = { MenuNode, DefaultNode, StartNode, OutputNode }
 const initialNodes: Node[] = [
     {
         id: 'start',
-        position: { x: 0, y: 10 },
+        position: { x: 0, y: 0 },
         data: { media_type : "message", media_value: "Start" },
         type: 'StartNode',
         deletable: false
-    }
+    },
+    {
+        id: 'commom_message',
+        position: { x: 0, y: 100 },
+        data: { media_type: "message", media_value: "Common Message" },
+        type: 'DefaultNode',
+        deletable: false,
+        parentNode:'start'
+    }    
 ];
 
+const initialEdges:Edge[]=[
+    {
+        id:'start-commom_message',
+        source:'start',
+        target:'commom_message',
+        type:"smoothstep"
+    }
+]
 function CreateFlowModal() {
     const { choice, setChoice } = useContext(ChoiceContext)
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [selectedNode, setSelectedNode] = useState<Node>()
     const [flow, setFlow] = useState<IFlow>()
     const [displaySaveModal, setDisplaySaveModal] = useState(false)

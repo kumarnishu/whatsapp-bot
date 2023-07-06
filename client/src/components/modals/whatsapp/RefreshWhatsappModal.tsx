@@ -49,7 +49,7 @@ function RefreshWhatsappModal() {
                 setQrCode(undefined)
             })
         }
-    }, [])
+    }, [user,setUser])
     return (
         <Modal
             show={choice === AppChoiceActions.refresh_whatsapp ? true : false}

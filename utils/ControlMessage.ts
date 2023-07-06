@@ -20,10 +20,12 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                         if (key) {
                             return flow
                         }
-                        return undefined
                     })
                     if (flow && from) {
-                        let parent = flow.nodes.find(node => node.parentNode === "start")
+                        let commonNode = flow.nodes.find((node) => node.id === "commom_message")
+                        if (commonNode)
+                            await client?.sendMessage(from._serialized, commonNode.data.media_value)
+                        let parent = flow.nodes.find(node => node.parentNode === "commom_message")
                         if (parent) {
                             let sendingNodes = flow.nodes.filter((node) => { return node.parentNode === parent?.id })
                             sendingNodes.forEach(async (node) => {
@@ -31,7 +33,7 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                             })
                             await client?.sendMessage(from._serialized, "type 0 for main menu")
                             await new MenuTracker({
-                                menu_id: flow.nodes.find(node => node.parentNode === "start")?.id,
+                                menu_id: flow.nodes.find(node => node.parentNode === "commom_message")?.id,
                                 phone_number: String(from._serialized),
                                 joined_at: new Date(),
                                 last_active: new Date(),
@@ -43,8 +45,14 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
             }
             if (tracker && from) {
                 let parent = tracker.flow.nodes.find((node) => node.id === tracker?.menu_id)
-                if (String(msg.body).toLowerCase() === '0' || tracker.flow.trigger_keywords.split(",").includes(String(msg.body).toLowerCase())) {
-                    let parentNode = tracker?.flow.nodes.find((node) => node.parentNode === "start")
+                let startTriggered = tracker.flow.trigger_keywords.split(",").includes(String(msg.body).toLowerCase())
+                if (String(msg.body).toLowerCase() === '0' || startTriggered) {
+                    if (startTriggered) {
+                        let commonNode = tracker?.flow.nodes.find((node) => node.id === "commom_message")
+                        if (commonNode)
+                            await client?.sendMessage(from._serialized, commonNode.data.media_value)
+                    }
+                    let parentNode = tracker?.flow.nodes.find((node) => node.parentNode === "commom_message")
                     let sendingNodes = tracker?.flow.nodes.filter((node) => { return node.parentNode === parentNode?.id })
                     sendingNodes.forEach(async (node) => {
                         await client?.sendMessage(from._serialized, node.data.media_value)
