@@ -67,7 +67,6 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                     }
 
                 }
-                console.log(startTriggered)
                 if (comingMessage === '0' || startTriggered) {
                     if (startTriggered) {
                         let commonNode = tracker?.flow.nodes.find((node) => node.id === "commom_message")
@@ -86,7 +85,6 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                     sendingNodes.forEach(async (node) => {
                         sendingMessage = sendingMessage + init_msg + node.data.media_value + "\n"
                     })
-                    sendingMessage = sendingMessage + init_msg + "Press 0 for main menu"
                     await client?.sendMessage(from._serialized, sendingMessage)
                     if (parentNode) {
                         tracker.menu_id = parentNode.id
