@@ -20,7 +20,7 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                     let flow = flows.find((flow) => {
                         let keys = flow.trigger_keywords.split(",");
                         for (let i = 0; i < keys.length; i++) {
-                            if (comingMessage.search(keys[i]) !== -1) {
+                            if (comingMessage.split(" ").includes(keys[i])) {
                                 return flow
                             }
                         }
@@ -60,11 +60,10 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                 let startTriggered = false
                 let keys = tracker.flow.trigger_keywords.split(",");
                 for (let i = 0; i < keys.length; i++) {
-                    if (comingMessage.search(keys[i]) !== -1) {
+                   if(comingMessage.split(" ").includes(keys[i])) {
                         startTriggered = true
                         break
                     }
-
                 }
                 if (comingMessage === '0' || startTriggered) {
                     if (startTriggered) {
