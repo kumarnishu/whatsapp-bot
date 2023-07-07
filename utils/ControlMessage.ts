@@ -6,32 +6,45 @@ import { MenuTracker } from "../models/MenuTracker";
 import { FlowNode } from "../types/flow.types";
 
 export const ControlMessage = async (msg: WAWebJS.Message) => {
+    let init_msg = "👉 "
     try {
         if (client) {
             const from = await client.getNumberId(msg.from);
             let tracker = await MenuTracker.findOne({ phone_number: from?._serialized }).populate('flow')
+            let comingMessage = String(msg.body).toLowerCase()
+            let sendingMessage = ""
             if (!tracker) {
                 let user = await User.findOne({ connected_number: String(msg.to).replace("@c.us", "") })
                 let flows = await Flow.find({ created_by: user })
                 if (flows.length > 0) {
-                    let flow = flows.find(flow => {
+                    let flow = flows.find((flow) => {
                         let keys = flow.trigger_keywords.split(",");
-                        let key = keys.find(key => key === String(msg.body).toLowerCase())
-                        if (key) {
-                            return flow
+                        for (let i = 0; i < keys.length; i++) {
+                            if (comingMessage.search(keys[i]) !== -1) {
+                                return flow
+                            }
                         }
+                        return null
                     })
                     if (flow && from) {
                         let commonNode = flow.nodes.find((node) => node.id === "commom_message")
-                        if (commonNode)
-                            await client?.sendMessage(from._serialized, commonNode.data.media_value)
+                        sendingMessage = String(commonNode?.data.media_value) + "\n"
                         let parent = flow.nodes.find(node => node.parentNode === "commom_message")
                         if (parent) {
                             let sendingNodes = flow.nodes.filter((node) => { return node.parentNode === parent?.id })
+                            sendingNodes.sort(function (a, b) {
+                                var keyA = new Date(a.data.index),
+                                    keyB = new Date(b.data.index);
+                                // Compare the 2 dates
+                                if (keyA < keyB) return -1;
+                                if (keyA > keyB) return 1;
+                                return 0;
+                            });
                             sendingNodes.forEach(async (node) => {
-                                await client?.sendMessage(from._serialized, node.data.media_value)
+                                sendingMessage = sendingMessage + init_msg + node.data.media_value + "\n"
                             })
-                            await client?.sendMessage(from._serialized, "Press 0 for main menu")
+                            sendingMessage = sendingMessage + init_msg + "Press 0 for main menu"
+                            await client?.sendMessage(from._serialized, sendingMessage)
                             await new MenuTracker({
                                 menu_id: flow.nodes.find(node => node.parentNode === "commom_message")?.id,
                                 phone_number: String(from._serialized),
@@ -45,18 +58,36 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
             }
             if (tracker && from) {
                 let parent = tracker.flow.nodes.find((node) => node.id === tracker?.menu_id)
-                let startTriggered = tracker.flow.trigger_keywords.split(",").includes(String(msg.body).toLowerCase())
-                if (String(msg.body).toLowerCase() === '0' || startTriggered) {
+                let startTriggered = false
+                let keys = tracker.flow.trigger_keywords.split(",");
+                for (let i = 0; i < keys.length; i++) {
+                    if (comingMessage.search(keys[i]) !== -1) {
+                        startTriggered = true
+                        break
+                    }
+
+                }
+                console.log(startTriggered)
+                if (comingMessage === '0' || startTriggered) {
                     if (startTriggered) {
                         let commonNode = tracker?.flow.nodes.find((node) => node.id === "commom_message")
-                        if (commonNode)
-                            await client?.sendMessage(from._serialized, commonNode.data.media_value)
+                        sendingMessage = String(commonNode?.data.media_value) + "\n"
                     }
                     let parentNode = tracker?.flow.nodes.find((node) => node.parentNode === "commom_message")
                     let sendingNodes = tracker?.flow.nodes.filter((node) => { return node.parentNode === parentNode?.id })
+                    sendingNodes.sort(function (a, b) {
+                        var keyA = new Date(a.data.index),
+                            keyB = new Date(b.data.index);
+                        // Compare the 2 dates
+                        if (keyA < keyB) return -1;
+                        if (keyA > keyB) return 1;
+                        return 0;
+                    });
                     sendingNodes.forEach(async (node) => {
-                        await client?.sendMessage(from._serialized, node.data.media_value)
+                        sendingMessage = sendingMessage + init_msg + node.data.media_value + "\n"
                     })
+                    sendingMessage = sendingMessage + init_msg + "Press 0 for main menu"
+                    await client?.sendMessage(from._serialized, sendingMessage)
                     if (parentNode) {
                         tracker.menu_id = parentNode.id
                         await tracker.save()
@@ -66,7 +97,7 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                     let sendingNodes = tracker.flow.nodes.filter((node) => { return node.parentNode === parent?.id })
                     let targetNode = sendingNodes.filter((node) => {
                         let index = String(node.data.index)
-                        if (index === String(msg.body).toLowerCase()) {
+                        if (index === comingMessage) {
                             return node
                         }
                         return undefined
@@ -91,9 +122,10 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                                     return 0;
                                 });
                                 sendingNodes.forEach(async (node) => {
-                                    await client?.sendMessage(from._serialized, node.data.media_value)
+                                    sendingMessage = sendingMessage + init_msg + node.data.media_value + "\n"
                                 })
-                                await client?.sendMessage(from._serialized, "Press 0 for main menu")
+                                sendingMessage = sendingMessage + init_msg + "Press 0 for main menu"
+                                await client?.sendMessage(from._serialized, sendingMessage)
                                 tracker.menu_id = menuNode.id
                                 await tracker.save()
                             }

@@ -39,8 +39,18 @@ export const ConectWhatsapp = async (req: Request, client_id: string, socket: So
         await User.findByIdAndUpdate(req.user?._id, {
             is_whatsapp_active: false
         })
-        if (client)
-            await client.initialize();
+        client = new Client({
+            authStrategy: new LocalAuth({
+                clientId: client_id
+            }),
+            puppeteer: {
+                headless: true,
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox'
+                ]
+            }
+        });
     });
     client.on('qr', async (qr) => {
         console.log("logged out", qr)
