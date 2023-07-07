@@ -43,7 +43,6 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                             sendingNodes.forEach(async (node) => {
                                 sendingMessage = sendingMessage + init_msg + node.data.media_value + "\n"
                             })
-                            sendingMessage = sendingMessage + init_msg + "Press 0 for main menu"
                             await client?.sendMessage(from._serialized, sendingMessage)
                             await new MenuTracker({
                                 menu_id: flow.nodes.find(node => node.parentNode === "commom_message")?.id,
