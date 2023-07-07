@@ -82,6 +82,11 @@ const UserSchema = new mongoose.Schema<IUser, mongoose.Model<IUser, {}, IUserMet
         trim: true,
         required: true
     },
+    client_data_path: {
+        type: String,
+        trim: true,
+        required: true
+    },
     updated_by: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

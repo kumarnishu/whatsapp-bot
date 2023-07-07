@@ -5,6 +5,7 @@ export type IUser = {
     email: string,
     mobile: string,
     client_id: string,
+    client_data_path:string,
     connected_number:number,
     is_whatsapp_active:Boolean,
     is_admin: Boolean,
