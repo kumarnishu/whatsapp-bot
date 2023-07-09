@@ -41,14 +41,12 @@ const initialEdges: Edge[] = [
         id: 'start_common_message',
         source: 'start',
         target: 'common_message',
-        type: "smoothstep",
         deletable: false
     },
     {
         id: 'common_menu_edge',
         source: 'common_message',
         target: 'parent_menu',
-        type: "smoothstep",
         deletable: false
     }
 ]
@@ -235,7 +233,7 @@ function CreateFlowModal() {
                     fitView
                     nodeTypes={nodeTypes}
                     onEdgeDoubleClick={handleEdgeDelete}
-                    defaultEdgeOptions={{ type: "smoothstep" }}
+                    defaultEdgeOptions={{ type: "smoothstep", animated: true, }}
                     onNodeDoubleClick={handleSelectNode}
                     //@ts-ignore
 
