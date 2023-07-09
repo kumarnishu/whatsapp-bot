@@ -11,7 +11,7 @@ export const Login = async (
 
 // signup new organization and owner
 export const Signup = async (body: {
-    username: string, mobile: number, email: string, password: string, client_id: string
+    username: string, mobile: number, email: string, password: string
 }) => {
     return await apiClient.post("signup", body);
 };

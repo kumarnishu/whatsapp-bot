@@ -9,9 +9,9 @@ import { AuthenticateUser } from '../middlewares/auth.middleware';
 // Create Owner account
 export const SignUp =
     async (req: Request, res: Response, next: NextFunction) => {
-        let { username, email, password, mobile, client_id } = req.body as TUserBody
+        let { username, email, password, mobile } = req.body as TUserBody
         // validations
-        if (!username || !email || !password || !mobile || !client_id)
+        if (!username || !email || !password || !mobile)
             return res.status(400).json({ message: "fill all the required fields" });
         if (!isEmail(email))
             return res.status(400).json({ message: "please provide valid email" });
@@ -22,19 +22,16 @@ export const SignUp =
             return res.status(403).json({ message: `${email} already exists` });
         if (await User.findOne({ mobile: String(mobile).toLowerCase().trim() }))
             return res.status(403).json({ message: `${mobile} already exists` });
-        let users = await User.find()
-        if (users.length > 0) {
-            return res.status(403).json({ message: "Not Allowed Here" });
-        }
+        
         let owner = new User({
             username,
             password,
             email,
             mobile,
             is_admin: true,
-            client_id: String(client_id).replace(" ", "")
+            client_id: username.replace(" ", "") + `${Number(new Date()) }`,
+            client_data_path: username.replace(" ", "") + `${Number(new Date())}`
         })
-
         owner.created_by = owner
         owner.updated_by = owner
         await owner.save()

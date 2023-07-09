@@ -7,12 +7,13 @@ import { MenuTracker } from "../models/MenuTracker";
 
 export const SetUpWhatsappProfile = async (req: Request, res: Response, next: NextFunction) => {
     const client_id = req.user?.client_id
-    if (!client_id) {
-        return res.status(404).json({ message: "whatsapp session id not found" })
+    const client_data_path = req.user?.client_data_path
+    if (!client_id || !client_data_path) {
+        return res.status(404).json({ message: "fill all required fields" })
     }
-    if (AppSocket && client_id) {
+    if (AppSocket && client_id && client_data_path) {
         try {
-            await ConectWhatsapp(req, client_id, AppSocket)
+            await ConectWhatsapp(req, client_id, client_data_path, AppSocket)
         }
         catch (err: any) {
             console.log(err)

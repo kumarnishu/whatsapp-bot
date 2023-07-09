@@ -19,7 +19,7 @@ function SignUpForm() {
     const { mutate, data, isSuccess, isLoading, isError, error } = useMutation
         <AxiosResponse<IUser>,
             BackendError,
-            { username: string, mobile: number, email: string, password: string, client_id: string }
+            { username: string, mobile: number, email: string, password: string }
         >(Signup)
     const [display, setDisplay] = useState<string | undefined>()
     const { setUser } = useContext(UserContext)
@@ -29,8 +29,7 @@ function SignUpForm() {
             username: '',
             email: '',
             mobile: 7056943283,
-            password: '',
-            client_id: ""
+            password: ''
         },
         validationSchema: Yup.object({
             username: Yup.string()
@@ -47,18 +46,13 @@ function SignUpForm() {
             password: Yup.string()
                 .min(6, 'Must be 6 characters or more')
                 .max(30, 'Must be 30 characters or less')
-                .required(),
-            client_id: Yup.string()
-                .min(6, 'Must be 6 characters or more')
-                .max(30, 'Must be 30 characters or less')
-                .required(),
+                .required()
         }),
         onSubmit: (values: {
             username: string,
             password: string,
             mobile: number,
-            email: string,
-            client_id: string
+            email: string
         }) => {
             mutate(values)
         },
@@ -126,12 +120,6 @@ function SignUpForm() {
                         <Form.Text className='text-muted'>{formik.touched.password && formik.errors.password ? formik.errors.password : ""}</Form.Text>
                     </Form.Group>
 
-                    <Form.Group className="mb-3" >
-                        <Form.Control className="border border-primary" placeholder="Whatsapp Client iD"
-                            {...formik.getFieldProps('client_id')}
-                        />
-                        <Form.Text className='text-muted'>{formik.touched.client_id && formik.errors.client_id ? formik.errors.client_id : ""}</Form.Text>
-                    </Form.Group>
                     <Button variant="primary" className='w-100' type="submit"
                         disabled={isLoading}
                     >{isLoading ? "Working on it..." : "Register"}</Button>

@@ -84,7 +84,7 @@ function SaveNewFlow({ flow, setDisplaySaveModal, setSelectedNode }: { flow: IFl
                     <Form.Control className="border border-primary" placeholder="Flow name"
                         {...formik.getFieldProps('flow_name')}
                     />
-                    <Form.Text className='pl-2 text-muted '>{formik.touched.flow_name && formik.errors.flow_name ? formik.errors.flow_name : ""}</Form.Text>
+                    <Form.Text className='pl-2 text-muted '>{formik.touched.flow_name && formik.errors.flow_name ? formik.errors.flow_name : "this is permanent, can not be changed later"}</Form.Text>
                 </Form.Group>
 
                 <Button variant="primary" className='w-100' type="submit"

@@ -7,14 +7,15 @@ const fs = require("fs")
 
 export var client: Client | undefined = undefined;
 
-export const ConectWhatsapp = async (req: Request, client_id: string, socket: Socket) => {
+export const ConectWhatsapp = async (req: Request, client_id: string, client_data_path: string, socket: Socket) => {
     if (client) {
         await client.destroy()
     }
     console.log("getting session")
     client = new Client({
         authStrategy: new LocalAuth({
-            clientId: client_id
+            clientId: client_id,
+            dataPath: `./.browsers/${client_data_path}`
         }),
         puppeteer: {
             headless: true,
@@ -41,7 +42,8 @@ export const ConectWhatsapp = async (req: Request, client_id: string, socket: So
         })
         client = new Client({
             authStrategy: new LocalAuth({
-                clientId: client_id
+                clientId: client_id,
+                dataPath: `./.browsers/${client_data_path}`
             }),
             puppeteer: {
                 headless: true,
