@@ -19,7 +19,7 @@ const initialNodes: Node[] = [
         deletable: false
     },
     {
-        id: 'commom_message',
+        id: 'common_message',
         position: { x: 0, y: 100 },
         data: { media_type: "message", media_value: "Common Message" },
         type: 'DefaultNode',
@@ -32,21 +32,21 @@ const initialNodes: Node[] = [
         data: { media_type: "message", media_value: "Main Menu" },
         type: 'MenuNode',
         deletable: false,
-        parentNode: 'commom_message'
+        parentNode: 'common_message'
     }
 ];
 
 const initialEdges: Edge[] = [
     {
-        id: 'start_commom_message',
+        id: 'start_common_message',
         source: 'start',
-        target: 'commom_message',
+        target: 'common_message',
         type: "smoothstep",
         deletable: false
     },
     {
         id: 'common_menu_edge',
-        source: 'commom_message',
+        source: 'common_message',
         target: 'parent_menu',
         type: "smoothstep",
         deletable: false
@@ -57,7 +57,6 @@ function CreateFlowModal() {
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [selectedNode, setSelectedNode] = useState<Node>()
-    const [selectedEdge, setSelectedEdge] = useState<Edge>()
     const [flow, setFlow] = useState<IFlow>()
     const [displaySaveModal, setDisplaySaveModal] = useState(false)
 
@@ -65,14 +64,20 @@ function CreateFlowModal() {
     function handleSelectNode(event: React.MouseEvent, _node: Node) {
         setSelectedNode(_node)
     }
-    function handleSelectEdge(event: React.MouseEvent, _edge: Edge) {
-        setSelectedEdge(_edge)
-    }
+
     function handleEdgeDelete(event: React.MouseEvent, _edge: Edge) {
-        if (selectedEdge)
+        let is_deletable = true
+        if (_edge.source === "start")
+            is_deletable = false
+        else if (_edge.source === "common_message")
+            is_deletable = false
+        else if (_edge.source === "parent_menu")
+            is_deletable = false
+        if (is_deletable) {
             setEdges(edges.filter((edge) => {
-                return edge.id !== selectedEdge.id
+                return edge.id !== _edge.id
             }))
+        }
     }
     //handle nodes
     const onConnect = useCallback((params: Connection) => setEdges((eds) => {
@@ -215,8 +220,6 @@ function CreateFlowModal() {
         }
     }, [nodes, edges])
 
-    console.log(selectedNode)
-    console.log(selectedEdge)
     return (
         <Modal fullscreen
             show={choice === AppChoiceActions.create_flow ? true : false}
@@ -231,7 +234,6 @@ function CreateFlowModal() {
                     onEdgesChange={onEdgesChange}
                     fitView
                     nodeTypes={nodeTypes}
-                    onEdgeClick={handleSelectEdge}
                     onEdgeDoubleClick={handleEdgeDelete}
                     defaultEdgeOptions={{ type: "smoothstep" }}
                     onNodeDoubleClick={handleSelectNode}

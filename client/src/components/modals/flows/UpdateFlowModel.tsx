@@ -17,7 +17,6 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
     const [nodes, setNodes, onNodesChange] = useNodesState(selectedFlow.nodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(selectedFlow.edges);
     const [selectedNode, setSelectedNode] = useState<Node>()
-    const [selectedEdge, setSelectedEdge] = useState<Edge>()
     const [displaySaveModal, setDisplaySaveModal] = useState(false)
     
     function handleSelectNode(event: React.MouseEvent, _node: Node) {
@@ -128,14 +127,20 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
         }
 
     }
-    function handleSelectEdge(event: React.MouseEvent, _edge: Edge) {
-        setSelectedEdge(_edge)
-    }
+   
     function handleEdgeDelete(event: React.MouseEvent, _edge: Edge) {
-        if (selectedEdge)
+        let is_deletable = true
+        if (_edge.source === "start")
+            is_deletable = false
+        else if (_edge.source === "common_message")
+            is_deletable = false
+        else if (_edge.source === "parent_menu")
+            is_deletable = false
+        if (is_deletable) {
             setEdges(edges.filter((edge) => {
-                return edge.id !== selectedEdge.id
+                return edge.id !== _edge.id
             }))
+        }
     }
     const handleNewNodeONClick = (type: string) => {
         const newNode: Node = {
@@ -146,7 +151,6 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
         };
         setNodes((nds) => nds.concat(newNode));
     }
-    console.log(flow)
     return (
         <Modal fullscreen
             show={choice === AppChoiceActions.update_flow ? true : false}
@@ -163,7 +167,6 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
                     nodeTypes={nodeTypes}
                     defaultEdgeOptions={{ type: "smoothstep" }}
                     onNodeDoubleClick={handleSelectNode}
-                    onEdgeClick={handleSelectEdge}
                     onEdgeDoubleClick={handleEdgeDelete}
                     //@ts-ignore
                     onDrop={onDrop}
