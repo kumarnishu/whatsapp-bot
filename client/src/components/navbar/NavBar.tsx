@@ -1,7 +1,7 @@
 import LogoutButton from '../buttons/LogoutButton';
 import { useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { paths } from '../../Routes';
 import { Dropdown } from 'react-bootstrap';
 import { AppChoiceActions, ChoiceContext } from '../../contexts/DialogContext';
@@ -11,7 +11,6 @@ import RefreshWhatsappButton from '../buttons/RefreshWhatsappButton';
 function NavBar() {
     const { user } = useContext(UserContext)
     const { setChoice } = useContext(ChoiceContext)
-    const goto = useNavigate()
     return (
         <>
             <UpdatePasswordModal />
@@ -34,21 +33,20 @@ function NavBar() {
                             {/* navbar */}
                             <div className="d-none d-md-flex  gap-1 justify-content-center align-items-center ">
                                 <div className="d-flex align-items-center">
-                                    {user ? <>
-                                        <img width="24" alt="icons" height="24" src="https://img.icons8.com/color/48/serial-tasks.png" />
-                                        <Link className="text-white text-decoration-none rounded shadow p-2 text-uppercase fw-bold fs-6" to={paths.flows}>Flows</Link>
-                                        <Dropdown>
-                                            <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                                                {user.username.toUpperCase()}
-                                            </Dropdown.Toggle>
-                                            <Dropdown.Menu >
-                                                <Dropdown.Item className="border-bottom-1" onClick={() => setChoice({ type: AppChoiceActions.update_password })}><img height="30" width="30" src="https://img.icons8.com/color/48/keys-holder.png" alt="icons" />Update Password</Dropdown.Item>
-                                                <Dropdown.Item >
-                                                    <LogoutButton />
-                                                </Dropdown.Item>
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-                                    </> : null}
+                                    {user ?
+                                        <>
+                                            <Dropdown>
+                                                <Dropdown.Toggle variant="dark" id="dropdown-basic">
+                                                    {user.username.toUpperCase()}
+                                                </Dropdown.Toggle>
+                                                <Dropdown.Menu >
+                                                    <Dropdown.Item className="border-bottom-1" onClick={() => setChoice({ type: AppChoiceActions.update_password })}><img height="30" width="30" src="https://img.icons8.com/color/48/keys-holder.png" alt="icons" />Update Password</Dropdown.Item>
+                                                    <Dropdown.Item >
+                                                        <LogoutButton />
+                                                    </Dropdown.Item>
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                        </> : null}
                                 </div>
                             </div>
                             {/* navbar menu */}
@@ -56,11 +54,7 @@ function NavBar() {
                                 <Dropdown.Toggle variant="dark" id="dropdown-basic">
                                     {user.username.toUpperCase()}
                                 </Dropdown.Toggle>
-                                <Dropdown.Menu >
-                                    <Dropdown.Item className="p-2 m-0">
-                                        <img width="24" height="24" src="https://img.icons8.com/color/48/serial-tasks.png" alt="serial-tasks--v1" />
-                                        <span onClick={() => goto(paths.flows)}>  Bot Flows</span>
-                                    </Dropdown.Item>
+                                <Dropdown.Menu className="">
                                     <Dropdown.Item className="p-0 m-0"
                                         onClick={() => setChoice({ type: AppChoiceActions.update_password })}
                                     >
