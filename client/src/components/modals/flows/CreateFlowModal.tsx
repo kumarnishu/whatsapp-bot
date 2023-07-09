@@ -25,15 +25,29 @@ const initialNodes: Node[] = [
         type: 'DefaultNode',
         deletable: false,
         parentNode:'start'
-    }    
+    },
+    {
+        id: 'parent_menu',
+        position: { x: 0, y: 200 },
+        data: { media_type: "message", media_value: "Main Menu" },
+        type: 'MenuNode',
+        deletable: false,
+        parentNode: 'commom_message'
+    }
 ];
 
 const initialEdges:Edge[]=[
     {
-        id:'start-commom_message',
+        id:'start_commom_message',
         source:'start',
         target:'commom_message',
         type:"smoothstep"
+    },
+    {
+        id: 'common_menu_edge',
+        source: 'commom_message',
+        target: 'parent_menu',
+        type: "smoothstep"
     }
 ]
 function CreateFlowModal() {
@@ -263,7 +277,7 @@ function CreateFlowModal() {
                                 onClick={() => {
                                     setFlow(undefined)
                                     setNodes(initialNodes)
-                                    setEdges([])
+                                    setEdges(initialEdges)
                                 }}
                             >
                                 <img width="20" height="20" src="https://img.icons8.com/ios-filled/50/update-left-rotation.png" alt="close" />

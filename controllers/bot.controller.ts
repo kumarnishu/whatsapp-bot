@@ -13,7 +13,7 @@ export const SetUpWhatsappProfile = async (req: Request, res: Response, next: Ne
     }
     if (AppSocket && client_id && client_data_path) {
         try {
-            await ConectWhatsapp(req, client_id, client_data_path, AppSocket)
+            await ConectWhatsapp(req,client_id, client_data_path, AppSocket)
         }
         catch (err: any) {
             console.log(err)

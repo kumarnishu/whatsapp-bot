@@ -1,11 +1,10 @@
-import WAWebJS, { MessageMedia } from "whatsapp-web.js";
-import { client } from "./ConnectWhatsapp";
+import WAWebJS, { Client, MessageMedia } from "whatsapp-web.js";
 import { Flow } from "../models/Flow";
 import { User } from "../models/User";
 import { MenuTracker } from "../models/MenuTracker";
 import { FlowNode } from "../types/flow.types";
 
-export const ControlMessage = async (msg: WAWebJS.Message) => {
+export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
     let init_msg = "👉 "
     try {
         if (client) {
@@ -60,7 +59,7 @@ export const ControlMessage = async (msg: WAWebJS.Message) => {
                 let startTriggered = false
                 let keys = tracker.flow.trigger_keywords.split(",");
                 for (let i = 0; i < keys.length; i++) {
-                   if(comingMessage.split(" ").includes(keys[i])) {
+                    if (comingMessage.split(" ").includes(keys[i])) {
                         startTriggered = true
                         break
                     }
