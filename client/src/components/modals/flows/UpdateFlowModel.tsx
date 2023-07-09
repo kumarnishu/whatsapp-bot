@@ -1,5 +1,5 @@
 import React, { useContext, useState, useCallback } from "react";
-import { Background, BackgroundVariant, Connection, Controls, MiniMap, Node, Panel, ReactFlow, addEdge, useNodesState, useEdgesState } from "reactflow";
+import { Background, BackgroundVariant, Connection, Controls, MiniMap, Node, Panel, ReactFlow, addEdge, useNodesState, useEdgesState, Edge } from "reactflow";
 import "reactflow/dist/style.css";
 import { v4 as uuidv4 } from 'uuid';
 import { MenuNode, DefaultNode, StartNode, OutputNode } from "../../nodes/NodeTypes"
@@ -17,7 +17,9 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
     const [nodes, setNodes, onNodesChange] = useNodesState(selectedFlow.nodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(selectedFlow.edges);
     const [selectedNode, setSelectedNode] = useState<Node>()
+    const [selectedEdge, setSelectedEdge] = useState<Edge>()
     const [displaySaveModal, setDisplaySaveModal] = useState(false)
+    
     function handleSelectNode(event: React.MouseEvent, _node: Node) {
         setSelectedNode(_node)
     }
@@ -126,6 +128,15 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
         }
 
     }
+    function handleSelectEdge(event: React.MouseEvent, _edge: Edge) {
+        setSelectedEdge(_edge)
+    }
+    function handleEdgeDelete(event: React.MouseEvent, _edge: Edge) {
+        if (selectedEdge)
+            setEdges(edges.filter((edge) => {
+                return edge.id !== selectedEdge.id
+            }))
+    }
     const handleNewNodeONClick = (type: string) => {
         const newNode: Node = {
             id: uuidv4(),
@@ -152,8 +163,9 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
                     nodeTypes={nodeTypes}
                     defaultEdgeOptions={{ type: "smoothstep" }}
                     onNodeDoubleClick={handleSelectNode}
+                    onEdgeClick={handleSelectEdge}
+                    onEdgeDoubleClick={handleEdgeDelete}
                     //@ts-ignore
-
                     onDrop={onDrop}
                     //@ts-ignore
 

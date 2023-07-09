@@ -14,7 +14,7 @@ const initialNodes: Node[] = [
     {
         id: 'start',
         position: { x: 0, y: 0 },
-        data: { media_type : "message", media_value: "Start" },
+        data: { media_type: "message", media_value: "Start" },
         type: 'StartNode',
         deletable: false
     },
@@ -24,7 +24,7 @@ const initialNodes: Node[] = [
         data: { media_type: "message", media_value: "Common Message" },
         type: 'DefaultNode',
         deletable: false,
-        parentNode:'start'
+        parentNode: 'start'
     },
     {
         id: 'parent_menu',
@@ -36,18 +36,20 @@ const initialNodes: Node[] = [
     }
 ];
 
-const initialEdges:Edge[]=[
+const initialEdges: Edge[] = [
     {
-        id:'start_commom_message',
-        source:'start',
-        target:'commom_message',
-        type:"smoothstep"
+        id: 'start_commom_message',
+        source: 'start',
+        target: 'commom_message',
+        type: "smoothstep",
+        deletable: false
     },
     {
         id: 'common_menu_edge',
         source: 'commom_message',
         target: 'parent_menu',
-        type: "smoothstep"
+        type: "smoothstep",
+        deletable: false
     }
 ]
 function CreateFlowModal() {
@@ -55,10 +57,22 @@ function CreateFlowModal() {
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [selectedNode, setSelectedNode] = useState<Node>()
+    const [selectedEdge, setSelectedEdge] = useState<Edge>()
     const [flow, setFlow] = useState<IFlow>()
     const [displaySaveModal, setDisplaySaveModal] = useState(false)
+
+
     function handleSelectNode(event: React.MouseEvent, _node: Node) {
         setSelectedNode(_node)
+    }
+    function handleSelectEdge(event: React.MouseEvent, _edge: Edge) {
+        setSelectedEdge(_edge)
+    }
+    function handleEdgeDelete(event: React.MouseEvent, _edge: Edge) {
+        if (selectedEdge)
+            setEdges(edges.filter((edge) => {
+                return edge.id !== selectedEdge.id
+            }))
     }
     //handle nodes
     const onConnect = useCallback((params: Connection) => setEdges((eds) => {
@@ -74,7 +88,7 @@ function CreateFlowModal() {
                         node.data = {
                             ...node.data,
                             media_type: "message",
-                            media_value:"menu"
+                            media_value: "menu"
                         }
                     }
                     return node
@@ -104,25 +118,25 @@ function CreateFlowModal() {
                     if (node.id === targetNode?.id) {
                         node.type = "MenuNode"
                         node.parentNode = srcNode?.id
-                            node.data = {
-                                ...node.data,
-                                media_type: "message",
-                                media_value: "menu"
-                            }
+                        node.data = {
+                            ...node.data,
+                            media_type: "message",
+                            media_value: "menu"
+                        }
                     }
                     return node
                 }))
             }
 
             if (srcNode.type === "DefaultNode" && targetNode.type === "OutputNode") {
-                  setNodes((nodes) => nodes.map((node) => {
+                setNodes((nodes) => nodes.map((node) => {
                     if (node.id === targetNode?.id) {
                         node.parentNode = srcNode?.id
-                            node.data = {
-                                ...node.data,
-                                media_type: "message",
-                                media_value: "output"
-                            }
+                        node.data = {
+                            ...node.data,
+                            media_type: "message",
+                            media_value: "output"
+                        }
                     }
                     return node
                 }))
@@ -200,7 +214,9 @@ function CreateFlowModal() {
             })
         }
     }, [nodes, edges])
-    console.log(flow)
+
+    console.log(selectedNode)
+    console.log(selectedEdge)
     return (
         <Modal fullscreen
             show={choice === AppChoiceActions.create_flow ? true : false}
@@ -215,6 +231,8 @@ function CreateFlowModal() {
                     onEdgesChange={onEdgesChange}
                     fitView
                     nodeTypes={nodeTypes}
+                    onEdgeClick={handleSelectEdge}
+                    onEdgeDoubleClick={handleEdgeDelete}
                     defaultEdgeOptions={{ type: "smoothstep" }}
                     onNodeDoubleClick={handleSelectNode}
                     //@ts-ignore
