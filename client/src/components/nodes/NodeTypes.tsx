@@ -26,8 +26,8 @@ overflow:hidden;
 export function MenuNode({ data }: { data: any }) {
     return (
         <>
-            <CustomHandle className=" bg-warning border border-2 white rounded-pill" type="target" position={Position.Top} />
-            <MenuDiv className="react-flow-menu-node  text-light rounded-pill p-1 ">
+            <CustomHandle className=" bg-warning border border-2 white rounded" type="target" position={Position.Top} />
+            <MenuDiv className="react-flow-menu-node  text-light rounded p-1 ">
                 {data.media_value || "Menu"}
             </MenuDiv>
             <CustomHandle className="bg-secondary border border-2 white" type="source" position={Position.Bottom} />
@@ -39,7 +39,7 @@ export function DefaultNode({ data }: { data: any }) {
     return (
         <>
             <CustomHandle className=" bg-info border border-2 white" type="target" position={Position.Top} isConnectable={2} />
-            <DefaultDiv className="d-flex gap-1 p-1 rounded-pill ">
+            <DefaultDiv className="d-flex gap-1 p-1 rounded ">
                 {
                     data.index ?
                         <div style={{ width: 15, height: 15, borderRadius: '50% ' }} className="d-flex align-items-center  bg-light  text-dark p-1">{data.index}
@@ -48,11 +48,11 @@ export function DefaultNode({ data }: { data: any }) {
                 }
 
 
-                <div className="rounded-pill text-light ">
+                <div className="rounded text-light ">
                     {data.media_value || "Default"}
                 </div>
             </DefaultDiv>
-            <CustomHandle className=" bg-secondary border border-2 rounded-pill white" type="source" position={Position.Bottom} />
+            <CustomHandle className=" bg-secondary border border-2 rounded white" type="source" position={Position.Bottom} />
         </>
     )
 }
@@ -61,7 +61,7 @@ export function OutputNode({ data }: { data: any }) {
     return (
         <>
             <CustomHandle className=" bg-info border border-2 white" type="target" position={Position.Top} isConnectable={1} />
-            <OutPutDiv className="d-flex gap-1 p-1 rounded-pill text-light ">
+            <OutPutDiv className="d-flex gap-1 p-1 rounded text-light ">
                 {data.media_type === "message" ? data.media_value : "media"}
             </OutPutDiv>
         </>
