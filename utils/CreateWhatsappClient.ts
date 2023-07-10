@@ -37,11 +37,10 @@ export async function createWhatsappClient(req: Request, client_id: string, clie
         }
         if (!clients.find((client) => client.client_id === client_id))
             clients.push({ client_id: client_id, client: client })
-        console.log("session revived", client && client.info.wid.user)
-        console.log(client_id)
+        console.log("session revived for", client && client.info.wid.user)
     })
     client.on('disconnected', async (reason) => {
-        console.log("reasn", reason)
+        console.log("reason", reason)
         fs.rmSync(`.browsers/${client_id}`, { recursive: true, force: true });
         let user = await User.findOne({ client_id: client_id })
         if (user) {
@@ -51,26 +50,24 @@ export async function createWhatsappClient(req: Request, client_id: string, clie
             })
         }
         clients = clients.filter((client) => { return client.client_id === client_id })
-        console.log(client_id)
+        console.log("task is running for", client_id)
     })
     client.on('qr', async (qr) => {
         console.log("logged out", qr)
         socket.emit("qr", qr);
         clients = clients.filter((client) => { return client.client_id === client_id })
-        console.log(client_id)
+        console.log("task is running for", client_id)
     });
     client.on('loading_screen', async (qr) => {
         console.log("loading..")
         socket.emit("loading");
-        console.log(client_id)
+        console.log("task is running for", client_id)
     });
     client.on('message', async (msg: Message) => {
         if (client) {
             ControlMessage(client, msg)
-            console.log(client_id)
+            console.log("task is running for",client_id)
         }
     });
     await client.initialize();
 }
-
-clients.forEach((client) => console.log(client.client_id))
