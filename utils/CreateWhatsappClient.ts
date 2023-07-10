@@ -28,38 +28,27 @@ export async function createWhatsappClient(req: Request, client_id: string, clie
 
     client.on("ready", async () => {
         socket.emit("ready", client_id)
-        let connected_number = client?.info.wid.user
-        if (connected_number) {
-            let user = await User.findOne({ connected_number: connected_number })
-            if (user)
-                user.is_whatsapp_active = true
-            if (!user) {
-                await User.findByIdAndUpdate(req.user?._id, {
-                    is_whatsapp_active: true,
-                    connected_number: client?.info.wid.user
-                })
-            }
+        let user = await User.findOne({ client_id: client_id })
+        if (user) {
+            await User.findByIdAndUpdate(user._id, {
+                is_whatsapp_active: true,
+                connected_number: client?.info.wid.user
+            })
         }
         if (!clients.find((client) => client.client_id === client_id))
             clients.push({ client_id: client_id, client: client })
         console.log("session revived", client && client.info.wid.user)
-
         console.log(client_id)
     })
     client.on('disconnected', async (reason) => {
         console.log("reasn", reason)
-        fs.rmSync(`.wwebjs_auth/session-${client_id}`, { recursive: true, force: true });
-        let connected_number = client?.info.wid.user
-        if (connected_number) {
-            let user = await User.findOne({ connected_number: connected_number })
-            if (user)
-                user.is_whatsapp_active = false
-            if (!user) {
-                await User.findByIdAndUpdate(req.user?._id, {
-                    is_whatsapp_active: false,
-                    connected_number: null
-                })
-            }
+        fs.rmSync(`.browsers/${client_id}`, { recursive: true, force: true });
+        let user = await User.findOne({ client_id: client_id })
+        if (user) {
+            await User.findByIdAndUpdate(user._id, {
+                is_whatsapp_active: false,
+                connected_number: null
+            })
         }
         clients = clients.filter((client) => { return client.client_id === client_id })
         console.log(client_id)
@@ -67,20 +56,7 @@ export async function createWhatsappClient(req: Request, client_id: string, clie
     client.on('qr', async (qr) => {
         console.log("logged out", qr)
         socket.emit("qr", qr);
-        let connected_number = client?.info.wid.user
-        if (connected_number) {
-            let user = await User.findOne({ connected_number: connected_number })
-            if (user)
-                user.is_whatsapp_active = false
-            if (!user) {
-                await User.findByIdAndUpdate(req.user?._id, {
-                    is_whatsapp_active: false,
-                    connected_number: null
-                })
-            }
-        }
         clients = clients.filter((client) => { return client.client_id === client_id })
-        console.log(client_id)
         console.log(client_id)
     });
     client.on('loading_screen', async (qr) => {

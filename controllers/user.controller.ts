@@ -73,9 +73,7 @@ export const Login = async (req: Request, res: Response, next: NextFunction) => 
 export const Logout = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.session.data)
         return res.status(200).json({ message: "already logged out" })
-    req.session.destroy(() => {
-        console.log(req.session)
-    })
+    req.session.destroy((err:any)=>console.log(err))
     return res.status(200).json({ message: "logged out" })
 }
 

@@ -26,9 +26,9 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
                         return null
                     })
                     if (flow && from) {
-                        let commonNode = flow.nodes.find((node) => node.id === "commom_message")
+                        let commonNode = flow.nodes.find((node) => node.id === "common_message")
                         sendingMessage = String(commonNode?.data.media_value) + "\n"
-                        let parent = flow.nodes.find(node => node.parentNode === "commom_message")
+                        let parent = flow.nodes.find(node => node.parentNode === "common_message")
                         if (parent) {
                             let sendingNodes = flow.nodes.filter((node) => { return node.parentNode === parent?.id })
                             sendingNodes.sort(function (a, b) {
@@ -44,7 +44,7 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
                             })
                             await client?.sendMessage(from._serialized, sendingMessage)
                             await new MenuTracker({
-                                menu_id: flow.nodes.find(node => node.parentNode === "commom_message")?.id,
+                                menu_id: flow.nodes.find(node => node.parentNode === "common_message")?.id,
                                 phone_number: String(from._serialized),
                                 joined_at: new Date(),
                                 last_active: new Date(),
@@ -66,10 +66,10 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
                 }
                 if (comingMessage === '0' || startTriggered) {
                     if (startTriggered) {
-                        let commonNode = tracker?.flow.nodes.find((node) => node.id === "commom_message")
+                        let commonNode = tracker?.flow.nodes.find((node) => node.id === "common_message")
                         sendingMessage = String(commonNode?.data.media_value) + "\n"
                     }
-                    let parentNode = tracker?.flow.nodes.find((node) => node.parentNode === "commom_message")
+                    let parentNode = tracker?.flow.nodes.find((node) => node.parentNode === "common_message")
                     let sendingNodes = tracker?.flow.nodes.filter((node) => { return node.parentNode === parentNode?.id })
                     sendingNodes.sort(function (a, b) {
                         var keyA = new Date(a.data.index),
