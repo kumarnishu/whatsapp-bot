@@ -30,13 +30,15 @@ export async function createWhatsappClient(req: Request, client_id: string, clie
 
     client.on("ready", async () => {
         socket.emit("ready", client.info.wid.user)
-        let user = await User.findOne({ connected_number: client.info.wid.user })
+        let user = await User.findOne({
+            connected_number: client.info.wid._serialized
+        })
         if (!user)
             user = await User.findOne({ client_id: client_id })
         if (user) {
             await User.findByIdAndUpdate(user._id, {
                 is_whatsapp_active: true,
-                connected_number: client?.info.wid.user
+                connected_number: client?.info.wid._serialized
             })
         }
         // let contacts:Contact[] = await client.getContacts()
@@ -49,7 +51,7 @@ export async function createWhatsappClient(req: Request, client_id: string, clie
         client.on('disconnected', async (reason) => {
             console.log("reason", reason)
             socket.emit("disconnected_whatsapp", client_id)
-            let user = await User.findOne({ connected_number: client.info.wid.user })
+            let user = await User.findOne({ connected_number: client.info.wid._serialized })
             if (user) {
                 await User.findByIdAndUpdate(user._id, {
                     is_whatsapp_active: false,
@@ -81,7 +83,7 @@ export async function createWhatsappClient(req: Request, client_id: string, clie
     });
 
     client.on('message_ack', (data) => {
-        console.log(data)
+        console.log(data.ack)
     })
     await client.initialize();
 }

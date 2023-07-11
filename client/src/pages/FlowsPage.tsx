@@ -55,7 +55,7 @@ export default function FlowsPage() {
                       <tr key={index}>
                         <th scope="row">{index + 1}</th>
                         {/* <td>{flow.is_active ? "active" : "disabled"}</td> */}
-                        <td>{user?.connected_number}</td>
+                        <td>{String(user?.connected_number).replace("@c.us", "")}</td>
                         <td>{flow.flow_name}</td>
                         <td>{flow.trigger_keywords}</td>
                         <td>{flow.updated_at && new Date(flow.updated_at).toLocaleString()}</td>

@@ -42,7 +42,7 @@ const UserSchema = new mongoose.Schema<IUser, mongoose.Model<IUser, {}, IUserMet
         required: true
     },
     connected_number:{
-        type: Number,
+        type: String,
     },
     is_active: {
         type: Boolean,
