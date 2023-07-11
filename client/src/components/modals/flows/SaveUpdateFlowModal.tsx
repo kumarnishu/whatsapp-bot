@@ -57,7 +57,6 @@ function SaveUpdateFlowModal({ flow, setDisplaySaveModal, setSelectedNode }: { f
             }, 400)
         }
     }, [isSuccess, setDisplaySaveModal, setSelectedNode, setChoice])
-    console.log(flow)
     return (
         <Modal
             show={flow ? true : false}

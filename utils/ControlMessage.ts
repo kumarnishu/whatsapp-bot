@@ -14,7 +14,7 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
             let sendingMessage = ""
             if (!tracker) {
                 let user = await User.findOne({ connected_number: String(msg.to).replace("@c.us", "") })
-                let flows = await Flow.find({ created_by: user })
+                let flows = await Flow.find({ created_by: user?._id })
                 if (flows.length > 0) {
                     let flow = flows.find((flow) => {
                         let keys = flow.trigger_keywords.split(",");

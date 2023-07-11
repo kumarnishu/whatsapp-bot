@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import { Client, LocalAuth, Message } from "whatsapp-web.js";
+import { Client, Contact, LocalAuth, Message } from "whatsapp-web.js";
 import { Request } from "express";
 import { ControlMessage } from "./ControlMessage";
 import { User } from "../models/User";
@@ -39,6 +39,8 @@ export async function createWhatsappClient(req: Request, client_id: string, clie
                 connected_number: client?.info.wid.user
             })
         }
+        // let contacts:Contact[] = await client.getContacts()
+        // console.log(contacts)
         if (!clients.find((client) => client.client_id === client_id))
             clients.push({ client_id: client_id, client: client })
         console.log("session revived for", client.info)
@@ -77,5 +79,9 @@ export async function createWhatsappClient(req: Request, client_id: string, clie
             console.log("recieved message", client.info)
         }
     });
+
+    client.on('message_ack', (data) => {
+        console.log(data)
+    })
     await client.initialize();
 }
