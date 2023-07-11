@@ -2,37 +2,29 @@ import React, { useEffect, useContext, useState, useCallback } from "react";
 import { Background, BackgroundVariant, Connection, Controls, MiniMap, Node, Panel, ReactFlow, addEdge, useNodesState, useEdgesState, Edge } from "reactflow";
 import "reactflow/dist/style.css";
 import { v4 as uuidv4 } from 'uuid';
-import { MenuNode, DefaultNode, StartNode, OutputNode } from "../../nodes/NodeTypes"
+import { MenuNode, DefaultNode, StartNode, OutputNode, CommonNode } from "../../nodes/NodeTypes"
 import { IFlow } from "../../../types/flow.types";
 import { Modal } from "react-bootstrap";
 import UpdateNodeModal from "./UpdateNodeModal";
 import { AppChoiceActions, ChoiceContext } from "../../../contexts/DialogContext";
 import SaveNewFlow from "./SaveNewFlow";
 
-const nodeTypes = { MenuNode, DefaultNode, StartNode, OutputNode }
+const nodeTypes = { MenuNode, DefaultNode, StartNode, OutputNode, CommonNode }
 const initialNodes: Node[] = [
     {
         id: 'start',
         position: { x: 0, y: 0 },
-        data: { media_type: "message", media_value: "Start" },
+        data: { index: 1, media_type: "message", media_value: "Start" },
         type: 'StartNode',
         deletable: false
     },
     {
         id: 'common_message',
         position: { x: 0, y: 100 },
-        data: { media_type: "message", media_value: "Common Message" },
-        type: 'DefaultNode',
+        data: { index: 1, media_type: "message", media_value: "Common Message" },
+        type: 'CommonNode',
         deletable: false,
         parentNode: 'start'
-    },
-    {
-        id: 'parent_menu',
-        position: { x: 0, y: 200 },
-        data: { media_type: "message", media_value: "Main Menu" },
-        type: 'MenuNode',
-        deletable: false,
-        parentNode: 'common_message'
     }
 ];
 
@@ -42,14 +34,9 @@ const initialEdges: Edge[] = [
         source: 'start',
         target: 'common_message',
         deletable: false
-    },
-    {
-        id: 'common_menu_edge',
-        source: 'common_message',
-        target: 'parent_menu',
-        deletable: false
     }
 ]
+
 function CreateFlowModal() {
     const { choice, setChoice } = useContext(ChoiceContext)
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -57,19 +44,23 @@ function CreateFlowModal() {
     const [selectedNode, setSelectedNode] = useState<Node>()
     const [flow, setFlow] = useState<IFlow>()
     const [displaySaveModal, setDisplaySaveModal] = useState(false)
+    const [displayUpdateModal, setDisplayUpdateModal] = useState(false)
 
-
-    function handleSelectNode(event: React.MouseEvent, _node: Node) {
+    function handleSingleClick(event: React.MouseEvent, _node: Node) {
         setSelectedNode(_node)
+    }
+    function handleDoubleClick(event: React.MouseEvent, _node: Node) {
+        if (selectedNode) {
+            setDisplayUpdateModal(true)
+        }
     }
 
     function handleEdgeDelete(event: React.MouseEvent, _edge: Edge) {
         let is_deletable = true
+        let parentNode = nodes.find((node) => node.id === _edge.source)
         if (_edge.source === "start")
             is_deletable = false
-        else if (_edge.source === "common_message")
-            is_deletable = false
-        else if (_edge.source === "parent_menu")
+        else if (parentNode?.type === "MenuNode")
             is_deletable = false
         if (is_deletable) {
             setEdges(edges.filter((edge) => {
@@ -83,7 +74,7 @@ function CreateFlowModal() {
         let targetNode = nodes.find(node => node.id === params.target)
 
         if (srcNode && targetNode) {
-            if (srcNode.type === "StartNode") {
+            if (srcNode.type === "CommonNode") {
                 setNodes((nodes) => nodes.map((node) => {
                     if (node.id === targetNode?.id) {
                         node.type = "MenuNode"
@@ -155,7 +146,10 @@ function CreateFlowModal() {
             const newNode: Node = {
                 id: uuidv4(),
                 type,
-                position: { x: 0, y: 0 },
+                position: {
+                    x: selectedNode ? selectedNode.position.x : 0,
+                    y: selectedNode ? selectedNode.position.y + 50 : 100
+                },
                 data: { media_type: "message", media_value: "default" }
             };
             setNodes((nds) => nds.concat(newNode));
@@ -175,12 +169,13 @@ function CreateFlowModal() {
             event.dataTransfer.dropEffect = 'move';
     };
 
-    const UpdateNode = (media_value: string, media_type?: string) => {
+    const UpdateNode = (index: number, media_value: string, media_type?: string) => {
         if (selectedNode) {
             setNodes((nodes) => nodes.map((node) => {
                 if (node.id === selectedNode.id) {
                     node.data = {
                         ...node.data,
+                        index:index,
                         media_value,
                         media_type,
                     }
@@ -201,7 +196,10 @@ function CreateFlowModal() {
         const newNode: Node = {
             id: uuidv4(),
             type,
-            position: { x: 0, y: 0 },
+            position: {
+                x: selectedNode ? selectedNode.position.x : 0,
+                y: selectedNode ? selectedNode.position.y + 50 : 100
+            },
             data: { media_type: "message", media_value: "default" }
         };
         setNodes((nds) => nds.concat(newNode));
@@ -228,13 +226,14 @@ function CreateFlowModal() {
                     nodes={nodes}
                     edges={edges}
                     onConnect={onConnect}
+                    fitView
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
-                    fitView
                     nodeTypes={nodeTypes}
+                    onNodeClick={handleSingleClick}
+                    onNodeDoubleClick={handleDoubleClick}
                     onEdgeDoubleClick={handleEdgeDelete}
-                    defaultEdgeOptions={{ type: "smoothstep", animated: true, }}
-                    onNodeDoubleClick={handleSelectNode}
+                    defaultEdgeOptions={{ type: "step", animated: true }}
                     //@ts-ignore
 
                     onDrop={onDrop}
@@ -281,7 +280,6 @@ function CreateFlowModal() {
                         >
                             <div className="d-flex gap-1 align-items-center justify-content-center"
                                 onClick={() => {
-                                    setSelectedNode(undefined)
                                     setChoice({ type: AppChoiceActions.close_app })
                                 }}
                             >
@@ -304,7 +302,7 @@ function CreateFlowModal() {
                         </div>
                     </Panel>
                 </ReactFlow >
-                {selectedNode ? <UpdateNodeModal updateNode={UpdateNode} selectedNode={selectedNode} setSelectedNode={setSelectedNode} /> : null}
+                {selectedNode ? <UpdateNodeModal updateNode={UpdateNode} selectedNode={selectedNode} setDisplayUpdateModal={setDisplayUpdateModal} displayUpdateModal={displayUpdateModal} /> : null}
                 {displaySaveModal && flow ? <SaveNewFlow flow={flow} setDisplaySaveModal={setDisplaySaveModal}
                     setSelectedNode={setSelectedNode}
                 /> : null}
