@@ -17,14 +17,15 @@ export type IFlow = {
     nodes: FlowNode[],
     edges: Object[],
     is_active: Boolean
-
 }
+
 export type TFlowBody = Request['body'] & IFlow & FlowNode;
 
 
 export type IMenuTracker = {
     _id: string,
     phone_number: string,
+    bot_number:string,
     menu_id: string,
     flow:IFlow,
     joined_at: Date,

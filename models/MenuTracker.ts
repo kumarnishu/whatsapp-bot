@@ -8,6 +8,10 @@ const MenuTrackerSchema = new mongoose.Schema<IMenuTracker, mongoose.Model<IMenu
         required: true,
         index: true
     },
+    bot_number: {
+        type: String,
+        required: true,
+    },
     menu_id: {
         type: String,
         required: true,

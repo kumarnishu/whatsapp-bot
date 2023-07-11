@@ -14,6 +14,7 @@ import UserRoutes from "./routes/user.routes"
 import BotRoutes from "./routes/bot.routes"
 import { Server } from "socket.io";
 import { Socket } from "socket.io";
+import { ControlMessage } from "./utils/ControlMessage";
 export const server = createServer(app)
 
 let AppSocket: Socket;
@@ -76,6 +77,8 @@ app.use(session({
 
 app.use("/api/v1", UserRoutes)
 app.use("/api/v1", BotRoutes)
+
+
 
 //serve client
 if (ENV === "production") {

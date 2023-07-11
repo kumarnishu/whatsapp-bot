@@ -9,7 +9,8 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
     try {
         if (client) {
             const from = await client.getNumberId(msg.from);
-            let tracker = await MenuTracker.findOne({ phone_number: from?._serialized }).populate('flow')
+            let tracker = await MenuTracker.findOne({ phone_number: from?._serialized, bot_number:msg.to }).populate('flow')
+            console.log(tracker)
             let comingMessage = String(msg.body).toLowerCase()
             let sendingMessage = ""
             if (!tracker) {
@@ -46,6 +47,7 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
                             await new MenuTracker({
                                 menu_id: flow.nodes.find(node => node.parentNode === "common_message")?.id,
                                 phone_number: String(from._serialized),
+                                bot_number:String(msg.to),
                                 joined_at: new Date(),
                                 last_active: new Date(),
                                 flow: flow

@@ -7,7 +7,7 @@ const fs = require("fs")
 
 let clients: { client_id: string, client: Client }[] = []
 
-export async function createWhatsappClient(req: Request, client_id: string, client_data_path: string, socket: Socket) {
+export async function createWhatsappClient(client_id: string, client_data_path: string, socket: Socket) {
     console.log("getting session")
     let oldClient = clients.find((client) => client.client_id === client_id)
     if (oldClient) {
@@ -78,12 +78,11 @@ export async function createWhatsappClient(req: Request, client_id: string, clie
     client.on('message', async (msg: Message) => {
         if (client) {
             ControlMessage(client, msg)
-            console.log("recieved message", client.info)
         }
     });
 
-    client.on('message_ack', (data) => {
-        console.log(data.ack)
-    })
+    // client.on('message_ack', (data) => {
+    //     console.log(data.ack)
+    // })
     await client.initialize();
 }
