@@ -35,12 +35,22 @@ function RefreshWhatsappModal() {
                         is_whatsapp_active: false
                     })
             })
-            socket.on("ready", () => {
+            socket.on("disconnected_whatsapp", (client_id: string) => {
+                setLoading(false)
+                setQrCode(undefined)
+                if (user?.client_id === client_id)
+                    setUser({
+                        ...user,
+                        is_whatsapp_active: false
+                    })
+            })
+            socket.on("ready", (phone) => {
                 setLoading(false)
                 setQrCode(undefined)
                 if (user)
                     setUser({
                         ...user,
+                        connected_number: phone,
                         is_whatsapp_active: true
                     })
             })
@@ -49,7 +59,7 @@ function RefreshWhatsappModal() {
                 setQrCode(undefined)
             })
         }
-    }, [user,setUser])
+    }, [user, setUser])
     return (
         <Modal
             show={choice === AppChoiceActions.refresh_whatsapp ? true : false}

@@ -21,7 +21,6 @@ const CustomHandle = (props:any) => {
         if (typeof props.isConnectable === 'number') {
             const node = nodeInternals.get(nodeId);
             const connectedEdges = getConnectedEdges([node], edges);
-
             return connectedEdges.length < props.isConnectable;
         }
 

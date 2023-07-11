@@ -39,7 +39,7 @@ export default function FlowsPage() {
             <tr>
               <th style={{ minWidth: '120px' }} scope="col">Index</th>
               {/* <th style={{ minWidth: '120px' }} scope="col">Status</th> */}
-              <th style={{ minWidth: '120px' }} scope="col">Phone</th>
+              <th style={{ minWidth: '120px' }} scope="col">Connected Phone</th>
               <th style={{ minWidth: '120px' }} scope="col">Flow Name</th>
               <th style={{ minWidth: '120px' }} scope="col">Triggers</th>
               <th style={{ minWidth: '120px' }} scope="col">Last Updated</th>
