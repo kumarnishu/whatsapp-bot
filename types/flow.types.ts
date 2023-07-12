@@ -26,6 +26,7 @@ export type IMenuTracker = {
     _id: string,
     phone_number: string,
     bot_number:string,
+    is_active:boolean,
     menu_id: string,
     flow:IFlow,
     joined_at: Date,

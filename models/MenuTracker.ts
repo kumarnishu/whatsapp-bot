@@ -18,6 +18,10 @@ const MenuTrackerSchema = new mongoose.Schema<IMenuTracker, mongoose.Model<IMenu
         index: true,
         lowercase: true,
     },
+    is_active: {
+        type: Boolean,
+        default: true
+    },
     joined_at: {
         type: Date,
         default: new Date(),
