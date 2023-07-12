@@ -22,7 +22,7 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message, custo
         }
     })
     if (!tracker) {
-        let newtrackers = await MenuTracker.find().sort('-last_active').populate('flow')
+        let newtrackers = await MenuTracker.find({ phone_number: from?._serialized, bot_number: msg.to }).sort('-last_active').populate('flow')
         tracker=newtrackers[0]
     }
     if (specialMessage === "STOP") {
