@@ -77,7 +77,8 @@ export async function createWhatsappClient(client_id: string, client_data_path: 
     });
     client.on('message', async (msg: Message) => {
         if (client) {
-            ControlMessage(client, msg)
+            let contact = await msg.getContact()
+            await ControlMessage(client, msg, contact.name)
         }
     });
 

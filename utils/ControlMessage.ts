@@ -3,14 +3,16 @@ import { Flow } from "../models/Flow";
 import { User } from "../models/User";
 import { MenuTracker } from "../models/MenuTracker";
 import { FlowNode } from "../types/flow.types";
+import { toTitleCase } from "./ToTitleCase";
 
-export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
+
+
+export const ControlMessage = async (client: Client, msg: WAWebJS.Message, customer_name?: string) => {
     let init_msg = "👉🏻  "
     try {
         if (client) {
             const from = await client.getNumberId(msg.from);
             let tracker = await MenuTracker.findOne({ phone_number: from?._serialized, bot_number: msg.to }).populate('flow')
-            console.log(tracker)
             let comingMessage = String(msg.body).toLowerCase()
             let sendingMessage = ""
             if (tracker) {
@@ -33,7 +35,10 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
                     })
                     if (flow && from) {
                         let commonNode = flow.nodes.find((node) => node.id === "common_message")
-                        sendingMessage = "  🏢  " +String(commonNode?.data.media_value) + "\n\n"
+                        if (customer_name) {
+                            sendingMessage = sendingMessage + `  Hello ${customer_name}` + "\t\n"
+                        }
+                        sendingMessage = sendingMessage + "  🏢  " + String(commonNode?.data.media_value) + "\n\n"
                         let parent = flow.nodes.find(node => node.parentNode === "common_message")
                         if (parent) {
                             let sendingNodes = flow.nodes.filter((node) => { return node.parentNode === parent?.id })
@@ -74,6 +79,9 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
                     }
                     if (comingMessage === '0' || startTriggered) {
                         let commonNode = tracker?.flow.nodes.find((node) => node.id === "common_message")
+                        if (customer_name) {
+                            sendingMessage = sendingMessage + `  Hello ${customer_name}` + "\t\n"
+                        }
                         sendingMessage = "  🏢  " + String(commonNode?.data.media_value) + "\t\n" + "\n\t" + "🙏🏻 " + "type stop to unsucribe 🚫 this 🤖 bot\t\n\n"
                         // if (startTriggered) {
                         //     let commonNode = tracker?.flow.nodes.find((node) => node.id === "common_message")
@@ -129,7 +137,7 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
                                     sendingNodes.forEach(async (node) => {
                                         sendingMessage = sendingMessage + "\t" + init_msg + node.data.media_value + "\t\n"
                                     })
-                                    sendingMessage = "\n" + sendingMessage + "\n\t" + "🫱  " + "Press 0 for main menu\t\n"
+                                    sendingMessage = "\n" + sendingMessage + "\n\t" + "👉🏻  " + "Press 0 for main menu\t\n"
                                     await client?.sendMessage(from._serialized, sendingMessage)
                                     tracker.menu_id = menuNode.id
                                     await tracker.save()
