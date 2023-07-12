@@ -129,7 +129,7 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
                                     sendingNodes.forEach(async (node) => {
                                         sendingMessage = sendingMessage + "\t" + init_msg + node.data.media_value + "\t\n"
                                     })
-                                    sendingMessage = "\n" + sendingMessage + "\n\t" + "🫱  " + "Press 0 for main menu\t"
+                                    sendingMessage = "\n" + sendingMessage + "\n\t" + "🫱  " + "Press 0 for main menu\t\n"
                                     await client?.sendMessage(from._serialized, sendingMessage)
                                     tracker.menu_id = menuNode.id
                                     await tracker.save()
