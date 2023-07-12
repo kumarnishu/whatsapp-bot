@@ -1,13 +1,13 @@
 import mongoose from "mongoose"
-import { IMenuTracker } from "../types/flow.types"
+import { IKeywordTracker } from "../types/flow.types"
 
-const MenuTrackerSchema = new mongoose.Schema<IMenuTracker, mongoose.Model<IMenuTracker, {}, {}>, {}>({
+const KeywordTrackerSchema = new mongoose.Schema<IKeywordTracker, mongoose.Model<IKeywordTracker, {}, {}>, {}>({
     phone_number: {
         type: String,
         required: true,
         index: true
     },
-    menu_id: {
+    bot_number: {
         type: String,
         required: true,
     },
@@ -22,4 +22,4 @@ const MenuTrackerSchema = new mongoose.Schema<IMenuTracker, mongoose.Model<IMenu
     }
 })
 
-export const MenuTracker = mongoose.model<IMenuTracker, mongoose.Model<IMenuTracker, {}, {}>>("MenuTracker", MenuTrackerSchema)
+export const KeywordTracker = mongoose.model<IKeywordTracker, mongoose.Model<IKeywordTracker, {}, {}>>("KeywordTracker", KeywordTrackerSchema)

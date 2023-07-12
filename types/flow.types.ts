@@ -3,7 +3,7 @@ import { IUser } from "./user.types";
 export type FlowNode = {
     id: string,
     data: any,
-    type: "DefaultNode" | "MenuNode" | "StartNode" | "OutputNode",
+    type: "DefaultNode" | "MenuNode" | "StartNode" | "OutputNode"|"CommonNode"
     parentNode: string
 }
 export type IFlow = {
@@ -22,13 +22,20 @@ export type IFlow = {
 export type TFlowBody = Request['body'] & IFlow & FlowNode;
 
 
+//keyword based tracker
+export type IKeywordTracker = {
+    _id: string,
+    phone_number: string,
+    bot_number: string,
+    is_active: boolean,
+    flow: IFlow
+}
+
+//menu id based tracker
 export type IMenuTracker = {
     _id: string,
     phone_number: string,
-    bot_number:string,
-    is_active:boolean,
+    is_active: boolean,
     menu_id: string,
-    flow:IFlow,
-    joined_at: Date,
-    last_active: Date
+    flow: IFlow
 }

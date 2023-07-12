@@ -3,7 +3,6 @@ import { ConectWhatsapp } from "../utils/ConnectWhatsapp";
 import { AppSocket } from "..";
 import { TFlowBody } from "../types/flow.types";
 import { Flow } from "../models/Flow";
-import { MenuTracker } from "../models/MenuTracker";
 
 export const SetUpWhatsappProfile = async (req: Request, res: Response, next: NextFunction) => {
     const client_id = req.user?.client_id
@@ -68,8 +67,5 @@ export const DestroyFlow = async (req: Request, res: Response, next: NextFunctio
     if (!flow)
         return res.status(404).json({ message: "flow not exists" })
     await Flow.findByIdAndDelete(id)
-    let menues = await MenuTracker.find({ flow: flow })
-    if (menues.length > 0)
-        menues.forEach(async (menu) => await menu.deleteOne())
     return res.status(200).json({ message: "deleted flow" })
 }
