@@ -13,7 +13,13 @@ import { queryClient } from '../../..'
 import { AppChoiceActions, ChoiceContext } from '../../../contexts/DialogContext'
 import { Node } from 'reactflow'
 
-function SaveNewFlow({ flow, setDisplaySaveModal, setSelectedNode }: { flow: IFlow, setDisplaySaveModal: React.Dispatch<React.SetStateAction<boolean>>, setSelectedNode: React.Dispatch<React.SetStateAction<Node | undefined>> }) {
+type Props = {
+    setFlow: React.Dispatch<React.SetStateAction<IFlow | undefined>>,
+    flow: IFlow,
+    setDisplaySaveModal: React.Dispatch<React.SetStateAction<boolean>>, setSelectedNode: React.Dispatch<React.SetStateAction<Node | undefined>>
+
+}
+function SaveNewFlow({ flow, setFlow,setDisplaySaveModal, setSelectedNode }: Props) {
     const { setChoice } = useContext(ChoiceContext)
     const { mutate, isSuccess, isLoading, isError, error } = useMutation
         <AxiosResponse<IFlow>,
@@ -52,9 +58,10 @@ function SaveNewFlow({ flow, setDisplaySaveModal, setSelectedNode }: { flow: IFl
                 setDisplaySaveModal(false)
                 setSelectedNode(undefined)
                 setChoice({ type: AppChoiceActions.close_app })
+                setFlow(undefined)
             }, 400)
         }
-    }, [isSuccess, setSelectedNode, setChoice, setDisplaySaveModal])
+    }, [isSuccess, setFlow, setSelectedNode, setChoice, setDisplaySaveModal])
     console.log(flow)
     return (
         <Modal

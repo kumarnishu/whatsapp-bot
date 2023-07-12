@@ -17,10 +17,13 @@ export default function FlowsPage() {
   const { setChoice } = useContext(ChoiceContext)
   const { user } = useContext(UserContext)
   const { data } = useQuery<AxiosResponse<IFlow[]>, BackendError>("flows", GetFlows)
+  
   useEffect(() => {
     if (data)
       setFlows(data.data)
   }, [data])
+
+
   return (
     <>
 
@@ -79,7 +82,7 @@ export default function FlowsPage() {
             }
           </tbody>
         </table>
-        {flow ? <UpdateFlowModel selectedFlow={flow} /> : null}
+        {flow ? <UpdateFlowModel setSelectedFlow={setFlow} selectedFlow={flow} /> : null}
         <CreateFlowModal />
         {flow ? <DeleteFlowModal flow={flow} /> : null}
       </Container>

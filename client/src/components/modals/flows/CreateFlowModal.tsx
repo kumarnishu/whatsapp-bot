@@ -281,6 +281,9 @@ function CreateFlowModal() {
                             <div className="d-flex gap-1 align-items-center justify-content-center"
                                 onClick={() => {
                                     setChoice({ type: AppChoiceActions.close_app })
+                                    setFlow(undefined)
+                                    setNodes(initialNodes)
+                                    setEdges(initialEdges)
                                 }}
                             >
                                 <img width="20" height="20" src="https://img.icons8.com/fluency/48/delete-sign.png" alt="close" />
@@ -303,7 +306,7 @@ function CreateFlowModal() {
                     </Panel>
                 </ReactFlow >
                 {selectedNode ? <UpdateNodeModal updateNode={UpdateNode} selectedNode={selectedNode} setDisplayUpdateModal={setDisplayUpdateModal} displayUpdateModal={displayUpdateModal} /> : null}
-                {displaySaveModal && flow ? <SaveNewFlow flow={flow} setDisplaySaveModal={setDisplaySaveModal}
+                {displaySaveModal && flow ? <SaveNewFlow setFlow={setFlow} flow={flow} setDisplaySaveModal={setDisplaySaveModal}
                     setSelectedNode={setSelectedNode}
                 /> : null}
             </div>

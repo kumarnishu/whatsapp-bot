@@ -11,9 +11,9 @@ import SaveUpdateFlowModal from "./SaveUpdateFlowModal";
 
 const nodeTypes = { MenuNode, DefaultNode, StartNode, OutputNode, CommonNode }
 
-function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
+function UpdateFlowModel({ selectedFlow, setSelectedFlow }: { selectedFlow: IFlow, setSelectedFlow: React.Dispatch<React.SetStateAction<IFlow | undefined>> }) {
     const { choice, setChoice } = useContext(ChoiceContext)
-    const [flow, setFlow] = useState<IFlow>(selectedFlow)
+    const [flow, setFlow] = useState<IFlow | undefined>(selectedFlow)
     const [nodes, setNodes, onNodesChange] = useNodesState(selectedFlow.nodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(selectedFlow.edges);
     const [selectedNode, setSelectedNode] = useState<Node>()
@@ -179,6 +179,9 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
         };
         setNodes((nds) => nds.concat(newNode));
     }
+    
+    console.log(flow?.nodes.filter(node => { return node.id === "common_message" })[0].data.media_value)
+    console.log(selectedFlow?.nodes.filter(node => { return node.id === "common_message" })[0].data.media_value)
     return (
         <Modal fullscreen
             show={choice === AppChoiceActions.update_flow ? true : false}
@@ -232,8 +235,10 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
                         >
                             <div className="d-flex gap-1 align-items-center justify-content-center"
                                 onClick={() => {
-                                    setFlow({ ...flow, nodes, edges })
-                                    setDisplaySaveModal(true)
+                                    if (flow) {
+                                        setFlow({ ...flow, nodes, edges })
+                                        setDisplaySaveModal(true)
+                                    }
                                 }
                                 }
                             >
@@ -246,6 +251,7 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
                             <div className="d-flex gap-1 align-items-center justify-content-center"
                                 onClick={() => {
                                     setChoice({ type: AppChoiceActions.close_app })
+                                    setSelectedFlow(undefined)
                                 }}
                             >
                                 <img width="20" height="20" src="https://img.icons8.com/fluency/48/delete-sign.png" alt="close" />
@@ -268,7 +274,7 @@ function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
                     </Panel>
                 </ReactFlow >
                 {selectedNode ? <UpdateNodeModal updateNode={UpdateNode} selectedNode={selectedNode} setDisplayUpdateModal={setDisplayUpdateModal} displayUpdateModal={displayUpdateModal} /> : null}
-                {displaySaveModal && flow ? <SaveUpdateFlowModal flow={flow} setDisplaySaveModal={setDisplaySaveModal} setSelectedNode={setSelectedNode} /> : null}
+                {displaySaveModal && flow ? <SaveUpdateFlowModal setFlow={setFlow} flow={flow} setDisplaySaveModal={setDisplaySaveModal} setSelectedNode={setSelectedNode} /> : null}
             </div>
         </Modal>
     )
