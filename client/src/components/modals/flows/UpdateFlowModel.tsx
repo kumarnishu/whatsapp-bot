@@ -54,6 +54,10 @@ function UpdateFlowModel({ selectedFlow, setSelectedFlow }: { selectedFlow: IFlo
                     if (node.id === targetNode?.id) {
                         node.type = "MenuNode"
                         node.parentNode = srcNode?.id
+                        node.position = {
+                            x: selectedNode ? selectedNode.position.x : 0,
+                            y: selectedNode ? selectedNode.position.y + 50 : 100
+                        }
                         node.data = {
                             ...node.data,
                             media_type: "message",
@@ -71,6 +75,10 @@ function UpdateFlowModel({ selectedFlow, setSelectedFlow }: { selectedFlow: IFlo
                     if (node.id === targetNode?.id) {
                         node.type = "DefaultNode"
                         node.parentNode = srcNode?.id
+                        node.position = {
+                            x: selectedNode ? selectedNode.position.x : 0,
+                            y: selectedNode ? selectedNode.position.y + 50 : 100
+                        }
                         node.data = {
                             ...node.data,
                             index: length ? length + 1 : 1,
@@ -87,6 +95,10 @@ function UpdateFlowModel({ selectedFlow, setSelectedFlow }: { selectedFlow: IFlo
                     if (node.id === targetNode?.id) {
                         node.type = "MenuNode"
                         node.parentNode = srcNode?.id
+                        node.position = {
+                            x: selectedNode ? selectedNode.position.x : 0,
+                            y: selectedNode ? selectedNode.position.y + 50 : 100
+                        }
                         node.data = {
                             ...node.data,
                             media_type: "message",
@@ -98,12 +110,18 @@ function UpdateFlowModel({ selectedFlow, setSelectedFlow }: { selectedFlow: IFlo
             }
 
             if (srcNode.type === "DefaultNode" && targetNode.type === "OutputNode") {
+                let length = nodes.filter((node) => { return node.parentNode === srcNode?.id }).length
                 setNodes((nodes) => nodes.map((node) => {
                     if (node.id === targetNode?.id) {
                         node.parentNode = srcNode?.id
+                        node.position = {
+                            x: selectedNode ? selectedNode.position.x : 0,
+                            y: selectedNode ? selectedNode.position.y + 50 : 100
+                        }
                         node.data = {
                             ...node.data,
                             media_type: "message",
+                            index: length ? length + 1 : 1,
                             media_value: "output"
                         }
                     }
@@ -112,7 +130,7 @@ function UpdateFlowModel({ selectedFlow, setSelectedFlow }: { selectedFlow: IFlo
             }
         }
         return addEdge(params, eds)
-    }), [nodes, setNodes, setEdges]);
+    }), [nodes, setNodes, selectedNode, setEdges]);
 
     const onDrop = (event: DragEvent) => {
         event.preventDefault();
@@ -179,7 +197,7 @@ function UpdateFlowModel({ selectedFlow, setSelectedFlow }: { selectedFlow: IFlo
         };
         setNodes((nds) => nds.concat(newNode));
     }
-    
+
     console.log(flow?.nodes.filter(node => { return node.id === "common_message" })[0].data.media_value)
     console.log(selectedFlow?.nodes.filter(node => { return node.id === "common_message" })[0].data.media_value)
     return (

@@ -94,7 +94,15 @@ export function OutputNode({ data }: { data: any }) {
         <>
             <CustomHandle className=" bg-info border border-2 white" type="target" position={Position.Top} isConnectable={1} />
             <OutPutDiv className="d-flex gap-1 p-1 rounded text-light ">
-                {data.media_type === "message" ? data.media_value : "media"}
+                {
+                    data.index ?
+                        <div style={{ width: 15, height: 15, borderRadius: '50% ' }} className="d-flex align-items-center  bg-light  text-dark p-1">{data.index}
+                        </div> : null
+
+                }
+                <div className="rounded text-light ">
+                    {data.media_value || "Output"}
+                </div>
             </OutPutDiv>
         </>
     )

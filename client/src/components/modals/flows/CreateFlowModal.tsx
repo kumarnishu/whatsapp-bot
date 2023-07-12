@@ -20,7 +20,7 @@ const initialNodes: Node[] = [
     },
     {
         id: 'common_message',
-        position: { x: 0, y: 100 },
+        position: { x: 0, y: 50 },
         data: { index: 1, media_type: "message", media_value: "Common Message" },
         type: 'CommonNode',
         deletable: false,
@@ -79,6 +79,10 @@ function CreateFlowModal() {
                     if (node.id === targetNode?.id) {
                         node.type = "MenuNode"
                         node.parentNode = srcNode?.id
+                        node.position = {
+                            x: selectedNode ? selectedNode.position.x : 0,
+                            y: selectedNode ? selectedNode.position.y + 50 : 100
+                        }
                         node.data = {
                             ...node.data,
                             media_type: "message",
@@ -96,6 +100,10 @@ function CreateFlowModal() {
                     if (node.id === targetNode?.id) {
                         node.type = "DefaultNode"
                         node.parentNode = srcNode?.id
+                        node.position = {
+                            x: selectedNode ? selectedNode.position.x : 0,
+                            y: selectedNode ? selectedNode.position.y + 50 : 100
+                        }
                         node.data = {
                             ...node.data,
                             index: length ? length + 1 : 1,
@@ -112,6 +120,10 @@ function CreateFlowModal() {
                     if (node.id === targetNode?.id) {
                         node.type = "MenuNode"
                         node.parentNode = srcNode?.id
+                        node.position = {
+                            x: selectedNode ? selectedNode.position.x : 0,
+                            y: selectedNode ? selectedNode.position.y + 50 : 100
+                        }
                         node.data = {
                             ...node.data,
                             media_type: "message",
@@ -123,11 +135,17 @@ function CreateFlowModal() {
             }
 
             if (srcNode.type === "DefaultNode" && targetNode.type === "OutputNode") {
+                let length = nodes.filter((node) => { return node.parentNode === srcNode?.id }).length
                 setNodes((nodes) => nodes.map((node) => {
                     if (node.id === targetNode?.id) {
                         node.parentNode = srcNode?.id
+                        node.position = {
+                            x: selectedNode ? selectedNode.position.x : 0,
+                            y: selectedNode ? selectedNode.position.y + 50 : 100
+                        }
                         node.data = {
                             ...node.data,
+                            index: length ? length + 1 : 1,
                             media_type: "message",
                             media_value: "output"
                         }
@@ -137,7 +155,7 @@ function CreateFlowModal() {
             }
         }
         return addEdge(params, eds)
-    }), [nodes, setNodes, setEdges]);
+    }), [nodes, selectedNode,setNodes, setEdges]);
 
     const onDrop = (event: DragEvent) => {
         event.preventDefault();
@@ -175,7 +193,7 @@ function CreateFlowModal() {
                 if (node.id === selectedNode.id) {
                     node.data = {
                         ...node.data,
-                        index:index,
+                        index: index,
                         media_value,
                         media_type,
                     }
@@ -233,7 +251,7 @@ function CreateFlowModal() {
                     onNodeClick={handleSingleClick}
                     onNodeDoubleClick={handleDoubleClick}
                     onEdgeDoubleClick={handleEdgeDelete}
-                    defaultEdgeOptions={{ type: "step", animated: true }}
+                    defaultEdgeOptions={{ animated: true, interactionWidth: 50 }}
                     //@ts-ignore
 
                     onDrop={onDrop}
