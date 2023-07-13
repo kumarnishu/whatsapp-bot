@@ -36,8 +36,9 @@ function NavBar() {
                                 <div className="d-flex align-items-center">
 
                                     <div className='d-flex gap-2'>
-                                        <Link className="text-white text-decoration-none rounded   text-uppercase fw-bold fs-6" to={paths.flows}>Flows</Link>
-                                        <Link className="text-white text-decoration-none rounded   text-uppercase fw-bold fs-6" to={paths.users}>Users</Link>
+                                        <Link className="text-white text-decoration-none rounded   text-uppercase fw-bold " to={paths.flows}>Flows</Link>
+                                        <Link className="text-white text-decoration-none rounded   text-uppercase fw-bold " to={paths.trackers}>Trackers</Link>
+                                        <Link className="text-white text-decoration-none rounded   text-uppercase fw-bold " to={paths.users}>Users</Link>
                                     </div>
 
                                     <Dropdown>
@@ -61,15 +62,18 @@ function NavBar() {
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu className="">
                                     <Dropdown.Item className="p-2 m-0"  >
-                                        <Link className="text-dark text-decoration-none rounded   text-uppercase fw-bold fs-6" to={paths.flows}>Flows</Link>
+                                        <Link className="text-dark text-decoration-none rounded   text-uppercase fw-bold " to={paths.flows}>Flows</Link>
                                     </Dropdown.Item>
                                     <Dropdown.Item className="p-2 m-0"  >
-                                        <Link className="text-dark text-decoration-none rounded   text-uppercase fw-bold fs-6" to={paths.users}>Users</Link>
+                                        <Link className="text-dark text-decoration-none rounded   text-uppercase fw-bold " to={paths.trackers}>Trackers</Link>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item className="p-2 m-0"  >
+                                        <Link className="text-dark text-decoration-none rounded   text-uppercase fw-bold " to={paths.users}>Users</Link>
                                     </Dropdown.Item>
                                     <Dropdown.Item className="p-2 m-0"
                                         onClick={() => setChoice({ type: AppChoiceActions.update_password })}
                                     >
-                                        <p className="text-dark text-decoration-none rounded   text-uppercase fw-bold fs-6">
+                                        <p className="text-dark text-decoration-none rounded   text-uppercase fw-bold ">
                                             Update Password
                                         </p>
                                     </Dropdown.Item>

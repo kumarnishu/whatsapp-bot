@@ -2,8 +2,8 @@ import mongoose from "mongoose"
 import { IMenuTracker } from "../types/flow.types"
 
 const MenuTrackerSchema = new mongoose.Schema<IMenuTracker, mongoose.Model<IMenuTracker, {}, {}>, {}>({
-   
-    customer_name:{
+
+    customer_name: {
         type: String,
         index: true
     },
@@ -27,6 +27,11 @@ const MenuTrackerSchema = new mongoose.Schema<IMenuTracker, mongoose.Model<IMenu
     flow: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Flow',
+        required: true
+    },
+    updated_at: {
+        type: Date,
+        default: new Date(),
         required: true
     }
 })

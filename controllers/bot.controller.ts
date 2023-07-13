@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { ConectWhatsapp } from "../utils/ConnectWhatsapp";
 import { AppSocket } from "..";
-import { TFlowBody, TTrackerBody } from "../types/flow.types";
+import { TFlowBody, TrackerBody } from "../types/flow.types";
 import { Flow } from "../models/Flow";
 import { KeywordTracker } from "../models/KeywordTracker";
 import { MenuTracker } from "../models/MenuTracker";
@@ -98,13 +98,28 @@ export const DestroyFlow = async (req: Request, res: Response, next: NextFunctio
     return res.status(200).json({ message: "deleted flow" })
 }
 
+export const GetTrackers = async (req: Request, res: Response, next: NextFunction) => {
+    let trackers = await MenuTracker.find().populate('flow')
+    return res.status(200).json(trackers)
+}
+
+export const UpdateTrackerName = async (req: Request, res: Response, next: NextFunction) => {
+    const { customer_name } = req.body as TrackerBody
+    const id = req.params.id
+    if (!id) {
+        return res.status(400).json({ message: "please provide correct tracker id" })
+    }
+    await MenuTracker.findByIdAndUpdate(id, { customer_name: customer_name })
+    return res.status(200).json({ message: "customer name updated" })
+}
+
 
 export const StartBot = async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id
     if (!id) {
         return res.status(400).json({ message: "please provide correct tracker id" })
     }
-    const { phone_number, bot_number } = req.body as TTrackerBody
+    const { phone_number, bot_number } = req.body as TrackerBody
 
     let trackers = await KeywordTracker.find({ phone_number: phone_number, bot_number: bot_number })
     let menuTrackers = await MenuTracker.find({ phone_number: phone_number, bot_number: bot_number })
@@ -119,7 +134,7 @@ export const StartBot = async (req: Request, res: Response, next: NextFunction) 
 }
 
 export const StopBot = async (req: Request, res: Response, next: NextFunction) => {
-    const { phone_number, bot_number } = req.body as TTrackerBody
+    const { phone_number, bot_number } = req.body as TrackerBody
     const id = req.params.idF
     if (!id) {
         return res.status(400).json({ message: "please provide correct tracker id" })

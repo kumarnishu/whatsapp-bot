@@ -13,6 +13,13 @@ export type IFlow = {
     edges: Edge[],
     is_active?:boolean
 }
-
-
-
+export type ITracker = {
+    _id: string,
+    phone_number: string,
+    bot_number: string,
+    customer_name: string,
+    is_active: boolean,
+    menu_id: string,
+    flow: IFlow,
+    updated_at: Date
+}

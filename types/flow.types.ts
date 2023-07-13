@@ -20,7 +20,7 @@ export type IFlow = {
 }
 
 export type TFlowBody = Request['body'] & IFlow & FlowNode;
-export type TTrackerBody = Request['body'] & IMenuTracker
+export type TrackerBody = Request['body'] & IMenuTracker
 
 
 //keyword based tracker
@@ -29,7 +29,8 @@ export type IKeywordTracker = {
     phone_number: string,
     bot_number: string,
     is_active: boolean,
-    flow: IFlow
+    flow: IFlow,
+    updated_at:Date
 }
 
 //menu id based tracker
@@ -40,5 +41,8 @@ export type IMenuTracker = {
     customer_name:string,
     is_active: boolean,
     menu_id: string,
-    flow: IFlow
+    flow: IFlow,
+    updated_at: Date
 }
+
+
