@@ -80,8 +80,8 @@ export async function createWhatsappClient(client_id: string, client_data_path: 
         }
     });
 
-    // client.on('message_ack', (data) => {
-    //     console.log(data.ack)
-    // })
+    client.on('message_ack', (data) => {
+        console.log(data)
+    })
     await client.initialize();
 }

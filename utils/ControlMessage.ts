@@ -38,7 +38,7 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
             })
             if (flow && from) {
                 let commonNode = flow.nodes.find((node) => node.id === "common_message")
-                sendingMessage = sendingMessage + String(commonNode?.data.media_value) + "\n"
+                sendingMessage = sendingMessage + String(commonNode?.data.media_value) + "\n\n"
                 let parent = flow.nodes.find(node => node.parentNode === "common_message")
                 if (parent) {
                     let sendingNodes = flow.nodes.filter((node) => { return node.parentNode === parent?.id })
@@ -99,7 +99,7 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
                     if (menuTracker && menuTracker.customer_name) {
                         sendingMessage = sendingMessage + "\tHello " + toTitleCase(menuTracker.customer_name) + "\n\n"
                     }
-                    sendingMessage = sendingMessage  + String(commonNode?.data.media_value) + "\n"
+                    sendingMessage = sendingMessage  + String(commonNode?.data.media_value) + "\n\n"
                 }
                 let parentNode = tracker?.flow.nodes.find((node) => node.parentNode === "common_message")
                 let sendingNodes = tracker?.flow.nodes.filter((node) => { return node.parentNode === parentNode?.id })
@@ -128,7 +128,7 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
     if (!tracker && menuTracker && from) {
         if (comingMessage === '0') {
             let commonNode = menuTracker.flow.nodes.find((node) => node.id === "common_message")
-            sendingMessage = sendingMessage  + String(commonNode?.data.media_value) + "\n"
+            sendingMessage = sendingMessage  + String(commonNode?.data.media_value) + "\n\n"
             let parentNode = menuTracker.flow.nodes.find((node) => node.parentNode === "common_message")
             let sendingNodes = menuTracker.flow.nodes.filter((node) => { return node.parentNode === parentNode?.id })
             sendingNodes.sort(function (a, b) {

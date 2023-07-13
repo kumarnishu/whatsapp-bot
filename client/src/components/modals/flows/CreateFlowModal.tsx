@@ -81,7 +81,7 @@ function CreateFlowModal() {
                         node.parentNode = srcNode?.id
                         node.position = {
                             x: selectedNode ? selectedNode.position.x : 0,
-                            y: selectedNode ? selectedNode.position.y + 50 : 100
+                            y: selectedNode ? selectedNode.position.y + 20 : 30
                         }
                         node.data = {
                             ...node.data,
@@ -102,7 +102,7 @@ function CreateFlowModal() {
                         node.parentNode = srcNode?.id
                         node.position = {
                             x: selectedNode ? selectedNode.position.x : 0,
-                            y: selectedNode ? selectedNode.position.y + 50 : 100
+                            y: selectedNode ? selectedNode.position.y + 20 : 30
                         }
                         node.data = {
                             ...node.data,
@@ -122,7 +122,7 @@ function CreateFlowModal() {
                         node.parentNode = srcNode?.id
                         node.position = {
                             x: selectedNode ? selectedNode.position.x : 0,
-                            y: selectedNode ? selectedNode.position.y + 50 : 100
+                            y: selectedNode ? selectedNode.position.y + 20 : 30
                         }
                         node.data = {
                             ...node.data,
@@ -141,7 +141,7 @@ function CreateFlowModal() {
                         node.parentNode = srcNode?.id
                         node.position = {
                             x: selectedNode ? selectedNode.position.x : 0,
-                            y: selectedNode ? selectedNode.position.y + 50 : 100
+                            y: selectedNode ? selectedNode.position.y + 20 : 30
                         }
                         node.data = {
                             ...node.data,
@@ -166,7 +166,7 @@ function CreateFlowModal() {
                 type,
                 position: {
                     x: selectedNode ? selectedNode.position.x : 0,
-                    y: selectedNode ? selectedNode.position.y + 50 : 100
+                    y: selectedNode ? selectedNode.position.y + 20 : 30
                 },
                 data: { media_type: "message", media_value: "default" }
             };
@@ -216,7 +216,7 @@ function CreateFlowModal() {
             type,
             position: {
                 x: selectedNode ? selectedNode.position.x : 0,
-                y: selectedNode ? selectedNode.position.y + 50 : 100
+                y: selectedNode ? selectedNode.position.y + 20 : 30
             },
             data: { media_type: "message", media_value: "default" }
         };
