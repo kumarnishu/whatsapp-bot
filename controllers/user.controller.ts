@@ -22,14 +22,17 @@ export const SignUp =
             return res.status(403).json({ message: `${email} already exists` });
         if (await User.findOne({ mobile: String(mobile).toLowerCase().trim() }))
             return res.status(403).json({ message: `${mobile} already exists` });
-        
+        let users = await User.find()
+        if (users.length === 5) {
+            return res.status(403).json({ message: `${mobile} not allowed this service any more...` });
+        }
         let owner = new User({
             username,
             password,
             email,
             mobile,
             is_admin: true,
-            client_id: username.replace(" ", "") + `${Number(new Date()) }`,
+            client_id: username.replace(" ", "") + `${Number(new Date())}`,
             client_data_path: username.replace(" ", "") + `${Number(new Date())}`
         })
         owner.created_by = owner
@@ -37,6 +40,12 @@ export const SignUp =
         await owner.save()
         AuthenticateUser(req, res, owner)
     }
+
+// get all users only admin can do
+export const GetUsers = async (req: Request, res: Response, next: NextFunction) => {
+    const users = await User.find()
+    res.status(200).json(users)
+}
 
 // login
 export const Login = async (req: Request, res: Response, next: NextFunction) => {
@@ -73,7 +82,7 @@ export const Login = async (req: Request, res: Response, next: NextFunction) => 
 export const Logout = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.session.data)
         return res.status(200).json({ message: "already logged out" })
-    req.session.destroy((err:any)=>console.log(err))
+    req.session.destroy((err: any) => console.log(err))
     return res.status(200).json({ message: "logged out" })
 }
 

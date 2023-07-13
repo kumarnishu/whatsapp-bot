@@ -32,21 +32,26 @@ function NavBar() {
                         <>
                             {/* navbar */}
                             <div className="d-none d-md-flex  gap-1 justify-content-center align-items-center ">
+
                                 <div className="d-flex align-items-center">
-                                    {user ?
-                                        <>
-                                            <Dropdown>
-                                                <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                                                    {user.username.toUpperCase()}
-                                                </Dropdown.Toggle>
-                                                <Dropdown.Menu >
-                                                    <Dropdown.Item className="border-bottom-1" onClick={() => setChoice({ type: AppChoiceActions.update_password })}><img height="30" width="30" src="https://img.icons8.com/color/48/keys-holder.png" alt="icons" />Update Password</Dropdown.Item>
-                                                    <Dropdown.Item >
-                                                        <LogoutButton />
-                                                    </Dropdown.Item>
-                                                </Dropdown.Menu>
-                                            </Dropdown>
-                                        </> : null}
+
+                                    <div className='d-flex gap-2'>
+                                        <Link className="text-white text-decoration-none rounded   text-uppercase fw-bold fs-6" to={paths.flows}>Flows</Link>
+                                        <Link className="text-white text-decoration-none rounded   text-uppercase fw-bold fs-6" to={paths.users}>Users</Link>
+                                    </div>
+
+                                    <Dropdown>
+                                        <Dropdown.Toggle variant="dark" id="dropdown-basic">
+                                            {user.username.toUpperCase()}
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu >
+                                            <Dropdown.Item className="border-bottom-1" onClick={() => setChoice({ type: AppChoiceActions.update_password })}><img height="30" width="30" src="https://img.icons8.com/color/48/keys-holder.png" alt="icons" />Update Password</Dropdown.Item>
+                                            <Dropdown.Item >
+                                                <LogoutButton />
+                                            </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+
                                 </div>
                             </div>
                             {/* navbar menu */}
@@ -55,11 +60,18 @@ function NavBar() {
                                     {user.username.toUpperCase()}
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu className="">
-                                    <Dropdown.Item className="p-0 m-0"
+                                    <Dropdown.Item className="p-2 m-0"  >
+                                        <Link className="text-dark text-decoration-none rounded   text-uppercase fw-bold fs-6" to={paths.flows}>Flows</Link>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item className="p-2 m-0"  >
+                                        <Link className="text-dark text-decoration-none rounded   text-uppercase fw-bold fs-6" to={paths.users}>Users</Link>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item className="p-2 m-0"
                                         onClick={() => setChoice({ type: AppChoiceActions.update_password })}
                                     >
-                                        <img height="30" width="30" src="https://img.icons8.com/color/48/keys-holder.png" alt="icons" />
-                                        Update Password
+                                        <p className="text-dark text-decoration-none rounded   text-uppercase fw-bold fs-6">
+                                            Update Password
+                                        </p>
                                     </Dropdown.Item>
                                     <LogoutButton />
                                 </Dropdown.Menu>
