@@ -17,7 +17,7 @@ export default function FlowsPage() {
   const { setChoice } = useContext(ChoiceContext)
   const { user } = useContext(UserContext)
   const { data } = useQuery<AxiosResponse<IFlow[]>, BackendError>("flows", GetFlows)
-  
+
   useEffect(() => {
     if (data)
       setFlows(data.data)
@@ -38,10 +38,10 @@ export default function FlowsPage() {
           </div>
         </div>
         <table className="table">
-          <thead>
+          <thead >
             <tr>
               <th style={{ minWidth: '120px' }} scope="col">Index</th>
-              {/* <th style={{ minWidth: '120px' }} scope="col">Status</th> */}
+              <th style={{ minWidth: '120px' }} scope="col">Status</th>
               <th style={{ minWidth: '120px' }} scope="col">Connected Phone</th>
               <th style={{ minWidth: '120px' }} scope="col">Flow Name</th>
               <th style={{ minWidth: '120px' }} scope="col">Triggers</th>
@@ -57,17 +57,19 @@ export default function FlowsPage() {
                     return (
                       <tr key={index}>
                         <th scope="row">{index + 1}</th>
-                        {/* <td>{flow.is_active ? "active" : "disabled"}</td> */}
+                        <td>{user?.connected_number ? "active" : "disabled"}</td>
                         <td>{String(user?.connected_number).replace("@c.us", "")}</td>
                         <td>{flow.flow_name}</td>
                         <td>{flow.trigger_keywords}</td>
                         <td>{flow.updated_at && new Date(flow.updated_at).toLocaleString()}</td>
                         <td className="d-flex gap-1">
-                          <Button variant="primary" onClick={() => {
+                          <Button size="sm" variant="primary" onClick={() => {
                             setFlow(flow)
                             setChoice({ type: AppChoiceActions.update_flow })
                           }}>Edit</Button>
-                          <Button variant="outline-danger"
+                          <Button
+                            size="sm"
+                            variant="outline-danger"
                             onClick={() => {
                               setFlow(flow)
                               setChoice({ type: AppChoiceActions.delete_flow })
@@ -82,7 +84,7 @@ export default function FlowsPage() {
             }
           </tbody>
         </table>
-        {flow ? <UpdateFlowModel  selectedFlow={flow} /> : null}
+        {flow ? <UpdateFlowModel selectedFlow={flow} /> : null}
         <CreateFlowModal />
         {flow ? <DeleteFlowModal flow={flow} /> : null}
       </Container>

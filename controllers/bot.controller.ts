@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { ConectWhatsapp } from "../utils/ConnectWhatsapp";
 import { AppSocket } from "..";
-import { TFlowBody } from "../types/flow.types";
+import { TFlowBody, TTrackerBody } from "../types/flow.types";
 import { Flow } from "../models/Flow";
+import { KeywordTracker } from "../models/KeywordTracker";
+import { MenuTracker } from "../models/MenuTracker";
 
 export const SetUpWhatsappProfile = async (req: Request, res: Response, next: NextFunction) => {
     const client_id = req.user?.client_id
@@ -79,11 +81,6 @@ export const UpdateFlow = async (req: Request, res: Response, next: NextFunction
     else
         return res.status(404).json({ message: "flow not exists" })
 
-
-
-
-
-
 }
 
 
@@ -99,4 +96,42 @@ export const DestroyFlow = async (req: Request, res: Response, next: NextFunctio
         return res.status(404).json({ message: "flow not exists" })
     await Flow.findByIdAndDelete(id)
     return res.status(200).json({ message: "deleted flow" })
+}
+
+
+export const StartBot = async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id
+    if (!id) {
+        return res.status(400).json({ message: "please provide correct tracker id" })
+    }
+    const { phone_number, bot_number } = req.body as TTrackerBody
+
+    let trackers = await KeywordTracker.find({ phone_number: phone_number, bot_number: bot_number })
+    let menuTrackers = await MenuTracker.find({ phone_number: phone_number, bot_number: bot_number })
+    trackers.forEach(async (tracker) => {
+        await KeywordTracker.findByIdAndUpdate(tracker._id, { is_active: true })
+    })
+    menuTrackers.forEach(async (tracker) => {
+        await MenuTracker.findByIdAndUpdate(tracker._id, { is_active: true })
+    })
+
+    return res.status(200).json("bot successfully started for this number")
+}
+
+export const StopBot = async (req: Request, res: Response, next: NextFunction) => {
+    const { phone_number, bot_number } = req.body as TTrackerBody
+    const id = req.params.idF
+    if (!id) {
+        return res.status(400).json({ message: "please provide correct tracker id" })
+    }
+    let trackers = await KeywordTracker.find({ phone_number: phone_number, bot_number: bot_number })
+    let menuTrackers = await MenuTracker.find({ phone_number: phone_number, bot_number: bot_number })
+    trackers.forEach(async (tracker) => {
+        await KeywordTracker.findByIdAndUpdate(tracker._id, { is_active: false })
+    })
+    menuTrackers.forEach(async (tracker) => {
+        await MenuTracker.findByIdAndUpdate(tracker._id, { is_active: false })
+    })
+    return res.status(200).json("bot stopped for this number")
+
 }

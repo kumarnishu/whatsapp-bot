@@ -1,6 +1,5 @@
 import { Socket } from "socket.io";
-import { Client, Contact, LocalAuth, Message } from "whatsapp-web.js";
-import { Request } from "express";
+import { Client,  LocalAuth, Message } from "whatsapp-web.js";
 import { ControlMessage } from "./ControlMessage";
 import { User } from "../models/User";
 const fs = require("fs")
@@ -77,8 +76,7 @@ export async function createWhatsappClient(client_id: string, client_data_path: 
     });
     client.on('message', async (msg: Message) => {
         if (client) {
-            let contact = await msg.getContact()
-            await ControlMessage(client, msg, contact.name)
+            await ControlMessage(client, msg)
         }
     });
 
