@@ -20,3 +20,17 @@ export const GetFlows = async () => {
 export const DestroyFlow = async (id: string) => {
     return await apiClient.delete(`flows/${id}`);
 };
+export const GetTrackers = async () => {
+    return await apiClient.get(`trackers`);
+}
+
+export const UpdateName = async ({ id, body }: { id: string, body: string }) => {
+    return await apiClient.put(`trackers/:${id}`, body)
+}
+export const StartBot = async (id: string) => {
+    return await apiClient.post(`start/${id}`);
+}
+export const StopBot = async (id: string) => {
+    return await apiClient.post(`stop/${id}`);
+}
+
