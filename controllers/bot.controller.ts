@@ -30,6 +30,40 @@ export const CreateFlow = async (req: Request, res: Response, next: NextFunction
         return res.status(400).json({ message: "please fill required fields" })
     let flows = await Flow.find({ created_by: req.user, flow_name: flow_name })
     let flow = flows[0]
+    if (flow)
+        return res.status(500).json({ message: "Already a flow exists with this name" })
+    await new Flow({
+        flow_name: flow_name,
+        nodes: nodes,
+        edges: edges,
+        trigger_keywords: trigger_keywords.toLowerCase(),
+        created_at: new Date(),
+        updated_at: new Date(),
+        created_by: req.user,
+        updated_by: req.user
+    }).save()
+    return res.status(201).json("new flow created")
+}
+
+
+export const UpdateFlow = async (req: Request, res: Response, next: NextFunction) => {
+    const { flow_name, nodes, edges, trigger_keywords } = req.body as TFlowBody
+    const id = req.params.id
+    if (!id) {
+        return res.status(400).json({ message: "please provide correct flow id" })
+    }
+    if (!flow_name || !nodes || !edges || !trigger_keywords)
+        return res.status(400).json({ message: "please fill required fields" })
+
+
+    let flow = await Flow.findById(id)
+    if (flow?.flow_name !== flow_name) {
+        let flows = await Flow.find({ created_by: req.user, flow_name: flow_name })
+        let flowtmp = flows[0]
+        if (flowtmp)
+            return res.status(400).json({ message: "Already a flow exists with this name" })
+    }
+
     if (flow) {
         await Flow.findByIdAndUpdate(flow._id, {
             flow_name: flow_name,
@@ -40,21 +74,18 @@ export const CreateFlow = async (req: Request, res: Response, next: NextFunction
             updated_at: new Date(),
             updated_by: req.user
         })
+        return res.status(200).json({ message: "flow updated" })
     }
-    else {
-        await new Flow({
-            flow_name: flow_name,
-            nodes: nodes,
-            edges: edges,
-            trigger_keywords: trigger_keywords.toLowerCase(),
-            created_at: new Date(),
-            updated_at: new Date(),
-            created_by: req.user,
-            updated_by: req.user
-        }).save()
-    }
-    return res.status(201).json("flow saved")
+    else
+        return res.status(404).json({ message: "flow not exists" })
+
+
+
+
+
+
 }
+
 
 export const GetFlows = async (req: Request, res: Response, next: NextFunction) => {
     let flows = await Flow.find({ created_by: req.user })

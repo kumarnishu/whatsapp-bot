@@ -6,10 +6,10 @@ import { Node } from 'reactflow';
 type Props = {
     selectedNode: Node,
     updateNode: (index: number, media_value: string, media_type?: string) => void,
-    setDisplayUpdateModal: React.Dispatch<React.SetStateAction<boolean>>
+    setDisplayNodeUpdateModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function UpdateNodeForm({ updateNode, selectedNode, setDisplayUpdateModal }: Props) {
+function UpdateNodeForm({ updateNode, selectedNode, setDisplayNodeUpdateModal }: Props) {
     const formik = useFormik({
         initialValues: {
             index: selectedNode.data.index || 1,
@@ -29,7 +29,7 @@ function UpdateNodeForm({ updateNode, selectedNode, setDisplayUpdateModal }: Pro
             media_value: string
         }) => {
             updateNode(values.index, values.media_value, values.media_type)
-            setDisplayUpdateModal(false)
+            setDisplayNodeUpdateModal(false)
         },
     });
     return (

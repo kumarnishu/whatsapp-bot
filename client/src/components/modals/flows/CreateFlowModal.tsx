@@ -44,14 +44,14 @@ function CreateFlowModal() {
     const [selectedNode, setSelectedNode] = useState<Node>()
     const [flow, setFlow] = useState<IFlow>()
     const [displaySaveModal, setDisplaySaveModal] = useState(false)
-    const [displayUpdateModal, setDisplayUpdateModal] = useState(false)
+    const [displayNodeUpdateModal, setDisplayNodeUpdateModal] = useState(false)
 
     function handleSingleClick(event: React.MouseEvent, _node: Node) {
         setSelectedNode(_node)
     }
     function handleDoubleClick(event: React.MouseEvent, _node: Node) {
         if (selectedNode) {
-            setDisplayUpdateModal(true)
+            setDisplayNodeUpdateModal(true)
         }
     }
 
@@ -155,7 +155,7 @@ function CreateFlowModal() {
             }
         }
         return addEdge(params, eds)
-    }), [nodes, selectedNode,setNodes, setEdges]);
+    }), [nodes, selectedNode, setNodes, setEdges]);
 
     const onDrop = (event: DragEvent) => {
         event.preventDefault();
@@ -285,15 +285,19 @@ function CreateFlowModal() {
                                 <span>Output</span>
                             </div>
                         </div>
-                        <div style={{ cursor: "pointer", maxWidth: 100 }} className="react-flow__node-default btn p-1 fs-6 mt-1 bg-dark text-light"
+                        <div style={{ cursor: "pointer", maxWidth: 100, backgroundColor: '#72A0C1' }} className="react-flow__node-default btn p-1 fs-6 mt-1 text-light"
                         >
                             <div className="d-flex gap-1 align-items-center justify-content-center"
-                                onClick={() => setDisplaySaveModal(true)}
+                                onClick={() => {
+                                    setDisplaySaveModal(true)
+                                }}
                             >
-                                <img width="20" height="20" src="https://img.icons8.com/color/48/save--v1.png" alt="undo" />
+                                <img width="20" height="20" src="https://img.icons8.com/color/48/save--v1.png" alt="close" />
                                 <span >Save</span>
                             </div>
                         </div>
+
+
                         <div style={{ cursor: "pointer", maxWidth: 100, backgroundColor: '#72A0C1' }} className="react-flow__node-default btn p-1 fs-6 mt-1 text-light"
                         >
                             <div className="d-flex gap-1 align-items-center justify-content-center"
@@ -323,9 +327,8 @@ function CreateFlowModal() {
                         </div>
                     </Panel>
                 </ReactFlow >
-                {selectedNode ? <UpdateNodeModal updateNode={UpdateNode} selectedNode={selectedNode} setDisplayUpdateModal={setDisplayUpdateModal} displayUpdateModal={displayUpdateModal} /> : null}
-                {displaySaveModal && flow ? <SaveNewFlow setFlow={setFlow} flow={flow} setDisplaySaveModal={setDisplaySaveModal}
-                    setSelectedNode={setSelectedNode}
+                {displayNodeUpdateModal && selectedNode ? <UpdateNodeModal updateNode={UpdateNode} selectedNode={selectedNode} setDisplayNodeUpdateModal={setDisplayNodeUpdateModal} displayNodeUpdateModal={displayNodeUpdateModal} /> : null}
+                {displaySaveModal && flow ? <SaveNewFlow setFlow={setFlow} flow={flow} setDisplaySaveModal={setDisplaySaveModal} 
                 /> : null}
             </div>
         </Modal>

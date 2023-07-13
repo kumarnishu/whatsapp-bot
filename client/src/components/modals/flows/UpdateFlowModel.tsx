@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from "react";
+import React, { useEffect, useContext, useState, useCallback } from "react";
 import { Background, BackgroundVariant, Connection, Controls, MiniMap, Node, Panel, ReactFlow, addEdge, useNodesState, useEdgesState, Edge } from "reactflow";
 import "reactflow/dist/style.css";
 import { v4 as uuidv4 } from 'uuid';
@@ -11,21 +11,21 @@ import SaveUpdateFlowModal from "./SaveUpdateFlowModal";
 
 const nodeTypes = { MenuNode, DefaultNode, StartNode, OutputNode, CommonNode }
 
-function UpdateFlowModel({ selectedFlow, setSelectedFlow }: { selectedFlow: IFlow, setSelectedFlow: React.Dispatch<React.SetStateAction<IFlow | undefined>> }) {
+function UpdateFlowModel({ selectedFlow }: { selectedFlow: IFlow }) {
     const { choice, setChoice } = useContext(ChoiceContext)
-    const [flow, setFlow] = useState<IFlow | undefined>(selectedFlow)
-    const [nodes, setNodes, onNodesChange] = useNodesState(selectedFlow.nodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(selectedFlow.edges);
+    const [flow, setFlow] = useState<IFlow | undefined>()
+    const [nodes, setNodes, onNodesChange] = useNodesState([]);
+    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [selectedNode, setSelectedNode] = useState<Node>()
-    const [displaySaveModal, setDisplaySaveModal] = useState(false)
     const [displayUpdateModal, setDisplayUpdateModal] = useState(false)
+    const [displayNodeUpdateModal, setDisplayNodeUpdateModal] = useState(false)
 
     function handleSingleClick(event: React.MouseEvent, _node: Node) {
         setSelectedNode(_node)
     }
     function handleDoubleClick(event: React.MouseEvent, _node: Node) {
         if (selectedNode) {
-            setDisplayUpdateModal(true)
+            setDisplayNodeUpdateModal(true)
         }
     }
 
@@ -197,9 +197,14 @@ function UpdateFlowModel({ selectedFlow, setSelectedFlow }: { selectedFlow: IFlo
         };
         setNodes((nds) => nds.concat(newNode));
     }
+    useEffect(() => {
+        if (selectedFlow) {
+            setFlow(selectedFlow)
+            setNodes(selectedFlow.nodes)
+            setEdges(selectedFlow.edges)
+        }
+    }, [selectedFlow, setNodes, setEdges, setFlow])
 
-    console.log(flow?.nodes.filter(node => { return node.id === "common_message" })[0].data.media_value)
-    console.log(selectedFlow?.nodes.filter(node => { return node.id === "common_message" })[0].data.media_value)
     return (
         <Modal fullscreen
             show={choice === AppChoiceActions.update_flow ? true : false}
@@ -217,7 +222,7 @@ function UpdateFlowModel({ selectedFlow, setSelectedFlow }: { selectedFlow: IFlo
                     onNodeClick={handleSingleClick}
                     onNodeDoubleClick={handleDoubleClick}
                     onEdgeDoubleClick={handleEdgeDelete}
-                    defaultEdgeOptions={{ type: "step", animated: true }}
+                    defaultEdgeOptions={{ animated: true, interactionWidth: 50 }}
                     //@ts-ignore
                     onDrop={onDrop}
                     //@ts-ignore
@@ -249,18 +254,19 @@ function UpdateFlowModel({ selectedFlow, setSelectedFlow }: { selectedFlow: IFlo
                                 <span>Output</span>
                             </div>
                         </div>
-                        <div style={{ cursor: "pointer", maxWidth: 100 }} className="react-flow__node-default btn p-1 fs-6 mt-1 bg-dark text-light"
+
+                        <div style={{ cursor: "pointer", maxWidth: 100, backgroundColor: '#72A0C1' }} className="react-flow__node-default btn p-1 fs-6 mt-1 text-light"
                         >
                             <div className="d-flex gap-1 align-items-center justify-content-center"
                                 onClick={() => {
                                     if (flow) {
-                                        setFlow({ ...flow, nodes, edges })
-                                        setDisplaySaveModal(true)
+                                        setDisplayUpdateModal(true)
+                                        setFlow({ ...flow, nodes: nodes, edges: edges })
                                     }
                                 }
                                 }
                             >
-                                <img width="20" height="20" src="https://img.icons8.com/color/48/save--v1.png" alt="undo" />
+                                <img width="20" height="20" src="https://img.icons8.com/color/48/save--v1.png" alt="close" />
                                 <span >Save</span>
                             </div>
                         </div>
@@ -269,7 +275,7 @@ function UpdateFlowModel({ selectedFlow, setSelectedFlow }: { selectedFlow: IFlo
                             <div className="d-flex gap-1 align-items-center justify-content-center"
                                 onClick={() => {
                                     setChoice({ type: AppChoiceActions.close_app })
-                                    setSelectedFlow(undefined)
+                                    setFlow(undefined)
                                 }}
                             >
                                 <img width="20" height="20" src="https://img.icons8.com/fluency/48/delete-sign.png" alt="close" />
@@ -291,8 +297,8 @@ function UpdateFlowModel({ selectedFlow, setSelectedFlow }: { selectedFlow: IFlo
                         </div>
                     </Panel>
                 </ReactFlow >
-                {selectedNode ? <UpdateNodeModal updateNode={UpdateNode} selectedNode={selectedNode} setDisplayUpdateModal={setDisplayUpdateModal} displayUpdateModal={displayUpdateModal} /> : null}
-                {displaySaveModal && flow ? <SaveUpdateFlowModal setFlow={setFlow} flow={flow} setDisplaySaveModal={setDisplaySaveModal} setSelectedNode={setSelectedNode} /> : null}
+                {selectedNode ? <UpdateNodeModal updateNode={UpdateNode} selectedNode={selectedNode} setDisplayNodeUpdateModal={setDisplayNodeUpdateModal} displayNodeUpdateModal={displayNodeUpdateModal} /> : null}
+                {displayUpdateModal && flow ? <SaveUpdateFlowModal flow={flow} setDisplayUpdateModal={setDisplayUpdateModal} displayUpdateModal={displayUpdateModal} /> : null}
             </div>
         </Modal>
     )

@@ -6,10 +6,13 @@ export const SetUpWhatsapp = async () => {
     return await apiClient.post(`setup/whatsapp`);
 };
 
-export const CreateFlow = async (body:IFlow) => {
-    return await apiClient.post(`flows`,body);
+export const CreateFlow = async (body: IFlow) => {
+    return await apiClient.post(`flows`, body);
 };
 
+export const UpdateFlow = async ({ id, body }: { id: string, body: IFlow }) => {
+    return await apiClient.put(`flows/${id}`, body);
+};
 export const GetFlows = async () => {
     return await apiClient.get(`flows`);
 };

@@ -4,22 +4,22 @@ import UpdateNodeForm from '../../forms/nodes/UpdateNodeForm'
 
 type Props = {
     selectedNode: Node,
-    displayUpdateModal: boolean,
+    displayNodeUpdateModal: boolean,
     updateNode: (index:number,media_value: string, media_type?: string) => void,
-    setDisplayUpdateModal: React.Dispatch<React.SetStateAction<boolean>>
+    setDisplayNodeUpdateModal: React.Dispatch<React.SetStateAction<boolean>>
 }
-function UpdateNodeModal({ updateNode, selectedNode, setDisplayUpdateModal, displayUpdateModal }: Props) {
+function UpdateNodeModal({ updateNode, selectedNode, setDisplayNodeUpdateModal, displayNodeUpdateModal }: Props) {
     return (
         <Modal
-            show={displayUpdateModal ? true : false}
-            onHide={() => setDisplayUpdateModal(false)}
+            show={displayNodeUpdateModal ? true : false}
+            onHide={() => setDisplayNodeUpdateModal(false)}
             centered
         >
             {selectedNode ?
-                <UpdateNodeForm selectedNode={selectedNode} updateNode={updateNode} setDisplayUpdateModal={setDisplayUpdateModal} /> : null}
+                <UpdateNodeForm selectedNode={selectedNode} updateNode={updateNode} setDisplayNodeUpdateModal={setDisplayNodeUpdateModal} /> : null}
 
             <Button variant="outline-danger" onClick={() => {
-                setDisplayUpdateModal(false)
+                setDisplayNodeUpdateModal(false)
             }
             }>Close</Button>
         </Modal>

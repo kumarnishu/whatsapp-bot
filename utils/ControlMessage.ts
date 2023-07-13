@@ -23,7 +23,7 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message, custo
         }
     })
     let menuTracker = await MenuTracker.findOne({ phone_number: from?._serialized }).populate('flow')
-    let menuTrackers = await MenuTracker.find()
+    let menuTrackers = await MenuTracker.find({ phone_number: from?._serialized })
     if (specialMessage === "STOP") {
         trackers.forEach(async (tracker) => {
             await KeywordTracker.findByIdAndUpdate(tracker._id, { is_active: false })
@@ -143,6 +143,7 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message, custo
                 if (parentNode) {
                     if (menuTracker) {
                         menuTracker.menu_id = parentNode.id
+                        menuTracker.flow = tracker.flow
                         await menuTracker.save()
                     }
                 }

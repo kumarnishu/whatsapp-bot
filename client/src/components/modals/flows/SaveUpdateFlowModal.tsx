@@ -8,23 +8,22 @@ import Alert from 'react-bootstrap/Alert';
 import { AxiosResponse } from 'axios'
 import { useMutation } from 'react-query'
 import { BackendError } from '../../../types'
-import { CreateFlow } from '../../../services/BotServices'
+import { UpdateFlow } from '../../../services/BotServices'
 import { queryClient } from '../../..'
 import { AppChoiceActions, ChoiceContext } from '../../../contexts/DialogContext'
-import { Node } from 'reactflow'
 
 type Props = {
-    setFlow: React.Dispatch<React.SetStateAction<IFlow | undefined>>,
-    flow: IFlow, setDisplaySaveModal: React.Dispatch<React.SetStateAction<boolean>>,
-    setSelectedNode: React.Dispatch<React.SetStateAction<Node | undefined>>
+    setDisplayUpdateModal: React.Dispatch<React.SetStateAction<boolean>>,
+    displayUpdateModal: boolean,
+    flow: IFlow
 }
-function SaveUpdateFlowModal({ flow, setFlow, setDisplaySaveModal, setSelectedNode }: Props) {
+function SaveUpdateFlow({ flow, setDisplayUpdateModal, displayUpdateModal }: Props) {
     const { setChoice } = useContext(ChoiceContext)
     const { mutate, isSuccess, isLoading, isError, error } = useMutation
         <AxiosResponse<IFlow>,
             BackendError,
-            IFlow
-        >(CreateFlow, {
+            { id: string, body: IFlow }
+        >(UpdateFlow, {
             onSuccess: () => queryClient.invalidateQueries("flows")
         })
 
@@ -41,31 +40,34 @@ function SaveUpdateFlowModal({ flow, setFlow, setDisplaySaveModal, setSelectedNo
                 .required("name is required")
 
         }),
-        onSubmit: (values: {
-            flow_name: string,
-        }) => {
-            mutate({
-                ...flow,
-                flow_name: values.flow_name
-
-            })
+        onSubmit: (values: IFlow) => {
+            if (flow && flow._id)
+                mutate({
+                    id: flow._id,
+                    body: {
+                        ...values,
+                        flow_name: values.flow_name,
+                        trigger_keywords: values.trigger_keywords,
+                        nodes: values.nodes,
+                        edges: values.edges
+                    }
+                })
         },
     });
 
     useEffect(() => {
         if (isSuccess) {
             setTimeout(() => {
-                setDisplaySaveModal(false)
-                setSelectedNode(undefined)
-                setFlow(undefined)
+                setDisplayUpdateModal(false)
                 setChoice({ type: AppChoiceActions.close_app })
             }, 400)
         }
-    }, [isSuccess, setFlow, setDisplaySaveModal, setSelectedNode, setChoice])
+    }, [isSuccess, setChoice, setDisplayUpdateModal])
+    console.log(flow)
     return (
         <Modal
-            show={flow ? true : false}
-            onHide={() => setDisplaySaveModal(false)}
+            show={displayUpdateModal ? true : false}
+            onHide={() => setDisplayUpdateModal(false)}
             centered
         >
             <Form onSubmit={formik.handleSubmit} className='shadow w-100  p-3 bg-body-tertiary border border-1 rounded bg-light align-self-center'>
@@ -87,18 +89,18 @@ function SaveUpdateFlowModal({ flow, setFlow, setDisplaySaveModal, setSelectedNo
                     ) : null
                 }
                 <Form.Group className="pt-3 mb-3" >
-                    <Form.Control disabled className="border border-primary" placeholder="Flow name"
+                    <Form.Control className="border border-primary" placeholder="Flow name"
                         {...formik.getFieldProps('flow_name')}
                     />
-                    <Form.Text  className='pl-2 text-muted '>{formik.touched.flow_name && formik.errors.flow_name ? formik.errors.flow_name : "this is permanent, can not be changed later"}</Form.Text>
+                    <Form.Text className='pl-2 text-muted '>{formik.touched.flow_name && formik.errors.flow_name ? formik.errors.flow_name : "this is permanent, can not be changed later"}</Form.Text>
                 </Form.Group>
 
                 <Button variant="primary" className='w-100' type="submit"
                     disabled={isLoading}
-                >{isLoading ? "saving..." : "Save"}</Button>
+                >{isLoading ? "saving..." : "Update"}</Button>
             </Form>
         </Modal>
     )
 }
 
-export default SaveUpdateFlowModal
+export default SaveUpdateFlow

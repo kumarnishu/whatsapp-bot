@@ -82,7 +82,7 @@ export default function FlowsPage() {
             }
           </tbody>
         </table>
-        {flow ? <UpdateFlowModel setSelectedFlow={setFlow} selectedFlow={flow} /> : null}
+        {flow ? <UpdateFlowModel  selectedFlow={flow} /> : null}
         <CreateFlowModal />
         {flow ? <DeleteFlowModal flow={flow} /> : null}
       </Container>
