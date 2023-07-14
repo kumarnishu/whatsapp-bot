@@ -115,24 +115,31 @@ export async function createWhatsappClient(client_id: string, client_data_path: 
 async function handleBot(data: Message) {
     let trackers = await KeywordTracker.find({ phone_number: data.to, bot_number: data.from })
     let menuTrackers = await MenuTracker.find({ phone_number: data.to, bot_number: data.from })
+    let createCronJob = false
     trackers.forEach(async (tracker) => {
-        await KeywordTracker.findByIdAndUpdate(tracker._id, { is_active: false })
+        if (tracker.is_active) {
+            createCronJob = true
+            await KeywordTracker.findByIdAndUpdate(tracker._id, { is_active: false })
+        }
     })
     menuTrackers.forEach(async (tracker) => {
-        await MenuTracker.findByIdAndUpdate(tracker._id, { is_active: false })
+        if (tracker.is_active) {
+            createCronJob = true
+            await MenuTracker.findByIdAndUpdate(tracker._id, { is_active: false })
+        }
     })
-    //@ts-ignore
-    console.log("running cron job")
     //cron job to restart
-    let time = new Date(new Date().getTime() + 5 * 60 * 60 * 1000)
-    // let time = new Date(new Date().getTime() + 60 * 1000)
-    new cron.CronJob(time, async () => {
-        console.log('running cron job')
-        trackers.forEach(async (tracker) => {
-            await KeywordTracker.findByIdAndUpdate(tracker._id, { is_active: true })
-        })
-        menuTrackers.forEach(async (tracker) => {
-            await MenuTracker.findByIdAndUpdate(tracker._id, { is_active: true })
-        })
-    }).start()
+    if (createCronJob) {
+        let time = new Date(new Date().getTime() + 5 * 60 * 60 * 1000)
+        // let time = new Date(new Date().getTime() + 60 * 1000)
+        new cron.CronJob(time, async () => {
+            console.log('running cron job')
+            trackers.forEach(async (tracker) => {
+                await KeywordTracker.findByIdAndUpdate(tracker._id, { is_active: true })
+            })
+            menuTrackers.forEach(async (tracker) => {
+                await MenuTracker.findByIdAndUpdate(tracker._id, { is_active: true })
+            })
+        }).start()
+    }
 }
