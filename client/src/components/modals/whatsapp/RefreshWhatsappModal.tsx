@@ -63,7 +63,6 @@ function RefreshWhatsappModal() {
                             onClick={() => {
                                 if (user) {
                                     socket?.emit("JoinRoom", user.client_id, user.client_data_path)
-                                    alert("success")
                                 }
                                 setLoading(true)
                             }}>Check Whatsapp Status
