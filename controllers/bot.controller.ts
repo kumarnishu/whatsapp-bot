@@ -1,30 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { ConectWhatsapp } from "../utils/ConnectWhatsapp";
-import { AppSocket } from "..";
 import { TFlowBody, TrackerBody } from "../types/flow.types";
 import { Flow } from "../models/Flow";
 import { KeywordTracker } from "../models/KeywordTracker";
 import { MenuTracker } from "../models/MenuTracker";
-
-export const SetUpWhatsappProfile = async (req: Request, res: Response, next: NextFunction) => {
-    const client_id = req.user?.client_id
-    const client_data_path = req.user?.client_data_path
-    if (!client_id || !client_data_path) {
-        return res.status(404).json({ message: "fill all required fields" })
-    }
-    if (AppSocket && client_id && client_data_path) {
-        try {
-            await ConectWhatsapp(client_id, client_data_path, AppSocket)
-        }
-        catch (err: any) {
-            console.log(err)
-            return res.status(500).json({ message: "error while Refresh Whatsapp,check internet" })
-        }
-
-    }
-    return res.status(200).json({ message: "whatsapp connected" })
-
-}
 
 export const CreateFlow = async (req: Request, res: Response, next: NextFunction) => {
     const { flow_name, nodes, edges, trigger_keywords } = req.body as TFlowBody

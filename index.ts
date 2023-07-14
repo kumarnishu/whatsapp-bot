@@ -15,6 +15,7 @@ import BotRoutes from "./routes/bot.routes"
 import { Server } from "socket.io";
 import { Socket } from "socket.io";
 import { ControlMessage } from "./utils/ControlMessage";
+import { createWhatsappClient, getCurrentUser, userJoin, userLeave } from "./utils/CreateWhatsappClient";
 export const server = createServer(app)
 
 let AppSocket: Socket;
@@ -33,7 +34,7 @@ if (ENV === "development") {
         origin: [origin],
         credentials: true
     }))
-    }
+}
 
 let io: Server | undefined = undefined
 io = new Server(server, {
@@ -45,10 +46,20 @@ io = new Server(server, {
 io.on("connection", (socket) => {
     console.log("socket connected")
     AppSocket = socket
-    // upon disconnection
-    socket.on("disconnect", (reason) => {
-        console.log(`socket ${socket.id} disconnected due to ${reason}`);
-    });
+    socket.on('JoinRoom', async (id: string, path: string) => {
+        console.log("running in room", id, path)
+        const user = userJoin(id)
+        socket.join(user.id)
+        if (io)
+            createWhatsappClient(id, path, io)
+        socket.on("disconnect", (reason) => {
+            let user = getCurrentUser(id)
+            if (user)
+                userLeave(user.id)
+            console.log(`socket ${socket.id} disconnected due to ${reason}`);
+        });
+    })
+
 });
 
 
@@ -107,4 +118,4 @@ server.listen(PORT, () => {
     console.log(`running on ${HOST}:${PORT}`)
 });
 
-export { AppSocket }
+export { io }

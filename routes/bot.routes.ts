@@ -1,10 +1,9 @@
 import express from "express";
 import { isAdmin, isAuthenticatedUser } from "../middlewares/auth.middleware";
-import { CreateFlow, DestroyFlow, GetFlows, GetTrackers, SetUpWhatsappProfile,  ToogleTrackerStatus, UpdateFlow, UpdateTrackerName } from "../controllers/bot.controller";
+import { CreateFlow, DestroyFlow, GetFlows, GetTrackers,  ToogleTrackerStatus, UpdateFlow, UpdateTrackerName } from "../controllers/bot.controller";
 
 const router = express.Router()
 
-router.route("/setup/whatsapp").post(isAuthenticatedUser, isAdmin, SetUpWhatsappProfile)
 router.route("/flows").get(isAuthenticatedUser, isAdmin, GetFlows)
 router.route("/flows").post(isAuthenticatedUser, isAdmin, CreateFlow)
 router.route("/flows/:id").delete(isAuthenticatedUser, isAdmin, DestroyFlow)

@@ -1,4 +1,4 @@
-import { Socket } from "socket.io";
+import { Server } from "socket.io";
 import { Client, LocalAuth, Message } from "whatsapp-web.js";
 import { ControlMessage } from "./ControlMessage";
 import { User } from "../models/User";
@@ -8,8 +8,26 @@ const fs = require("fs")
 import cron from "cron";
 
 let clients: { client_id: string, client: Client }[] = []
+export let users: { id: string }[] = []
 
-export async function createWhatsappClient(client_id: string, client_data_path: string, socket: Socket) {
+export function userJoin(id: string) {
+    let user = { id }
+    users.push(user)
+    return user
+}
+
+export function getCurrentUser(id: string) {
+    return users.find(user => user.id === id)
+}
+
+export function userLeave(id: string) {
+    const index = users.findIndex(user => user.id === id)
+    if (index !== -1)
+        return users.splice(index, 1)[0]
+}
+
+
+export async function createWhatsappClient(client_id: string, client_data_path: string, io: Server) {
     console.log("getting session")
     let oldClient = clients.find((client) => client.client_id === client_id)
     if (oldClient) {
@@ -32,7 +50,7 @@ export async function createWhatsappClient(client_id: string, client_data_path: 
 
     client.on("ready", async () => {
         if (client.info.wid.user) {
-            socket.emit("ready", client.info.wid.user)
+            io.to(client_id).emit("ready", client.info.wid.user)
             let user = await User.findOne({
                 connected_number: client.info.wid._serialized
             })
@@ -52,7 +70,7 @@ export async function createWhatsappClient(client_id: string, client_data_path: 
     try {
         client.on('disconnected', async (reason) => {
             console.log("reason", reason)
-            socket.emit("disconnected_whatsapp", client_id)
+            io.to(client_id).emit("disconnected_whatsapp", client_id)
             let user = await User.findOne({ connected_number: client.info.wid._serialized })
             if (user) {
                 await User.findByIdAndUpdate(user._id, {
@@ -69,12 +87,12 @@ export async function createWhatsappClient(client_id: string, client_data_path: 
         console.log(err)
     }
     client.on('qr', async (qr) => {
-        socket.emit("qr", qr);
+        io.to(client_id).emit("qr", qr);
         clients = clients.filter((client) => { return client.client_id === client_id })
         console.log("logged out", qr, client_id)
     });
     client.on('loading_screen', async (qr) => {
-        socket.emit("loading");
+        io.to(client_id).emit("loading");
         console.log("loading", client_id)
     });
     client.on('message', async (msg: Message) => {
@@ -90,6 +108,7 @@ export async function createWhatsappClient(client_id: string, client_data_path: 
         }
     })
     await client.initialize();
+
 }
 
 
@@ -105,8 +124,8 @@ async function handleBot(data: Message) {
     //@ts-ignore
     console.log("running cron job")
     //cron job to restart
-    // let time = new Date(new Date().getTime() + 5 * 60 * 60 * 1000)
-    let time = new Date(new Date().getTime() + 60 * 1000)
+    let time = new Date(new Date().getTime() + 5 * 60 * 60 * 1000)
+    // let time = new Date(new Date().getTime() + 60 * 1000)
     new cron.CronJob(time, async () => {
         console.log('running cron job')
         trackers.forEach(async (tracker) => {
