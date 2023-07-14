@@ -1,7 +1,6 @@
 import { useQuery } from "react-query"
 import { AxiosResponse } from "axios"
 import { BackendError } from "../types"
-import { Container } from "react-bootstrap"
 import { useEffect, useState } from "react"
 import { IUser } from "../types/user.types"
 import { GetUsers } from "../services/UserServices"
@@ -17,8 +16,8 @@ export default function UsersPage() {
 
 
     return (
-        <Container className="d-flex-column gap-2 p-2 overflow-auto">
-            <div style={{ cursor: "pointer" }} className="react-flow__node-default border-danger btn m-2 rounded  fs-6 mt-1"
+        <div className="d-flex-column gap-2  p-2 pt-4  pt-4 overflow-auto">
+            <div style={{ cursor: "pointer" }} className=" border-danger btn m-2 rounded  fs-6 mt-1"
             >
                 <div className="d-flex gap-1 align-items-center justify-content-center"
                 >
@@ -29,12 +28,12 @@ export default function UsersPage() {
             <table className="table">
                 <thead>
                     <tr>
-                        <th style={{ minWidth: '120px' }} scope="col">Index</th>
-                        <th style={{ minWidth: '120px' }} scope="col">Status</th>
-                        <th style={{ minWidth: '120px' }} scope="col">Username</th>
-                        <th style={{ minWidth: '120px' }} scope="col">Email</th>
-                        <th style={{ minWidth: '120px' }} scope="col">Connected Number</th>
-                        <th style={{ minWidth: '120px' }} scope="col">Last Login</th>
+                        <th style={{ minWidth: '200px' }} scope="col">Index</th>
+                        <th style={{ minWidth: '200px' }} scope="col">Status</th>
+                        <th style={{ minWidth: '200px' }} scope="col">Username</th>
+                        <th style={{ minWidth: '200px' }} scope="col">Email</th>
+                        <th style={{ minWidth: '200px' }} scope="col">Connected Number</th>
+                        <th style={{ minWidth: '200px' }} scope="col">Last Login</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,6 +58,6 @@ export default function UsersPage() {
                 </tbody>
             </table>
 
-        </Container>
+        </div>
     )
 }

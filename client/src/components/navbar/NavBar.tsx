@@ -31,7 +31,7 @@ function NavBar() {
                     user ?
                         <>
                             {/* navbar */}
-                            <div className="d-none d-md-flex  gap-1 justify-content-center align-items-center ">
+                            <div className="d-none d-md-flex  gap-3 justify-content-center align-items-center ">
 
                                 <div className="d-flex align-items-center">
 

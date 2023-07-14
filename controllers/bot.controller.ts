@@ -115,12 +115,7 @@ export const UpdateTrackerName = async (req: Request, res: Response, next: NextF
 
 
 export const ToogleTrackerStatus = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id
-    if (!id) {
-        return res.status(400).json({ message: "please provide correct tracker id" })
-    }
     const { phone_number, bot_number } = req.body as TrackerBody
-
     let trackers = await KeywordTracker.find({ phone_number: phone_number, bot_number: bot_number })
     let menuTrackers = await MenuTracker.find({ phone_number: phone_number, bot_number: bot_number })
     trackers.forEach(async (tracker) => {

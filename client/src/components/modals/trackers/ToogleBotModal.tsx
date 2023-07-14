@@ -14,7 +14,7 @@ function ToogleBotModal({ tracker }: { tracker: ITracker }) {
     const { mutate, isSuccess, isLoading, isError, error } = useMutation
         <AxiosResponse<ITracker>,
             BackendError,
-            string
+            { body: { phone_number:string, bot_number: string } }
         >(ToogleBotStatus, {
             onSuccess: () => queryClient.invalidateQueries("trackers")
         })
@@ -48,7 +48,9 @@ function ToogleBotModal({ tracker }: { tracker: ITracker }) {
             <div className='p-2 d-flex justify-content-end gap-2'>
                 <Button onClick={() => setChoice({ type: AppChoiceActions.close_app })}>Cancel</Button>
                 <Button variant="outline-danger" onClick={() => {
-                    if (tracker && tracker._id) mutate(tracker._id)
+                    if (tracker && tracker._id) mutate({
+                        body:{phone_number:tracker.phone_number,bot_number:tracker.bot_number}
+                    })
                     setChoice({ type: AppChoiceActions.close_app })
                 }
                 }

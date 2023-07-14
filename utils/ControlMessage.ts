@@ -97,7 +97,7 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
                 let commonNode = tracker?.flow.nodes.find((node) => node.id === "common_message")
                 if (startTriggered) {
                     if (menuTracker && menuTracker.customer_name) {
-                        sendingMessage = sendingMessage + "\tHello " + toTitleCase(menuTracker.customer_name) + "\n\n"
+                        sendingMessage = sendingMessage + "Hello " + toTitleCase(menuTracker.customer_name) + "\n\n"
                     }
                     sendingMessage = sendingMessage  + String(commonNode?.data.media_value) + "\n\n"
                 }

@@ -1,8 +1,11 @@
 import { Socket } from "socket.io";
-import { Client,  LocalAuth, Message } from "whatsapp-web.js";
+import { Client, LocalAuth, Message } from "whatsapp-web.js";
 import { ControlMessage } from "./ControlMessage";
 import { User } from "../models/User";
+import { KeywordTracker } from "../models/KeywordTracker";
+import { MenuTracker } from "../models/MenuTracker";
 const fs = require("fs")
+import cron from "cron";
 
 let clients: { client_id: string, client: Client }[] = []
 
@@ -28,20 +31,20 @@ export async function createWhatsappClient(client_id: string, client_data_path: 
     });
 
     client.on("ready", async () => {
-        socket.emit("ready", client.info.wid.user)
-        let user = await User.findOne({
-            connected_number: client.info.wid._serialized
-        })
-        if (!user)
-            user = await User.findOne({ client_id: client_id })
-        if (user) {
-            await User.findByIdAndUpdate(user._id, {
-                is_whatsapp_active: true,
-                connected_number: client?.info.wid._serialized
+        if (client.info.wid.user) {
+            socket.emit("ready", client.info.wid.user)
+            let user = await User.findOne({
+                connected_number: client.info.wid._serialized
             })
+            if (!user)
+                user = await User.findOne({ client_id: client_id })
+            if (user) {
+                await User.findByIdAndUpdate(user._id, {
+                    is_whatsapp_active: true,
+                    connected_number: client?.info.wid._serialized
+                })
+            }
         }
-        // let contacts:Contact[] = await client.getContacts()
-        // console.log(contacts)
         if (!clients.find((client) => client.client_id === client_id))
             clients.push({ client_id: client_id, client: client })
         console.log("session revived for", client.info)
@@ -80,8 +83,37 @@ export async function createWhatsappClient(client_id: string, client_data_path: 
         }
     });
 
-    client.on('message_ack', (data) => {
-        console.log(data)
+    client.on('message_ack', async (data) => {
+        //@ts-ignore
+        if (data.ack === 2 && data._data.self === "in") {
+            await handleBot(data)
+        }
     })
     await client.initialize();
+}
+
+
+async function handleBot(data: Message) {
+    let trackers = await KeywordTracker.find({ phone_number: data.to, bot_number: data.from })
+    let menuTrackers = await MenuTracker.find({ phone_number: data.to, bot_number: data.from })
+    trackers.forEach(async (tracker) => {
+        await KeywordTracker.findByIdAndUpdate(tracker._id, { is_active: false })
+    })
+    menuTrackers.forEach(async (tracker) => {
+        await MenuTracker.findByIdAndUpdate(tracker._id, { is_active: false })
+    })
+    //@ts-ignore
+    console.log("running cron job")
+    //cron job to restart
+    // let time = new Date(new Date().getTime() + 5 * 60 * 60 * 1000)
+    let time = new Date(new Date().getTime() + 60 * 1000)
+    new cron.CronJob(time, async () => {
+        console.log('running cron job')
+        trackers.forEach(async (tracker) => {
+            await KeywordTracker.findByIdAndUpdate(tracker._id, { is_active: true })
+        })
+        menuTrackers.forEach(async (tracker) => {
+            await MenuTracker.findByIdAndUpdate(tracker._id, { is_active: true })
+        })
+    }).start()
 }

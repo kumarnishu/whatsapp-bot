@@ -13,9 +13,11 @@ import { queryClient } from '../../..'
 import { AppChoiceActions, ChoiceContext } from '../../../contexts/DialogContext'
 
 type Props = {
-    tracker: ITracker
+    tracker: ITracker,
+    setTracker: React.Dispatch<React.SetStateAction<ITracker | undefined>>
+
 }
-function UpdateTrackerModal({ tracker }: Props) {
+function UpdateTrackerModal({ tracker, setTracker }: Props) {
     const { choice, setChoice } = useContext(ChoiceContext)
     const { mutate, isSuccess, isLoading, isError, error } = useMutation
         <AxiosResponse<ITracker>,
@@ -54,7 +56,11 @@ function UpdateTrackerModal({ tracker }: Props) {
     return (
         <Modal
             show={choice === AppChoiceActions.update_tracker ? true : false}
-            onHide={() => setChoice({ type: AppChoiceActions.close_app })}
+            onHide={() => {
+                setTracker(undefined)
+                setChoice({ type: AppChoiceActions.close_app })
+            }
+            }
             centered
         >
             <Form onSubmit={formik.handleSubmit} className='shadow w-100  p-3 bg-body-tertiary border border-1 rounded bg-light align-self-center'>

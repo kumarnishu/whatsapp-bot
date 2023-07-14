@@ -27,7 +27,7 @@ export const GetTrackers = async () => {
 export const UpdateCustomerName = async ({ id, body }: { id: string, body: { customer_name: string } }) => {
     return await apiClient.put(`trackers/${id}`, body)
 }
-export const ToogleBotStatus = async (id: string) => {
-    return await apiClient.post(`toogle/${id}`);
+export const ToogleBotStatus = async ({ body }: { body: { phone_number: string, bot_number: string } }) => {
+    return await apiClient.post(`toogle`, body);
 }
 

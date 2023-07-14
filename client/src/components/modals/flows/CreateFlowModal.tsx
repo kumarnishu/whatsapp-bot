@@ -58,11 +58,18 @@ function CreateFlowModal() {
     function handleEdgeDelete(event: React.MouseEvent, _edge: Edge) {
         let is_deletable = true
         let parentNode = nodes.find((node) => node.id === _edge.source)
+        let targetNode = nodes.find((node) => node.id === _edge.target)
         if (_edge.source === "start")
             is_deletable = false
         else if (parentNode?.type === "MenuNode")
             is_deletable = false
         if (is_deletable) {
+            setNodes((nodes) => nodes.map((node) => {
+                if (node.id === targetNode?.id) {
+                    node.parentNode = undefined
+                }
+                return node
+            }))
             setEdges(edges.filter((edge) => {
                 return edge.id !== _edge.id
             }))
@@ -328,7 +335,7 @@ function CreateFlowModal() {
                     </Panel>
                 </ReactFlow >
                 {displayNodeUpdateModal && selectedNode ? <UpdateNodeModal updateNode={UpdateNode} selectedNode={selectedNode} setDisplayNodeUpdateModal={setDisplayNodeUpdateModal} displayNodeUpdateModal={displayNodeUpdateModal} /> : null}
-                {displaySaveModal && flow ? <SaveNewFlow setFlow={setFlow} flow={flow} setDisplaySaveModal={setDisplaySaveModal} 
+                {displaySaveModal && flow ? <SaveNewFlow setFlow={setFlow} flow={flow} setDisplaySaveModal={setDisplaySaveModal}
                 /> : null}
             </div>
         </Modal>
