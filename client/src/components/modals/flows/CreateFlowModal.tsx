@@ -93,7 +93,6 @@ function CreateFlowModal() {
                         node.data = {
                             ...node.data,
                             media_type: "message",
-                            media_value: "menu"
                         }
                     }
                     return node
@@ -115,7 +114,6 @@ function CreateFlowModal() {
                             ...node.data,
                             index: length ? length + 1 : 1,
                             media_type: "message",
-                            media_value: "default"
                         }
                     }
                     return node
@@ -134,13 +132,28 @@ function CreateFlowModal() {
                         node.data = {
                             ...node.data,
                             media_type: "message",
-                            media_value: "menu"
                         }
                     }
                     return node
                 }))
             }
 
+            if (srcNode.type === "DefaultNode" && targetNode.type === "MenuNode") {
+                setNodes((nodes) => nodes.map((node) => {
+                    if (node.id === targetNode?.id) {
+                        node.parentNode = srcNode?.id
+                        node.position = {
+                            x: selectedNode ? selectedNode.position.x : 0,
+                            y: selectedNode ? selectedNode.position.y + 20 : 30
+                        }
+                        node.data = {
+                            ...node.data,
+                            media_type: "message",
+                        }
+                    }
+                    return node
+                }))
+            }
             if (srcNode.type === "DefaultNode" && targetNode.type === "OutputNode") {
                 let length = nodes.filter((node) => { return node.parentNode === srcNode?.id }).length
                 setNodes((nodes) => nodes.map((node) => {
@@ -154,7 +167,6 @@ function CreateFlowModal() {
                             ...node.data,
                             index: length ? length + 1 : 1,
                             media_type: "message",
-                            media_value: "output"
                         }
                     }
                     return node
