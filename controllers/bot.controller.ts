@@ -63,7 +63,7 @@ export const UpdateFlow = async (req: Request, res: Response, next: NextFunction
 
 
 export const GetFlows = async (req: Request, res: Response, next: NextFunction) => {
-    let flows = await Flow.find({ created_by: req.user })
+    let flows = await Flow.find({ created_by: req.user }).sort('-updated_at')
     return res.status(200).json(flows)
 }
 
@@ -77,7 +77,7 @@ export const DestroyFlow = async (req: Request, res: Response, next: NextFunctio
 }
 
 export const GetTrackers = async (req: Request, res: Response, next: NextFunction) => {
-    let trackers = await MenuTracker.find().populate('flow')
+    let trackers = await MenuTracker.find().populate('flow').sort('-updated_at')
     return res.status(200).json(trackers)
 }
 
