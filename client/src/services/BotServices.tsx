@@ -24,13 +24,10 @@ export const GetTrackers = async () => {
     return await apiClient.get(`trackers`);
 }
 
-export const UpdateCustomerName = async ({ id, body }: { id: string, body: string }) => {
-    return await apiClient.put(`trackers/:${id}`, body)
+export const UpdateCustomerName = async ({ id, body }: { id: string, body: { customer_name: string } }) => {
+    return await apiClient.put(`trackers/${id}`, body)
 }
-export const StartBot = async (id: string) => {
-    return await apiClient.post(`start/${id}`);
-}
-export const StopBot = async (id: string) => {
-    return await apiClient.post(`stop/${id}`);
+export const ToogleBotStatus = async (id: string) => {
+    return await apiClient.post(`toogle/${id}`);
 }
 

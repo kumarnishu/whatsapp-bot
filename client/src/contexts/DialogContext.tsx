@@ -1,10 +1,10 @@
 import React, { useReducer } from "react"
 
 // choices
-type AppChoices = "close_app" |  null |  "update_password" | "refresh_whatsapp" | "delete_flow" | "create_flow" | "update_flow"
+type AppChoices = "close_app" | null | "update_password" | "refresh_whatsapp" | "delete_flow" | "create_flow" | "update_flow" | 'toogle_bot_status' | "update_tracker"
 
 // initial state
-type ChoiceState = AppChoices 
+type ChoiceState = AppChoices
 
 const initialState: ChoiceState = null
 
@@ -14,12 +14,14 @@ export enum AppChoiceActions {
     create_flow = "create_flow",
     refresh_whatsapp = "refresh_whatsapp",
     update_flow = "update_flow",
+    toogle_bot_status = "toogle_bot_status",
+    update_tracker = "update_tracker",
     delete_flow = "delete_flow"
 }
 
 
 type Action = {
-    type: AppChoiceActions 
+    type: AppChoiceActions
 }
 
 // reducer
@@ -32,6 +34,8 @@ function reducer(state: ChoiceState, action: Action) {
         case AppChoiceActions.delete_flow: return type
         case AppChoiceActions.update_flow: return type
         case AppChoiceActions.create_flow: return type
+        case AppChoiceActions.update_tracker: return type
+        case AppChoiceActions.toogle_bot_status: return type
         case AppChoiceActions.close_app: return type
         default: return state
     }

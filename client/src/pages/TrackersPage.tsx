@@ -3,14 +3,16 @@ import { AxiosResponse } from 'axios'
 import { useQuery } from 'react-query'
 import { BackendError } from '../types'
 import { GetTrackers } from '../services/BotServices'
-import { ChoiceContext } from '../contexts/DialogContext'
+import { AppChoiceActions, ChoiceContext } from '../contexts/DialogContext'
 import { Button, Container } from 'react-bootstrap'
 import { ITracker } from '../types/flow.types'
+import UpdateTrackerModal from '../components/modals/trackers/UpdateTrackerModal'
+import ToogleBotModal from '../components/modals/trackers/ToogleBotModal'
 
 function TrackersPage() {
     const [trackers, setTrackers] = useState<ITracker[]>()
     const [tracker, setTracker] = useState<ITracker>()
-    const { choice, setChoice } = useContext(ChoiceContext)
+    const {setChoice } = useContext(ChoiceContext)
     const { data } = useQuery<AxiosResponse<ITracker[]>, BackendError>("trackers", GetTrackers)
 
     useEffect(() => {
@@ -55,10 +57,25 @@ function TrackersPage() {
                                                 <td>{tracker.flow.flow_name}</td>
                                                 <td>{tracker.updated_at && new Date(tracker.updated_at).toLocaleString()}</td>
                                                 <td className="d-flex gap-1">
-                                                    <Button size="sm" variant="primary">Edit</Button>
+                                                    <Button size="sm" variant="primary"
+                                                        onClick={() => {
+                                                            setTracker(tracker)
+                                                            setChoice({ type: AppChoiceActions.update_tracker })
+                                                        }}
+                                                    >Edit</Button>
                                                     {tracker.is_active ?
-                                                        < Button size="sm" variant="outline-danger">Stop</Button> :
-                                                        <Button size="sm" variant="outline-danger">Start</Button>
+                                                        < Button size="sm" variant="outline-danger"
+                                                            onClick={() => {
+                                                                setTracker(tracker)
+                                                                setChoice({ type: AppChoiceActions.toogle_bot_status })
+                                                            }}
+                                                        >Stop</Button> :
+                                                        <Button size="sm" variant="outline-success"
+                                                            onClick={() => {
+                                                                setTracker(tracker)
+                                                                setChoice({ type: AppChoiceActions.toogle_bot_status })
+                                                            }}
+                                                        >Start</Button>
                                                     }
                                                 </td>
                                             </tr>
@@ -71,6 +88,8 @@ function TrackersPage() {
                 </table>
 
             </Container >
+            {tracker ? <UpdateTrackerModal tracker={tracker} /> : null}
+            {tracker ? <ToogleBotModal tracker={tracker} /> : null}
         </>
     )
 }

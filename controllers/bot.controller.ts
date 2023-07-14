@@ -114,7 +114,7 @@ export const UpdateTrackerName = async (req: Request, res: Response, next: NextF
 }
 
 
-export const StartBot = async (req: Request, res: Response, next: NextFunction) => {
+export const ToogleTrackerStatus = async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id
     if (!id) {
         return res.status(400).json({ message: "please provide correct tracker id" })
@@ -124,29 +124,13 @@ export const StartBot = async (req: Request, res: Response, next: NextFunction) 
     let trackers = await KeywordTracker.find({ phone_number: phone_number, bot_number: bot_number })
     let menuTrackers = await MenuTracker.find({ phone_number: phone_number, bot_number: bot_number })
     trackers.forEach(async (tracker) => {
-        await KeywordTracker.findByIdAndUpdate(tracker._id, { is_active: true })
+        await KeywordTracker.findByIdAndUpdate(tracker._id, { is_active: !tracker.is_active })
     })
     menuTrackers.forEach(async (tracker) => {
-        await MenuTracker.findByIdAndUpdate(tracker._id, { is_active: true })
+        await MenuTracker.findByIdAndUpdate(tracker._id, { is_active: !tracker.is_active })
     })
 
-    return res.status(200).json("bot successfully started for this number")
+    return res.status(200).json("bot successfully changed for this number")
 }
 
-export const StopBot = async (req: Request, res: Response, next: NextFunction) => {
-    const { phone_number, bot_number } = req.body as TrackerBody
-    const id = req.params.idF
-    if (!id) {
-        return res.status(400).json({ message: "please provide correct tracker id" })
-    }
-    let trackers = await KeywordTracker.find({ phone_number: phone_number, bot_number: bot_number })
-    let menuTrackers = await MenuTracker.find({ phone_number: phone_number, bot_number: bot_number })
-    trackers.forEach(async (tracker) => {
-        await KeywordTracker.findByIdAndUpdate(tracker._id, { is_active: false })
-    })
-    menuTrackers.forEach(async (tracker) => {
-        await MenuTracker.findByIdAndUpdate(tracker._id, { is_active: false })
-    })
-    return res.status(200).json("bot stopped for this number")
 
-}
