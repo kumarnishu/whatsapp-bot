@@ -29,6 +29,7 @@ export type IKeywordTracker = {
     phone_number: string,
     bot_number: string,
     is_active: boolean,
+    skip_main_menu:boolean,
     flow: IFlow,
     updated_at:Date
 }

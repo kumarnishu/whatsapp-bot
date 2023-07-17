@@ -15,6 +15,10 @@ const KeywordTrackerSchema = new mongoose.Schema<IKeywordTracker, mongoose.Model
         type: Boolean,
         default: true
     },
+    skip_main_menu: {
+        type: Boolean,
+        default: false
+    },
     flow: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Flow',

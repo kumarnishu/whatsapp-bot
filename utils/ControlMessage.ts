@@ -1,10 +1,11 @@
 import WAWebJS, { Client, MessageMedia } from "whatsapp-web.js";
 import { Flow } from "../models/Flow";
 import { User } from "../models/User";
-import { FlowNode } from "../types/flow.types";
+import { FlowNode, IKeywordTracker } from "../types/flow.types";
 import { toTitleCase } from "./ToTitleCase";
 import { MenuTracker } from "../models/MenuTracker";
 import { KeywordTracker } from "../models/KeywordTracker";
+import { CronJob } from "cron";
 
 
 export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
@@ -64,6 +65,7 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
                             menu_id: flow.nodes.find(node => node.parentNode === "common_message")?.id,
                             phone_number: String(from._serialized),
                             bot_number: String(msg.to),
+                            updated_at:new Date(),
                             flow: flow
                         }).save()
                     }
@@ -71,7 +73,8 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
                         let id = flow.nodes.find(node => node.parentNode === "common_message")?.id
                         if (id) {
                             menuTracker.menu_id = id
-                            menuTracker.flow = flow
+                            menuTracker.flow = flow,
+                            menuTracker.updated_at= new Date(),
                             await menuTracker.save()
                         }
 
@@ -83,7 +86,7 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
 
     }
     if (tracker && menuTracker && from) {
-        if (tracker.is_active) {
+        if (tracker.is_active && !tracker.skip_main_menu) {
             menuTracker = await MenuTracker.findOne({ phone_number: tracker.phone_number })
             let startTriggered = false
             let keys = tracker.flow.trigger_keywords.split(",");
@@ -99,7 +102,7 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
                     if (menuTracker && menuTracker.customer_name) {
                         sendingMessage = sendingMessage + "Hello " + toTitleCase(menuTracker.customer_name) + "\n\n"
                     }
-                    sendingMessage = sendingMessage  + String(commonNode?.data.media_value) + "\n\n"
+                    sendingMessage = sendingMessage + String(commonNode?.data.media_value) + "\n\n"
                 }
                 let parentNode = tracker?.flow.nodes.find((node) => node.parentNode === "common_message")
                 let sendingNodes = tracker?.flow.nodes.filter((node) => { return node.parentNode === parentNode?.id })
@@ -118,17 +121,20 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
                 if (parentNode) {
                     if (menuTracker) {
                         menuTracker.menu_id = parentNode.id
-                        menuTracker.flow = tracker.flow
+                        menuTracker.flow = tracker.flow,
+                        menuTracker.updated_at=new Date(),
                         await menuTracker.save()
                     }
                 }
             }
+            await KeywordTracker.findByIdAndUpdate(tracker._id, { skip_main_menu: true })
+            SkippedMainMenuActivate(tracker)
         }
     }
     if (!tracker && menuTracker && from) {
         if (comingMessage === '0') {
             let commonNode = menuTracker.flow.nodes.find((node) => node.id === "common_message")
-            sendingMessage = sendingMessage  + String(commonNode?.data.media_value) + "\n\n"
+            sendingMessage = sendingMessage + String(commonNode?.data.media_value) + "\n\n"
             let parentNode = menuTracker.flow.nodes.find((node) => node.parentNode === "common_message")
             let sendingNodes = menuTracker.flow.nodes.filter((node) => { return node.parentNode === parentNode?.id })
             sendingNodes.sort(function (a, b) {
@@ -140,12 +146,13 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
                 return 0;
             });
             sendingNodes.forEach(async (node) => {
-                sendingMessage = sendingMessage  + init_msg + node.data.media_value + "\n"
+                sendingMessage = sendingMessage + init_msg + node.data.media_value + "\n"
             })
             await client?.sendMessage(from._serialized, sendingMessage)
             if (parentNode) {
                 if (menuTracker) {
-                    menuTracker.menu_id = parentNode.id
+                    menuTracker.menu_id = parentNode.id,
+                    menuTracker.updated_at= new Date(),
                     await menuTracker.save()
                 }
             }
@@ -180,12 +187,13 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
                                 return 0;
                             });
                             sendingNodes.forEach(async (node) => {
-                                sendingMessage = sendingMessage  + init_msg + node.data.media_value + "\n"
+                                sendingMessage = sendingMessage + init_msg + node.data.media_value + "\n"
                             })
                             sendingMessage = "\n" + sendingMessage + init_msg + "Press 0 for main menu\n"
                             await client?.sendMessage(from._serialized, sendingMessage)
                             if (menuTracker) {
-                                menuTracker.menu_id = menuNode.id
+                                menuTracker.menu_id = menuNode.id,
+                                menuTracker.updated_at= new Date(),
                                 await menuTracker.save()
                             }
 
@@ -215,3 +223,9 @@ export const ControlMessage = async (client: Client, msg: WAWebJS.Message) => {
 }
 
 
+async function SkippedMainMenuActivate(tracker: IKeywordTracker) {
+    let time = new Date(new Date().getTime() + 2 * 60 * 60 * 1000)
+    new CronJob(time, async () => {
+        await KeywordTracker.findByIdAndUpdate(tracker._id, { skip_main_menu: false })
+    })
+}

@@ -101,7 +101,7 @@ export function OutputNode({ data }: { data: any }) {
 
                 }
                 <div className="rounded text-light ">
-                    {data.media_value || "Output"}
+                    {data.media_type === "media" ? "media" : data.media_value}
                 </div>
             </OutPutDiv>
         </>
